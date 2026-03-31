@@ -1,3 +1,53 @@
 site_name: Untitled FRC Physics Library
 repo_url: https://github.com/Ruthie-FRC/Untitled-FRC-Physics-Library
 repo_name: Ruthie-FRC/Untitled-FRC-Physics-Library
+site_description: >-
+  An untitled FRC physics library.
+site_author: Ruthie-FRC
+edit_uri: edit/main/mkdocs/docs/
+
+theme:
+  name: material
+ # logo: assets/logo.png
+ # favicon: assets/logo.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - announce.dismiss
+    - header.autohide
+
+nav:
+  - Home: docs/index.md
+  - GitHub Workflows: github-workflows.md
+
+plugins:
+  - search
+  - mkdocs-material
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.details
