@@ -25,4 +25,7 @@ target_link_libraries(frcsim_rigidbody_test PRIVATE frcsim_physics)
 
 add_executable(frcsim_magnus_test vendordep/tests/magnus_test.cpp)
 target_link_libraries(frcsim_magnus_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_modular_body_test vendordep/tests/modular_body_test.cpp)
+target_link_libraries(frcsim_modular_body_test PRIVATE frcsim_physics)
 endif()
