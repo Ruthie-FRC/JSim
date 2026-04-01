@@ -12,14 +12,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(core/physics-core)
 
 if(FRCSIM_BUILD_EXAMPLES)
-	add_executable(frcsim_minimal_world examples/cpp/minimal_world.cpp)
-	target_link_libraries(frcsim_minimal_world PRIVATE frcsim_physics)
+add_executable(frcsim_minimal_world examples/cpp/minimal_world.cpp)
+target_link_libraries(frcsim_minimal_world PRIVATE frcsim_physics)
+
+add_executable(frcsim_modular_bodies examples/cpp/modular_bodies_demo.cpp)
+target_link_libraries(frcsim_modular_bodies PRIVATE frcsim_physics)
 endif()
 
 if(FRCSIM_BUILD_TESTS)
-	add_executable(frcsim_rigidbody_test vendordep/tests/rigidbody_test.cpp)
-	target_link_libraries(frcsim_rigidbody_test PRIVATE frcsim_physics)
+add_executable(frcsim_rigidbody_test vendordep/tests/rigidbody_test.cpp)
+target_link_libraries(frcsim_rigidbody_test PRIVATE frcsim_physics)
 
-	add_executable(frcsim_magnus_test vendordep/tests/magnus_test.cpp)
-	target_link_libraries(frcsim_magnus_test PRIVATE frcsim_physics)
+add_executable(frcsim_magnus_test vendordep/tests/magnus_test.cpp)
+target_link_libraries(frcsim_magnus_test PRIVATE frcsim_physics)
 endif()
