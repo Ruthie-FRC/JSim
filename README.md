@@ -7,9 +7,9 @@ RemSim is a modular FRC physics library for simulation, analysis, and robotics w
 This repository is organized as a monorepo.
 
 - **core/**
-	- **core/physics-core/**: Core C++ physics engine source code.
-	- **core/bindings-java/**: Java bindings for the physics engine.
-	- **core/bindings-python/**: Python bindings for the physics engine.
+	- **core/cpp/**: Core C++ physics engine source code.
+	- **core/java/**: Java bindings for the physics engine.
+	- **core/python/**: Python bindings for the physics engine.
 	- **core/gamepiece-models/**: C++ gamepiece models used by the simulation core (season-specific models may be split later if needed).
 - **apps/**
 	- **apps/sim-runtime/**: Separate Python runtime application that integrates the engine with robot-side simulation workflows.
