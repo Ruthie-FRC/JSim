@@ -1,0 +1,109 @@
+# Build directories
+build/
+cmake-build-*/
+dist/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+
+# Compiled objects and libraries
+*.o
+*.a
+*.so
+*.so.*
+*.dylib
+*.exe
+*.dll
+*.lib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.Python
+env/
+venv/
+ENV/
+*.whl
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+.vim/
+.emacs.d/
+*.iml
+
+# Documentation
+mkdocs/site/
+site/
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Java
+*.class
+*.jar
+target/
+.gradle/
+.gradletasknamecache
+*.iml
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+
+# Dependencies (if using package managers)
+node_modules/
+vendor/
+
+# Test binaries (keep source test files, ignore compiled binaries)
+frcsim_*
+!vendordep/tests/*.cpp
+
+# CMake and build artifacts
+compile_commands.json
+CTestTestfile.cmake
+DartConfiguration.tcl
+
+# IDE cache and language server
+.ccls-cache/
+.clangd/
+.cache/
+.LSP-*
+
+# Code coverage
+*.gcov
+*.gcda
+*.gcno
+*.gcov.json
+
+# Compiled Python bytecode in specific directories
+core/bindings-python/*.so
+core/bindings-java/*.so
+
+# Any local configuration
+.env
+.env.local
