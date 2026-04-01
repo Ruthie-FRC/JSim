@@ -142,12 +142,12 @@ struct alignas(16) Matrix3 {
 
     /* Inverse */
 
-    Matrix3 inverse() const noexcept {
+    bool tryInverse(Matrix3& out, double eps = std::numeric_limits<double>::epsilon()) const noexcept {
 
         double det = determinant();
 
-        if(std::abs(det) < std::numeric_limits<double>::epsilon())
-            return identity(); // safe fallback
+        if(std::abs(det) < eps)
+            return false;
 
         double invDet = 1.0 / det;
 
@@ -164,6 +164,16 @@ struct alignas(16) Matrix3 {
         r.m[2][0]=(m[1][0]*m[2][1]-m[1][1]*m[2][0])*invDet;
         r.m[2][1]=(m[0][1]*m[2][0]-m[0][0]*m[2][1])*invDet;
         r.m[2][2]=(m[0][0]*m[1][1]-m[0][1]*m[1][0])*invDet;
+
+        out = r;
+        return true;
+    }
+
+    Matrix3 inverse() const noexcept {
+
+        Matrix3 r;
+        if(!tryInverse(r))
+            return identity(); // safe fallback for legacy callers
 
         return r;
     }
