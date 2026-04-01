@@ -13,26 +13,28 @@
       
       
       
+        <link rel="prev" href="../physics_reference/">
       
-        <link rel="next" href="api_usage/">
+      
+        <link rel="next" href="../vector/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>RemSim</title>
+        <title>Integrators - RemSim</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +53,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#remsim" class="md-skip">
+        <a href="#integrators-frcsimintegrator" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Integrators
             
           </span>
         </div>
@@ -230,7 +232,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -257,37 +259,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -303,81 +278,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Capabilities (implementaion ongoing)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Project Goals
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Start
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributing
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -389,7 +289,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api_usage/" class="md-nav__link">
+      <a href="../api_usage/" class="md-nav__link">
         
   
   
@@ -416,7 +316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -443,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="physics_reference/" class="md-nav__link">
+      <a href="../physics_reference/" class="md-nav__link">
         
   
   
@@ -467,18 +367,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -499,7 +401,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -514,10 +416,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="integrators/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrators
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -533,6 +462,120 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-integratelinear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. integrateLinear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-integratelinearexplicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. integrateLinearExplicit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-integrateangular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. integrateAngular
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-integrateangularvelocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. integrateAngularVelocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-integratelinearrk2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. integrateLinearRK2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -545,7 +588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vector/" class="md-nav__link">
+      <a href="../vector/" class="md-nav__link">
         
   
   
@@ -573,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="quaternion/" class="md-nav__link">
+      <a href="../quaternion/" class="md-nav__link">
         
   
   
@@ -628,10 +671,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        Overview
       
     </span>
   </a>
@@ -639,43 +682,82 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
+  <a href="#methods" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project Goals
+        Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-integratelinear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. integrateLinear
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#2-integratelinearexplicit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation
+        2. integrateLinearExplicit
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#3-integrateangular" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Start
+        3. integrateAngular
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#4-integrateangularvelocity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        4. integrateAngularVelocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-integratelinearrk2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. integrateLinearRK2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
       
     </span>
   </a>
@@ -699,7 +781,7 @@
 
 
   
-    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/integrators.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -707,66 +789,87 @@
   
 
 
-<h1 id="remsim">RemSim<a class="headerlink" href="#remsim" title="Permanent link">&para;</a></h1>
-<p>RemSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.</p>
-<h3 id="key-capabilities-implementaion-ongoing">Key Capabilities (implementaion ongoing)<a class="headerlink" href="#key-capabilities-implementaion-ongoing" title="Permanent link">&para;</a></h3>
+<h1 id="integrators-frcsimintegrator">Integrators (<code>frcsim::Integrator</code>)<a class="headerlink" href="#integrators-frcsimintegrator" title="Permanent link">&para;</a></h1>
+<p>This page documents the integrators provided in the <code>frcsim</code> physics library, which are used for updating positions, velocities, and orientations in physics simulations.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The <code>Integrator</code> struct provides static methods for several common numerical integration techniques used in real-time physics engines. These methods are designed for use with the library's <code>Vector3</code> and <code>Quaternion</code> types.</p>
+<hr />
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<h3 id="1-integratelinear">1. <code>integrateLinear</code><a class="headerlink" href="#1-integratelinear" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> Semi-Implicit Euler (a.k.a. Symplectic Euler)</p>
 <ul>
-<li><strong>Unified Physics Engine:</strong></li>
-<li>Rigid body, drivetrain, and mechanism simulation</li>
-<li>Realistic field, collision, and sensor modeling</li>
-<li><strong>Multi-language Bindings:</strong></li>
-<li>Native C++ core</li>
-<li>Python and Java bindings for rapid prototyping and integration</li>
-<li><strong>Simulation Runtime:</strong></li>
-<li>Plug-and-play robot code simulation</li>
-<li>Sensor pipelines and WPILib bridge</li>
-<li><strong>CAD Import:</strong></li>
-<li>Load URDF, STL, and more for custom robots and fields</li>
-<li><strong>Extensible &amp; Modular:</strong></li>
-<li>Add your own models, forces, and plugins</li>
-</ul>
-<h3 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Accuracy:</strong> Realistic, physically-based simulation for FRC robots and game elements</li>
-<li><strong>Integration:</strong> Seamless workflow from CAD to code to simulation</li>
-<li><strong>Accessibility:</strong> Usable by teams of all experience levels, with Python/Java/C++ support</li>
-<li><strong>Open Source:</strong> Community-driven, MIT-licensed</li>
+<li><strong>Usage:</strong></li>
+<li><code>integrateLinear(position, velocity, acceleration, dt)</code></li>
+<li><strong>Description:</strong></li>
+<li>Updates velocity and position using the semi-implicit Euler method, which is stable and widely used in real-time physics.</li>
+<li>
+<p>$$
+\text{velocity} \mathrel{+}= \text{acceleration} \times dt \
+\text{position} \mathrel{+}= \text{velocity} \times dt
+$$</p>
+</li>
 </ul>
 <hr />
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<h3 id="2-integratelinearexplicit">2. <code>integrateLinearExplicit</code><a class="headerlink" href="#2-integratelinearexplicit" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> Explicit Euler</p>
 <ul>
-<li><a href="api_usage/">API Usage</a>: How to use the library in your code</li>
-<li><a href="integrators/">Integrators</a>: Numerical integration methods used by the physics engine</li>
-<li><a href="vector/">Vector3</a>: 3D vector operations and helpers</li>
-<li><a href="quaternion/">Quaternion</a>: 3D orientation and rotation utilities</li>
-<li><a href="architecture/">Architecture</a>: System design and extensibility</li>
-<li><a href="physics_reference/">Physics Reference</a>: Underlying models and equations</li>
+<li><strong>Usage:</strong></li>
+<li><code>integrateLinearExplicit(position, velocity, acceleration, dt)</code></li>
+<li><strong>Description:</strong></li>
+<li>Updates position and velocity using the explicit Euler method. Less stable than semi-implicit Euler, but useful for debugging or predictor steps.</li>
+<li>
+<p>$$
+\text{position} \mathrel{+}= \text{velocity} \times dt \
+\text{velocity} \mathrel{+}= \text{acceleration} \times dt
+$$</p>
+</li>
 </ul>
 <hr />
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># C++</span>
-<span class="c1"># See examples/cpp/minimal_world.cpp</span>
-
-<span class="c1"># Python</span>
-pip<span class="w"> </span>install<span class="w"> </span>frcsim-physics
-python<span class="w"> </span>examples/python/simple_world_demo.py
-
-<span class="c1"># Java</span>
-<span class="c1"># See examples/java/ShooterPredictionExample.java</span>
-</code></pre></div>
+<h3 id="3-integrateangular">3. <code>integrateAngular</code><a class="headerlink" href="#3-integrateangular" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> Quaternion Integration</p>
+<ul>
+<li><strong>Usage:</strong></li>
+<li><code>integrateAngular(orientation, angularVelocity, dt)</code></li>
+<li><strong>Description:</strong></li>
+<li>Integrates orientation using angular velocity and quaternion algebra.</li>
+<li>Quaternion derivative:
+    $$
+    \dot{q} = 0.5 \cdot \omega_{quat} \cdot q
+    $$
+    where $\omega_{quat} = (0, \omega_x, \omega_y, \omega_z)$</li>
+</ul>
 <hr />
-<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<p>We welcome issues, pull requests, and ideas from the FRC and robotics community.</p>
-<!--
-<div align="center">
-  <img src="assets/images/frc_field.png" alt="FRC Field" width="400"/>
-</div>
--->
-
+<h3 id="4-integrateangularvelocity">4. <code>integrateAngularVelocity</code><a class="headerlink" href="#4-integrateangularvelocity" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> Angular Velocity Update</p>
+<ul>
+<li><strong>Usage:</strong></li>
+<li><code>integrateAngularVelocity(angularVelocity, angularAcceleration, dt)</code></li>
+<li><strong>Description:</strong></li>
+<li>Updates angular velocity using angular acceleration.</li>
+<li>
+<p>$$
+\omega \mathrel{+}= \alpha \times dt
+$$</p>
+</li>
+</ul>
 <hr />
-<div align="center">
-  <b>Simulate. Innovate. Win.</b>
-</div>
+<h3 id="5-integratelinearrk2">5. <code>integrateLinearRK2</code><a class="headerlink" href="#5-integratelinearrk2" title="Permanent link">&para;</a></h3>
+<p><strong>Type:</strong> Runge-Kutta 2nd Order (Midpoint)</p>
+<ul>
+<li><strong>Usage:</strong></li>
+<li><code>integrateLinearRK2(position, velocity, acceleration, dt)</code></li>
+<li><strong>Description:</strong></li>
+<li>Uses the midpoint (RK2) method for more accurate integration, useful for projectiles or high-speed mechanisms.</li>
+</ul>
+<hr />
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../vector/"><code>Vector3</code></a></li>
+<li><a href="../quaternion/"><code>Quaternion</code></a></li>
+<li><a href="../physics_reference/">Physics Reference</a></li>
+</ul>
+<hr />
+<p><em>This documentation was generated for the file: <code>core/physics-core/include/frcsim/math/integrators.hpp</code></em></p>
 
 
 
@@ -822,10 +925,10 @@ python<span class="w"> </span>examples/python/simple_world_demo.py
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

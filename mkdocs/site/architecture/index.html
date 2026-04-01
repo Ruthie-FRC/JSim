@@ -13,26 +13,28 @@
       
       
       
+        <link rel="prev" href="../api_usage/">
       
-        <link rel="next" href="api_usage/">
+      
+        <link rel="next" href="../physics_reference/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>RemSim</title>
+        <title>Architecture - RemSim</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +53,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#remsim" class="md-skip">
+        <a href="#architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Architecture
             
           </span>
         </div>
@@ -230,7 +232,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -257,6 +259,60 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -276,7 +332,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    Architecture
   
 
     
@@ -287,14 +343,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="." class="md-nav__link md-nav__link--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
+    Architecture
   
 
     
@@ -320,10 +376,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#high-level-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        High-Level Structure
       
     </span>
   </a>
@@ -331,10 +387,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
+  <a href="#physics-core-design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project Goals
+        Physics Core Design
       
     </span>
   </a>
@@ -342,10 +398,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#build-and-test" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation
+        Build and Test
       
     </span>
   </a>
@@ -353,10 +409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#documentation-strategy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Start
+        Documentation Strategy
       
     </span>
   </a>
@@ -364,10 +420,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+  <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        Related Pages
       
     </span>
   </a>
@@ -389,61 +445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api_usage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API Usage
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="architecture/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="physics_reference/" class="md-nav__link">
+      <a href="../physics_reference/" class="md-nav__link">
         
   
   
@@ -517,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="integrators/" class="md-nav__link">
+      <a href="../integrators/" class="md-nav__link">
         
   
   
@@ -545,7 +547,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vector/" class="md-nav__link">
+      <a href="../vector/" class="md-nav__link">
         
   
   
@@ -573,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="quaternion/" class="md-nav__link">
+      <a href="../quaternion/" class="md-nav__link">
         
   
   
@@ -628,10 +630,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#high-level-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        High-Level Structure
       
     </span>
   </a>
@@ -639,10 +641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
+  <a href="#physics-core-design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project Goals
+        Physics Core Design
       
     </span>
   </a>
@@ -650,10 +652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#build-and-test" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation
+        Build and Test
       
     </span>
   </a>
@@ -661,10 +663,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#documentation-strategy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Start
+        Documentation Strategy
       
     </span>
   </a>
@@ -672,10 +674,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+  <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        Related Pages
       
     </span>
   </a>
@@ -699,7 +701,7 @@
 
 
   
-    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/architecture.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -707,66 +709,41 @@
   
 
 
-<h1 id="remsim">RemSim<a class="headerlink" href="#remsim" title="Permanent link">&para;</a></h1>
-<p>RemSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.</p>
-<h3 id="key-capabilities-implementaion-ongoing">Key Capabilities (implementaion ongoing)<a class="headerlink" href="#key-capabilities-implementaion-ongoing" title="Permanent link">&para;</a></h3>
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<p>RemSim is organized as a modular monorepo with clear separation between core physics, bindings, runtime applications, and documentation.</p>
+<h2 id="high-level-structure">High-Level Structure<a class="headerlink" href="#high-level-structure" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Unified Physics Engine:</strong></li>
-<li>Rigid body, drivetrain, and mechanism simulation</li>
-<li>Realistic field, collision, and sensor modeling</li>
-<li><strong>Multi-language Bindings:</strong></li>
-<li>Native C++ core</li>
-<li>Python and Java bindings for rapid prototyping and integration</li>
-<li><strong>Simulation Runtime:</strong></li>
-<li>Plug-and-play robot code simulation</li>
-<li>Sensor pipelines and WPILib bridge</li>
-<li><strong>CAD Import:</strong></li>
-<li>Load URDF, STL, and more for custom robots and fields</li>
-<li><strong>Extensible &amp; Modular:</strong></li>
-<li>Add your own models, forces, and plugins</li>
+<li><code>core/physics-core/</code>: C++ physics engine implementation.</li>
+<li><code>core/bindings-python/</code>: Python bindings.</li>
+<li><code>core/bindings-java/</code>: Java bindings.</li>
+<li><code>core/gamepiece-models/</code>: Gamepiece models for simulation.</li>
+<li><code>apps/sim-runtime/</code>: Runtime integration for robot simulation workflows.</li>
+<li><code>apps/viewer-plugin/</code>: Visualization and timeline tooling.</li>
+<li><code>examples/</code>: Language-specific examples.</li>
+<li><code>vendordep/tests/</code>: Unit and integration tests.</li>
 </ul>
-<h3 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h3>
+<h2 id="physics-core-design">Physics Core Design<a class="headerlink" href="#physics-core-design" title="Permanent link">&para;</a></h2>
+<p>Key components include:</p>
 <ul>
-<li><strong>Accuracy:</strong> Realistic, physically-based simulation for FRC robots and game elements</li>
-<li><strong>Integration:</strong> Seamless workflow from CAD to code to simulation</li>
-<li><strong>Accessibility:</strong> Usable by teams of all experience levels, with Python/Java/C++ support</li>
-<li><strong>Open Source:</strong> Community-driven, MIT-licensed</li>
+<li>Math primitives: vectors, quaternions, matrices, and integrators.</li>
+<li>Rigid-body modeling and assemblies.</li>
+<li>Force generators and aerodynamic models.</li>
+<li>Physics world orchestration.</li>
 </ul>
-<hr />
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<p>The architecture is designed to support extension through additional force models, body types, and runtime integrations.</p>
+<h2 id="build-and-test">Build and Test<a class="headerlink" href="#build-and-test" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="api_usage/">API Usage</a>: How to use the library in your code</li>
-<li><a href="integrators/">Integrators</a>: Numerical integration methods used by the physics engine</li>
-<li><a href="vector/">Vector3</a>: 3D vector operations and helpers</li>
-<li><a href="quaternion/">Quaternion</a>: 3D orientation and rotation utilities</li>
-<li><a href="architecture/">Architecture</a>: System design and extensibility</li>
-<li><a href="physics_reference/">Physics Reference</a>: Underlying models and equations</li>
+<li>CMake drives native builds.</li>
+<li>CTest executes test binaries.</li>
+<li>Helper scripts streamline configure/build/test workflows.</li>
 </ul>
-<hr />
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># C++</span>
-<span class="c1"># See examples/cpp/minimal_world.cpp</span>
-
-<span class="c1"># Python</span>
-pip<span class="w"> </span>install<span class="w"> </span>frcsim-physics
-python<span class="w"> </span>examples/python/simple_world_demo.py
-
-<span class="c1"># Java</span>
-<span class="c1"># See examples/java/ShooterPredictionExample.java</span>
-</code></pre></div>
-<hr />
-<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<p>We welcome issues, pull requests, and ideas from the FRC and robotics community.</p>
-<!--
-<div align="center">
-  <img src="assets/images/frc_field.png" alt="FRC Field" width="400"/>
-</div>
--->
-
-<hr />
-<div align="center">
-  <b>Simulate. Innovate. Win.</b>
-</div>
+<h2 id="documentation-strategy">Documentation Strategy<a class="headerlink" href="#documentation-strategy" title="Permanent link">&para;</a></h2>
+<p>Documentation is authored in Markdown under <code>mkdocs/docs/</code> and published with MkDocs Material.</p>
+<h2 id="related-pages">Related Pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../api_usage/">API Usage</a></li>
+<li><a href="../physics_reference/">Physics Reference</a></li>
+</ul>
 
 
 
@@ -822,10 +799,10 @@ python<span class="w"> </span>examples/python/simple_world_demo.py
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

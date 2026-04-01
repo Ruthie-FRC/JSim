@@ -1,8 +1,8 @@
-site_name: Untitled FRC Physics Library
-repo_url: https://github.com/Ruthie-FRC/Untitled-FRC-Physics-Library
-repo_name: Ruthie-FRC/Untitled-FRC-Physics-Library
+site_name: RemSim
+repo_url: https://github.com/Ruthie-FRC/RemSim
+repo_name: Ruthie-FRC/RemSim
 site_description: >-
-  An untitled FRC physics library.
+  RemSim is a modular FRC physics library.
 site_author: Ruthie-FRC
 edit_uri: edit/main/mkdocs/docs/
 

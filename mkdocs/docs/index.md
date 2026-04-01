@@ -1,20 +1,8 @@
+# RemSim
 
-# Untitled FRC Physics Library
+RemSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
-
-<!--
-<div align="center">
-  <img src="assets/images/logo.png" alt="FRC Physics Library Logo" width="200"/>
-</div>
--->
-
----
-
-## All-in-One FRC Physics & Simulation Platform
-
-This is the Untitled FRC Physics Library. This is a work-in-progress project.
-
-### Key Features (will be implemented over time)
+### Key Capabilities (implementaion ongoing)
 - **Unified Physics Engine:**
   - Rigid body, drivetrain, and mechanism simulation
   - Realistic field, collision, and sensor modeling
@@ -39,7 +27,9 @@ This is the Untitled FRC Physics Library. This is a work-in-progress project.
 
 ## Documentation
 - [API Usage](api_usage.md): How to use the library in your code
-- [Math & Physics](math/): Integrators, vectors, quaternions, and more
+- [Integrators](integrators.md): Numerical integration methods used by the physics engine
+- [Vector3](vector.md): 3D vector operations and helpers
+- [Quaternion](quaternion.md): 3D orientation and rotation utilities
 - [Architecture](architecture.md): System design and extensibility
 - [Physics Reference](physics_reference.md): Underlying models and equations
 

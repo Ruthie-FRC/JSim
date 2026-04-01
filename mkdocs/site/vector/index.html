@@ -13,26 +13,28 @@
       
       
       
+        <link rel="prev" href="../integrators/">
       
-        <link rel="next" href="api_usage/">
+      
+        <link rel="next" href="../quaternion/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>RemSim</title>
+        <title>Vector3 - RemSim</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +53,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#remsim" class="md-skip">
+        <a href="#vector3-frcsimvector3" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-header__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Vector3
             
           </span>
         </div>
@@ -230,7 +232,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
+    <a href=".." title="RemSim" class="md-nav__button md-logo" aria-label="RemSim" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -257,37 +259,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -303,81 +278,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Capabilities (implementaion ongoing)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Project Goals
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quick Start
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributing
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -389,7 +289,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api_usage/" class="md-nav__link">
+      <a href="../api_usage/" class="md-nav__link">
         
   
   
@@ -416,7 +316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -443,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="physics_reference/" class="md-nav__link">
+      <a href="../physics_reference/" class="md-nav__link">
         
   
   
@@ -467,18 +367,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -499,7 +401,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -517,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="integrators/" class="md-nav__link">
+      <a href="../integrators/" class="md-nav__link">
         
   
   
@@ -542,10 +444,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="vector/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector3
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -561,6 +490,164 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#members" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Members
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-methods-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Methods &amp; Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Methods &amp; Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#norms-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Norms &amp; Normalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dot-cross-product" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dot &amp; Cross Product
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#physics-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physics Helpers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -573,7 +660,7 @@
   
   
     <li class="md-nav__item">
-      <a href="quaternion/" class="md-nav__link">
+      <a href="../quaternion/" class="md-nav__link">
         
   
   
@@ -628,10 +715,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        Overview
       
     </span>
   </a>
@@ -639,10 +726,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-goals" class="md-nav__link">
+  <a href="#members" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project Goals
+        Members
       
     </span>
   </a>
@@ -650,32 +737,115 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#key-methods-operations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation
+        Key Methods &amp; Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Methods &amp; Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructors
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quick Start
+        Arithmetic
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#norms-normalization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        Norms &amp; Normalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dot-cross-product" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dot &amp; Cross Product
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#physics-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physics Helpers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Usage
       
     </span>
   </a>
@@ -699,7 +869,7 @@
 
 
   
-    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Ruthie-FRC/RemSim/edit/main/mkdocs/docs/vector.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -707,66 +877,76 @@
   
 
 
-<h1 id="remsim">RemSim<a class="headerlink" href="#remsim" title="Permanent link">&para;</a></h1>
-<p>RemSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.</p>
-<h3 id="key-capabilities-implementaion-ongoing">Key Capabilities (implementaion ongoing)<a class="headerlink" href="#key-capabilities-implementaion-ongoing" title="Permanent link">&para;</a></h3>
+<h1 id="vector3-frcsimvector3">Vector3 (<code>frcsim::Vector3</code>)<a class="headerlink" href="#vector3-frcsimvector3" title="Permanent link">&para;</a></h1>
+<p>This page documents the <code>Vector3</code> struct in the <code>frcsim</code> physics library, which represents a 3D vector and provides a wide range of vector operations for physics simulations.</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p><code>Vector3</code> is a 3D vector type with double-precision components (<code>x</code>, <code>y</code>, <code>z</code>). It supports arithmetic, geometric, and physics-related operations, and is used throughout the library for positions, velocities, forces, and more.</p>
+<hr />
+<h2 id="members">Members<a class="headerlink" href="#members" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Unified Physics Engine:</strong></li>
-<li>Rigid body, drivetrain, and mechanism simulation</li>
-<li>Realistic field, collision, and sensor modeling</li>
-<li><strong>Multi-language Bindings:</strong></li>
-<li>Native C++ core</li>
-<li>Python and Java bindings for rapid prototyping and integration</li>
-<li><strong>Simulation Runtime:</strong></li>
-<li>Plug-and-play robot code simulation</li>
-<li>Sensor pipelines and WPILib bridge</li>
-<li><strong>CAD Import:</strong></li>
-<li>Load URDF, STL, and more for custom robots and fields</li>
-<li><strong>Extensible &amp; Modular:</strong></li>
-<li>Add your own models, forces, and plugins</li>
-</ul>
-<h3 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Accuracy:</strong> Realistic, physically-based simulation for FRC robots and game elements</li>
-<li><strong>Integration:</strong> Seamless workflow from CAD to code to simulation</li>
-<li><strong>Accessibility:</strong> Usable by teams of all experience levels, with Python/Java/C++ support</li>
-<li><strong>Open Source:</strong> Community-driven, MIT-licensed</li>
+<li><strong>x, y, z</strong>: The vector components (double)</li>
 </ul>
 <hr />
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<h2 id="key-methods-operations">Key Methods &amp; Operations<a class="headerlink" href="#key-methods-operations" title="Permanent link">&para;</a></h2>
+<h3 id="constructors">Constructors<a class="headerlink" href="#constructors" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="api_usage/">API Usage</a>: How to use the library in your code</li>
-<li><a href="integrators/">Integrators</a>: Numerical integration methods used by the physics engine</li>
-<li><a href="vector/">Vector3</a>: 3D vector operations and helpers</li>
-<li><a href="quaternion/">Quaternion</a>: 3D orientation and rotation utilities</li>
-<li><a href="architecture/">Architecture</a>: System design and extensibility</li>
-<li><a href="physics_reference/">Physics Reference</a>: Underlying models and equations</li>
+<li><code>Vector3()</code> — Zero vector</li>
+<li><code>Vector3(double x, double y, double z)</code> — Initialize with values</li>
+</ul>
+<h3 id="arithmetic">Arithmetic<a class="headerlink" href="#arithmetic" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> (with scalars and vectors)</li>
+<li>Compound assignment: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code></li>
+</ul>
+<h3 id="norms-normalization">Norms &amp; Normalization<a class="headerlink" href="#norms-normalization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>norm2()</code> — Squared magnitude</li>
+<li><code>norm()</code> — Magnitude</li>
+<li><code>normalized()</code> — Returns normalized vector</li>
+<li><code>isZero(eps)</code> — Checks if vector is near zero</li>
+</ul>
+<h3 id="dot-cross-product">Dot &amp; Cross Product<a class="headerlink" href="#dot-cross-product" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>dot(const Vector3&amp;)</code> — Dot product</li>
+<li><code>cross(const Vector3&amp;)</code> — Cross product</li>
+</ul>
+<h3 id="utility">Utility<a class="headerlink" href="#utility" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>clamp(min, max)</code> — Clamp each component</li>
+<li><code>lerp(a, b, t)</code> — Linear interpolation</li>
+<li><code>distance(a, b)</code> — Distance between vectors</li>
+<li><code>projectOnto(axis)</code> — Projection onto another vector</li>
+<li><code>reflect(n)</code> — Reflect across a normal</li>
+<li><code>torque(r)</code> — Torque at a point</li>
+</ul>
+<h3 id="physics-helpers">Physics Helpers<a class="headerlink" href="#physics-helpers" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>magnusForce(velocity, omega, k)</code> — Magnus effect force</li>
+<li><code>dragForce(v, Cd, A, rho)</code> — Drag force</li>
+<li><code>dynamicGravity(velocity, spin, g, magnusCoeff, gravityEffect)</code> — Gravity with Magnus effect</li>
+<li><code>tractionForce(normal, frictionCoeff, normalForce)</code> — Traction/friction force</li>
+</ul>
+<h3 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>zero()</code> — Zero vector</li>
+<li><code>unitX()</code>, <code>unitY()</code>, <code>unitZ()</code> — Unit vectors</li>
+</ul>
+<h3 id="other">Other<a class="headerlink" href="#other" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>hasNaN()</code> — Check for NaN components</li>
+<li><code>operator[]</code> — Element access</li>
+<li><code>operator&lt;&lt;</code> — Output stream</li>
 </ul>
 <hr />
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># C++</span>
-<span class="c1"># See examples/cpp/minimal_world.cpp</span>
-
-<span class="c1"># Python</span>
-pip<span class="w"> </span>install<span class="w"> </span>frcsim-physics
-python<span class="w"> </span>examples/python/simple_world_demo.py
-
-<span class="c1"># Java</span>
-<span class="c1"># See examples/java/ShooterPredictionExample.java</span>
+<h2 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">frcsim</span><span class="o">::</span><span class="n">Vector3</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">);</span>
+<span class="n">frcsim</span><span class="o">::</span><span class="n">Vector3</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">normalized</span><span class="p">();</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="n">frcsim</span><span class="o">::</span><span class="n">Vector3</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frcsim</span><span class="o">::</span><span class="n">Vector3</span><span class="o">::</span><span class="n">dragForce</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">);</span>
 </code></pre></div>
 <hr />
-<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<p>We welcome issues, pull requests, and ideas from the FRC and robotics community.</p>
-<!--
-<div align="center">
-  <img src="assets/images/frc_field.png" alt="FRC Field" width="400"/>
-</div>
--->
-
-<hr />
-<div align="center">
-  <b>Simulate. Innovate. Win.</b>
-</div>
+<p><em>This documentation was generated for the file: <code>physics-core/include/frcsim/math/vector.hpp</code></em></p>
 
 
 
@@ -822,10 +1002,10 @@ python<span class="w"> </span>examples/python/simple_world_demo.py
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

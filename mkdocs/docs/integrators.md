@@ -82,7 +82,7 @@ The `Integrator` struct provides static methods for several common numerical int
 ## See Also
 - [`Vector3`](vector.md)
 - [`Quaternion`](quaternion.md)
-- [Physics Reference](../../docs/physics_reference.md)
+- [Physics Reference](physics_reference.md)
 
 ---
 
