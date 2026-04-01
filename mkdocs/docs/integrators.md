@@ -86,4 +86,4 @@ The `Integrator` struct provides static methods for several common numerical int
 
 ---
 
-*This documentation was generated for the file: `physics-core/include/frcsim/math/integrators.hpp`*
+*This documentation was generated for the file: `core/physics-core/include/frcsim/math/integrators.hpp`*
