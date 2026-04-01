@@ -42,13 +42,13 @@ int main() {
         assert(std::fabs(cross.y - 0.0) < 1e-9);
         assert(std::fabs(cross.z - 1.0) < 1e-9);
 
-        // Magnitude
-        double mag = v2.magnitude();
+        // Magnitude (norm)
+        double mag = v2.norm();
         assert(std::fabs(mag - std::sqrt(14.0)) < 1e-9);
 
         // Normalized
         frcsim::Vector3 normalized = v2.normalized();
-        double normalized_mag = normalized.magnitude();
+        double normalized_mag = normalized.norm();
         assert(std::fabs(normalized_mag - 1.0) < 1e-9);
     }
 
@@ -82,7 +82,7 @@ int main() {
 
         // Rotate vector
         frcsim::Vector3 v_original(1.0, 0.0, 0.0);
-        frcsim::Vector3 v_rotated = q2.rotateVector(v_original);
+        frcsim::Vector3 v_rotated = q2.rotate(v_original);
         // 90-degree rotation around X should map (1,0,0) -> close to (1,0,0)
         assert(std::fabs(v_rotated.x - 1.0) < 1e-3);
     }
