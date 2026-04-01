@@ -186,8 +186,13 @@ const double angular_decay =
 std::max(0.0,
 1.0 - angular_damping_per_s * dt_s);
 
-linear_velocity_mps_ *= linear_decay;
-angular_velocity_radps_ *= angular_decay;
+// compute dimensionless decay factors using WPILib units
+const units::dimensionless_t linear_decay_unit = 1.0 - linear_damping_per_s * dt;
+const units::dimensionless_t angular_decay_unit = 1.0 - angular_damping_per_s * dt;
+
+// apply the decay to velocities
+linear_velocity_mps_ *= linear_decay_unit.value();
+angular_velocity_radps_ *= angular_decay_unit.value();
 
 clearAccumulators();
 }
