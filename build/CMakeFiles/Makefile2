@@ -65,6 +65,7 @@ CMAKE_BINARY_DIR = /workspaces/Untitled-FRC-Physics-Library/build
 # The main recursive "all" target.
 all: CMakeFiles/frcsim_minimal_world.dir/all
 all: CMakeFiles/frcsim_modular_bodies.dir/all
+all: CMakeFiles/frcsim_robot_assembly.dir/all
 all: CMakeFiles/frcsim_rigidbody_test.dir/all
 all: CMakeFiles/frcsim_magnus_test.dir/all
 all: CMakeFiles/frcsim_modular_body_test.dir/all
@@ -78,6 +79,7 @@ preinstall: core/physics-core/preinstall
 # The main recursive "clean" target.
 clean: CMakeFiles/frcsim_minimal_world.dir/clean
 clean: CMakeFiles/frcsim_modular_bodies.dir/clean
+clean: CMakeFiles/frcsim_robot_assembly.dir/clean
 clean: CMakeFiles/frcsim_rigidbody_test.dir/clean
 clean: CMakeFiles/frcsim_magnus_test.dir/clean
 clean: CMakeFiles/frcsim_modular_body_test.dir/clean
@@ -111,7 +113,7 @@ CMakeFiles/frcsim_minimal_world.dir/all: core/physics-core/CMakeFiles/frcsim_phy
 
 # Build rule for subdir invocation for target.
 CMakeFiles/frcsim_minimal_world.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_minimal_world.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : CMakeFiles/frcsim_minimal_world.dir/rule
@@ -137,7 +139,7 @@ CMakeFiles/frcsim_modular_bodies.dir/all: core/physics-core/CMakeFiles/frcsim_ph
 
 # Build rule for subdir invocation for target.
 CMakeFiles/frcsim_modular_bodies.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_modular_bodies.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : CMakeFiles/frcsim_modular_bodies.dir/rule
@@ -152,18 +154,44 @@ CMakeFiles/frcsim_modular_bodies.dir/clean:
 .PHONY : CMakeFiles/frcsim_modular_bodies.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/frcsim_robot_assembly.dir
+
+# All Build rule for target.
+CMakeFiles/frcsim_robot_assembly.dir/all: core/physics-core/CMakeFiles/frcsim_physics.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=15,16 "Built target frcsim_robot_assembly"
+.PHONY : CMakeFiles/frcsim_robot_assembly.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/frcsim_robot_assembly.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_robot_assembly.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
+.PHONY : CMakeFiles/frcsim_robot_assembly.dir/rule
+
+# Convenience name for target.
+frcsim_robot_assembly: CMakeFiles/frcsim_robot_assembly.dir/rule
+.PHONY : frcsim_robot_assembly
+
+# clean rule for target.
+CMakeFiles/frcsim_robot_assembly.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/clean
+.PHONY : CMakeFiles/frcsim_robot_assembly.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/frcsim_rigidbody_test.dir
 
 # All Build rule for target.
 CMakeFiles/frcsim_rigidbody_test.dir/all: core/physics-core/CMakeFiles/frcsim_physics.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_rigidbody_test.dir/build.make CMakeFiles/frcsim_rigidbody_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_rigidbody_test.dir/build.make CMakeFiles/frcsim_rigidbody_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=11,12 "Built target frcsim_rigidbody_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=13,14 "Built target frcsim_rigidbody_test"
 .PHONY : CMakeFiles/frcsim_rigidbody_test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/frcsim_rigidbody_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_rigidbody_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : CMakeFiles/frcsim_rigidbody_test.dir/rule
@@ -189,7 +217,7 @@ CMakeFiles/frcsim_magnus_test.dir/all: core/physics-core/CMakeFiles/frcsim_physi
 
 # Build rule for subdir invocation for target.
 CMakeFiles/frcsim_magnus_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_magnus_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : CMakeFiles/frcsim_magnus_test.dir/rule
@@ -215,7 +243,7 @@ CMakeFiles/frcsim_modular_body_test.dir/all: core/physics-core/CMakeFiles/frcsim
 
 # Build rule for subdir invocation for target.
 CMakeFiles/frcsim_modular_body_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frcsim_modular_body_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : CMakeFiles/frcsim_modular_body_test.dir/rule
@@ -236,12 +264,12 @@ CMakeFiles/frcsim_modular_body_test.dir/clean:
 core/physics-core/CMakeFiles/frcsim_physics.dir/all:
 	$(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/depend
 	$(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=9,10 "Built target frcsim_physics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=9,10,11,12 "Built target frcsim_physics"
 .PHONY : core/physics-core/CMakeFiles/frcsim_physics.dir/all
 
 # Build rule for subdir invocation for target.
 core/physics-core/CMakeFiles/frcsim_physics.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 core/physics-core/CMakeFiles/frcsim_physics.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles 0
 .PHONY : core/physics-core/CMakeFiles/frcsim_physics.dir/rule

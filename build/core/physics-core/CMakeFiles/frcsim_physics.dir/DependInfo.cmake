@@ -8,7 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/joints.cpp" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o" "gcc" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o.d"
   "/workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/physics_world.cpp" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o" "gcc" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o.d"
+  "/workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/rigid_assembly.cpp" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o" "gcc" "core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

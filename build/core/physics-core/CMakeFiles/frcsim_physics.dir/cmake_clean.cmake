@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/frcsim_physics.dir/src/joints.cpp.o"
+  "CMakeFiles/frcsim_physics.dir/src/joints.cpp.o.d"
   "CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o"
   "CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o.d"
+  "CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o"
+  "CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o.d"
   "libfrcsim_physics.a"
   "libfrcsim_physics.pdb"
 )

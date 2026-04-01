@@ -130,6 +130,30 @@ frcsim_physics/fast:
 	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/build
 .PHONY : frcsim_physics/fast
 
+src/joints.o: src/joints.cpp.o
+.PHONY : src/joints.o
+
+# target to build an object file
+src/joints.cpp.o:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o
+.PHONY : src/joints.cpp.o
+
+src/joints.i: src/joints.cpp.i
+.PHONY : src/joints.i
+
+# target to preprocess a source file
+src/joints.cpp.i:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.i
+.PHONY : src/joints.cpp.i
+
+src/joints.s: src/joints.cpp.s
+.PHONY : src/joints.s
+
+# target to generate assembly for a file
+src/joints.cpp.s:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.s
+.PHONY : src/joints.cpp.s
+
 src/physics_world.o: src/physics_world.cpp.o
 .PHONY : src/physics_world.o
 
@@ -154,6 +178,30 @@ src/physics_world.cpp.s:
 	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.s
 .PHONY : src/physics_world.cpp.s
 
+src/rigid_assembly.o: src/rigid_assembly.cpp.o
+.PHONY : src/rigid_assembly.o
+
+# target to build an object file
+src/rigid_assembly.cpp.o:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o
+.PHONY : src/rigid_assembly.cpp.o
+
+src/rigid_assembly.i: src/rigid_assembly.cpp.i
+.PHONY : src/rigid_assembly.i
+
+# target to preprocess a source file
+src/rigid_assembly.cpp.i:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.i
+.PHONY : src/rigid_assembly.cpp.i
+
+src/rigid_assembly.s: src/rigid_assembly.cpp.s
+.PHONY : src/rigid_assembly.s
+
+# target to generate assembly for a file
+src/rigid_assembly.cpp.s:
+	cd /workspaces/Untitled-FRC-Physics-Library/build && $(MAKE) $(MAKESILENT) -f core/physics-core/CMakeFiles/frcsim_physics.dir/build.make core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.s
+.PHONY : src/rigid_assembly.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -163,9 +211,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... frcsim_physics"
+	@echo "... src/joints.o"
+	@echo "... src/joints.i"
+	@echo "... src/joints.s"
 	@echo "... src/physics_world.o"
 	@echo "... src/physics_world.i"
 	@echo "... src/physics_world.s"
+	@echo "... src/rigid_assembly.o"
+	@echo "... src/rigid_assembly.i"
+	@echo "... src/rigid_assembly.s"
 .PHONY : help
 
 

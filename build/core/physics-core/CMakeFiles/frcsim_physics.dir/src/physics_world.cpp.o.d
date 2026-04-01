@@ -252,4 +252,14 @@ core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o: \
  /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/aerodynamics/magnus_model.hpp \
  /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/aerodynamics/spin_decay_model.hpp \
  /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/field/boundary.hpp \
- /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/forces/force_generator.hpp
+ /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/forces/force_generator.hpp \
+ /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/rigidbody/rigid_assembly.hpp \
+ /workspaces/Untitled-FRC-Physics-Library/core/physics-core/include/frcsim/joints/joint_base.hpp \
+ /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
+ /usr/include/c++/13/unordered_map \
+ /usr/include/c++/13/bits/unordered_map.h \
+ /usr/include/c++/13/bits/hashtable.h \
+ /usr/include/c++/13/bits/hashtable_policy.h \
+ /usr/include/c++/13/bits/enable_special_members.h \
+ /usr/include/c++/13/bits/node_handle.h \
+ /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/array

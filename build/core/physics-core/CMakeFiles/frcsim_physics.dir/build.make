@@ -83,17 +83,49 @@ core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.s: cmake_f
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.s"
 	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/physics_world.cpp -o CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.s
 
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o: core/physics-core/CMakeFiles/frcsim_physics.dir/flags.make
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o: /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/rigid_assembly.cpp
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o: core/physics-core/CMakeFiles/frcsim_physics.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o -MF CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o.d -o CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o -c /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/rigid_assembly.cpp
+
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.i"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/rigid_assembly.cpp > CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.i
+
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.s"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/rigid_assembly.cpp -o CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.s
+
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o: core/physics-core/CMakeFiles/frcsim_physics.dir/flags.make
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o: /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/joints.cpp
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o: core/physics-core/CMakeFiles/frcsim_physics.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o -MF CMakeFiles/frcsim_physics.dir/src/joints.cpp.o.d -o CMakeFiles/frcsim_physics.dir/src/joints.cpp.o -c /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/joints.cpp
+
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/frcsim_physics.dir/src/joints.cpp.i"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/joints.cpp > CMakeFiles/frcsim_physics.dir/src/joints.cpp.i
+
+core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/frcsim_physics.dir/src/joints.cpp.s"
+	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/Untitled-FRC-Physics-Library/core/physics-core/src/joints.cpp -o CMakeFiles/frcsim_physics.dir/src/joints.cpp.s
+
 # Object files for target frcsim_physics
 frcsim_physics_OBJECTS = \
-"CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o"
+"CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o" \
+"CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o" \
+"CMakeFiles/frcsim_physics.dir/src/joints.cpp.o"
 
 # External object files for target frcsim_physics
 frcsim_physics_EXTERNAL_OBJECTS =
 
 core/physics-core/libfrcsim_physics.a: core/physics-core/CMakeFiles/frcsim_physics.dir/src/physics_world.cpp.o
+core/physics-core/libfrcsim_physics.a: core/physics-core/CMakeFiles/frcsim_physics.dir/src/rigid_assembly.cpp.o
+core/physics-core/libfrcsim_physics.a: core/physics-core/CMakeFiles/frcsim_physics.dir/src/joints.cpp.o
 core/physics-core/libfrcsim_physics.a: core/physics-core/CMakeFiles/frcsim_physics.dir/build.make
 core/physics-core/libfrcsim_physics.a: core/physics-core/CMakeFiles/frcsim_physics.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libfrcsim_physics.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/workspaces/Untitled-FRC-Physics-Library/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libfrcsim_physics.a"
 	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && $(CMAKE_COMMAND) -P CMakeFiles/frcsim_physics.dir/cmake_clean_target.cmake
 	cd /workspaces/Untitled-FRC-Physics-Library/build/core/physics-core && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/frcsim_physics.dir/link.txt --verbose=$(VERBOSE)
 

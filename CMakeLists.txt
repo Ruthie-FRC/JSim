@@ -17,6 +17,9 @@ target_link_libraries(frcsim_minimal_world PRIVATE frcsim_physics)
 
 add_executable(frcsim_modular_bodies examples/cpp/modular_bodies_demo.cpp)
 target_link_libraries(frcsim_modular_bodies PRIVATE frcsim_physics)
+
+add_executable(frcsim_robot_assembly examples/cpp/robot_assembly_demo.cpp)
+target_link_libraries(frcsim_robot_assembly PRIVATE frcsim_physics)
 endif()
 
 if(FRCSIM_BUILD_TESTS)

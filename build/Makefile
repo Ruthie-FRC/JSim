@@ -143,6 +143,19 @@ frcsim_modular_bodies/fast:
 .PHONY : frcsim_modular_bodies/fast
 
 #=============================================================================
+# Target rules for targets named frcsim_robot_assembly
+
+# Build rule for target.
+frcsim_robot_assembly: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 frcsim_robot_assembly
+.PHONY : frcsim_robot_assembly
+
+# fast build rule for target.
+frcsim_robot_assembly/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/build
+.PHONY : frcsim_robot_assembly/fast
+
+#=============================================================================
 # Target rules for targets named frcsim_rigidbody_test
 
 # Build rule for target.
@@ -242,6 +255,30 @@ examples/cpp/modular_bodies_demo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_modular_bodies.dir/build.make CMakeFiles/frcsim_modular_bodies.dir/examples/cpp/modular_bodies_demo.cpp.s
 .PHONY : examples/cpp/modular_bodies_demo.cpp.s
 
+examples/cpp/robot_assembly_demo.o: examples/cpp/robot_assembly_demo.cpp.o
+.PHONY : examples/cpp/robot_assembly_demo.o
+
+# target to build an object file
+examples/cpp/robot_assembly_demo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/examples/cpp/robot_assembly_demo.cpp.o
+.PHONY : examples/cpp/robot_assembly_demo.cpp.o
+
+examples/cpp/robot_assembly_demo.i: examples/cpp/robot_assembly_demo.cpp.i
+.PHONY : examples/cpp/robot_assembly_demo.i
+
+# target to preprocess a source file
+examples/cpp/robot_assembly_demo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/examples/cpp/robot_assembly_demo.cpp.i
+.PHONY : examples/cpp/robot_assembly_demo.cpp.i
+
+examples/cpp/robot_assembly_demo.s: examples/cpp/robot_assembly_demo.cpp.s
+.PHONY : examples/cpp/robot_assembly_demo.s
+
+# target to generate assembly for a file
+examples/cpp/robot_assembly_demo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frcsim_robot_assembly.dir/build.make CMakeFiles/frcsim_robot_assembly.dir/examples/cpp/robot_assembly_demo.cpp.s
+.PHONY : examples/cpp/robot_assembly_demo.cpp.s
+
 vendordep/tests/magnus_test.o: vendordep/tests/magnus_test.cpp.o
 .PHONY : vendordep/tests/magnus_test.o
 
@@ -328,12 +365,16 @@ help:
 	@echo "... frcsim_modular_body_test"
 	@echo "... frcsim_physics"
 	@echo "... frcsim_rigidbody_test"
+	@echo "... frcsim_robot_assembly"
 	@echo "... examples/cpp/minimal_world.o"
 	@echo "... examples/cpp/minimal_world.i"
 	@echo "... examples/cpp/minimal_world.s"
 	@echo "... examples/cpp/modular_bodies_demo.o"
 	@echo "... examples/cpp/modular_bodies_demo.i"
 	@echo "... examples/cpp/modular_bodies_demo.s"
+	@echo "... examples/cpp/robot_assembly_demo.o"
+	@echo "... examples/cpp/robot_assembly_demo.i"
+	@echo "... examples/cpp/robot_assembly_demo.s"
 	@echo "... vendordep/tests/magnus_test.o"
 	@echo "... vendordep/tests/magnus_test.i"
 	@echo "... vendordep/tests/magnus_test.s"
