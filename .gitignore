@@ -83,6 +83,27 @@ vendor/
 frcsim_*
 !vendordep/tests/*.cpp
 
+# CMake and build artifacts
+compile_commands.json
+CTestTestfile.cmake
+DartConfiguration.tcl
+
+# IDE cache and language server
+.ccls-cache/
+.clangd/
+.cache/
+.LSP-*
+
+# Code coverage
+*.gcov
+*.gcda
+*.gcno
+*.gcov.json
+
+# Compiled Python bytecode in specific directories
+core/bindings-python/*.so
+core/bindings-java/*.so
+
 # Any local configuration
 .env
 .env.local
