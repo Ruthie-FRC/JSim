@@ -54,7 +54,7 @@ void PhysicsWorld::clearGlobalForceGenerators() {
 global_force_generators_.clear();
 }
 
-void PhysicsWorld::forEachBody(std::function<void(RigidBody&)> callback) {
+void PhysicsWorld::forEachBody(const std::function<void(RigidBody&)>& callback) {
 for (RigidBody& body : bodies_) {
 callback(body);
 }
@@ -65,7 +65,7 @@ callback(body);
 }
 }
 
-void PhysicsWorld::forEachBody(std::function<void(const RigidBody&)> callback) const {
+void PhysicsWorld::forEachBody(const std::function<void(const RigidBody&)>& callback) const {
 for (const RigidBody& body : bodies_) {
 callback(body);
 }
@@ -126,7 +126,7 @@ generator->apply(body, dt_s);
 }
 
 void PhysicsWorld::applyAeroForces() {
-forEachBody([&](RigidBody& body) {
+forEachBody([this](RigidBody& body) {
 if (body.isStatic() || body.flags().is_kinematic) return;
 drag_model_.apply(body);
 magnus_model_.apply(body);
