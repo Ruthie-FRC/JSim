@@ -31,4 +31,23 @@ target_link_libraries(frcsim_magnus_test PRIVATE frcsim_physics)
 
 add_executable(frcsim_modular_body_test vendordep/tests/modular_body_test.cpp)
 target_link_libraries(frcsim_modular_body_test PRIVATE frcsim_physics)
+
+# New comprehensive test suites
+add_executable(frcsim_math_test vendordep/tests/math_test.cpp)
+target_link_libraries(frcsim_math_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_integration_test vendordep/tests/integration_test.cpp)
+target_link_libraries(frcsim_integration_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_assembly_test vendordep/tests/assembly_test.cpp)
+target_link_libraries(frcsim_assembly_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_boundary_test vendordep/tests/boundary_test.cpp)
+target_link_libraries(frcsim_boundary_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_deformable_test vendordep/tests/deformable_test.cpp)
+target_link_libraries(frcsim_deformable_test PRIVATE frcsim_physics)
+
+add_executable(frcsim_forces_test vendordep/tests/forces_test.cpp)
+target_link_libraries(frcsim_forces_test PRIVATE frcsim_physics)
 endif()
