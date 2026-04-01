@@ -24,14 +24,14 @@ All source code is kept in dedicated folders by responsibility.
 
 ## Running Tests
 
-Use the helper script at [scripts/run-tests.sh](scripts/run-tests.sh) to configure, build, and run the full test suite in one step:
+Use the helper script at [scripts/run-tests.sh](scripts/run-tests.sh) to run the vendordep unit tests with Gradle in one step:
 
 ```bash
 ./scripts/run-tests.sh
 ```
 
-You can pass extra `ctest` arguments through the script, for example:
+You can pass extra Gradle arguments through the script, for example:
 
 ```bash
-./scripts/run-tests.sh -R frcsim_math_test
+./scripts/run-tests.sh --info
 ```

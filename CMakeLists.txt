@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_subdirectory(core/physics-core)
+add_subdirectory(core/driver)
 
 if(FRCSIM_BUILD_EXAMPLES)
 add_executable(frcsim_minimal_world examples/cpp/minimal_world.cpp)
