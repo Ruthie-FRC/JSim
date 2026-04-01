@@ -7,31 +7,44 @@ namespace frcsim {
 
 struct Quaternion {
     alignas(16) double w, x, y, z;
-    Vector3 angularVelocity; // rad/s in world frame
 
-    constexpr Quaternion() noexcept : w(1.0), x(0.0), y(0.0), z(0.0), angularVelocity{} {}
-    constexpr Quaternion(double w_, double x_, double y_, double z_) noexcept
-        : w(w_), x(x_), y(y_), z(z_), angularVelocity{} {}
-    constexpr Quaternion(double w_, const Vector3& v) noexcept
-        : w(w_), x(v.x), y(v.y), z(v.z), angularVelocity{} {}
+    constexpr Quaternion() noexcept : w(1.0), x(0.0), y(0.0), z(0.0) {}
+    constexpr Quaternion(double w_, double x_, double y_, double z_) noexcept : w(w_), x(x_), y(y_), z(z_) {}
+    constexpr Quaternion(double w_, const Vector3& v) noexcept : w(w_), x(v.x), y(v.y), z(v.z) {}
+
 
 
     [[nodiscard]] constexpr double norm2() const noexcept { return w*w + x*x + y*y + z*z; }
     [[nodiscard]] double norm() const noexcept { return std::sqrt(norm2()); }
+
+    [[nodiscard]] constexpr bool isIdentity(double eps=1e-12) const noexcept { return std::abs(w-1.0)<eps && std::abs(x)<eps && std::abs(y)<eps && std::abs(z)<eps; }
+    [[nodiscard]] constexpr bool hasNaN() const noexcept { return std::isnan(w)||std::isnan(x)||std::isnan(y)||std::isnan(z); }
 
     [[nodiscard]] Quaternion normalized() const noexcept {
         double n = norm();
         if (n < 1e-12) return Quaternion();
         return Quaternion(w/n, x/n, y/n, z/n);
     }
-    bool isIdentity(double eps=1e-12) const noexcept { return std::abs(w-1.0)<eps && std::abs(x)<eps && std::abs(y)<eps && std::abs(z)<eps; }
-    bool hasNaN() const noexcept { return std::isnan(w)||std::isnan(x)||std::isnan(y)||std::isnan(z); }
+
+    // Normalize if needed (helper)
+    void normalizeIfNeeded(double eps=1e-12) noexcept {
+        double n2 = norm2();
+        if (std::abs(n2-1.0) > eps) normalize();
+    }
 
     // Static: from axis-angle
     static Quaternion fromAxisAngle(const Vector3& axis, double angleRad) noexcept {
+        Vector3 nAxis = axis.normalized();
         double half = 0.5*angleRad;
         double s = std::sin(half);
-        return Quaternion(std::cos(half), axis.x*s, axis.y*s, axis.z*s);
+        return Quaternion(std::cos(half), nAxis.x*s, nAxis.y*s, nAxis.z*s);
+    }
+
+    // From angular velocity (small angle approx)
+    static Quaternion fromAngularVelocity(const Vector3& omega, double dt) noexcept {
+        double angle = omega.norm() * dt;
+        Vector3 axis = (angle > 1e-12) ? omega.normalized() : Vector3(1,0,0);
+        return fromAxisAngle(axis, angle);
     }
     // To axis-angle
     void toAxisAngle(Vector3& axis, double& angleRad) const noexcept {
@@ -78,18 +91,18 @@ struct Quaternion {
         w /= n; x /= n; y /= n; z /= n;
     }
 
-    [[nodiscard]] Quaternion conjugate() const noexcept {
+    [[nodiscard]] constexpr Quaternion conjugate() const noexcept {
         return Quaternion(w, -x, -y, -z);
     }
 
     [[nodiscard]] Quaternion inverse() const noexcept {
-        double n2 = w*w + x*x + y*y + z*z;
+        double n2 = norm2();
         if (n2 < 1e-12) return Quaternion();
         Quaternion c = conjugate();
         return Quaternion(c.w / n2, c.x / n2, c.y / n2, c.z / n2);
     }
 
-    [[nodiscard]] Quaternion operator*(const Quaternion& rhs) const noexcept {
+    [[nodiscard]] constexpr Quaternion operator*(const Quaternion& rhs) const noexcept {
         return Quaternion(
             w*rhs.w - x*rhs.x - y*rhs.y - z*rhs.z,
             w*rhs.x + x*rhs.w + y*rhs.z - z*rhs.y,
@@ -98,41 +111,37 @@ struct Quaternion {
         );
     }
 
+    // Scalar multiply (right)
+    [[nodiscard]] constexpr Quaternion operator*(double scalar) const noexcept {
+        return Quaternion(w*scalar, x*scalar, y*scalar, z*scalar);
+    }
+    // Scalar multiply (left)
+    friend constexpr Quaternion operator*(double scalar, const Quaternion& q) noexcept {
+        return Quaternion(q.w*scalar, q.x*scalar, q.y*scalar, q.z*scalar);
+    }
+
+    // Rotate vector using conjugate (faster, more stable)
     [[nodiscard]] Vector3 rotate(const Vector3& v) const noexcept {
         Quaternion qv(0.0, v);
-        Quaternion res = (*this * qv * inverse());
+        Quaternion res = (*this * qv * conjugate());
         return Vector3(res.x, res.y, res.z);
     }
 
-    [[nodiscard]] Vector3 forward() const noexcept { return rotate(Vector3(0,0,1)); }
-    [[nodiscard]] Vector3 up() const noexcept { return rotate(Vector3(0,1,0)); }
-    [[nodiscard]] Vector3 right() const noexcept { return rotate(Vector3(1,0,0)); }
+    [[nodiscard]] constexpr Vector3 forward() const noexcept { return rotate(Vector3(0,0,1)); }
+    [[nodiscard]] constexpr Vector3 up() const noexcept { return rotate(Vector3(0,1,0)); }
+    [[nodiscard]] constexpr Vector3 right() const noexcept { return rotate(Vector3(1,0,0)); }
 
-    // Integrate angular velocity over dt, applying Magnus & effective gravity effects
-    void integrateAngularVelocity(const Vector3& spin, double dt, const Vector3& velocity,
-                                  double magnusCoeff, double gravityEffect) noexcept {
-        angularVelocity = spin;
-        Vector3 magnus = Vector3::magnusForce(spin, velocity, magnusCoeff); // FRC spin/ball Magnus
-        Vector3 effectiveGravity = Vector3(0, 0, -9.81 * gravityEffect) + magnus; // dynamic gravity
-        Vector3 deltaOmega = angularVelocity * dt; // simple Euler integration
-        Quaternion deltaQuat(0.0, deltaOmega);
-        *this = (*this + deltaQuat * (*this) * 0.5).normalized();
-    }
+    // No longer stores angular velocity; use Integrator for integration
 
-    Quaternion operator+(const Quaternion& rhs) const noexcept {
+
+    [[nodiscard]] constexpr Quaternion operator+(const Quaternion& rhs) const noexcept {
         return Quaternion(w+rhs.w, x+rhs.x, y+rhs.y, z+rhs.z);
     }
-
-    Quaternion operator*(double scalar) const noexcept {
-        return Quaternion(w*scalar, x*scalar, y*scalar, z*scalar);
-    }
-    Quaternion operator-() const noexcept { return Quaternion(-w, -x, -y, -z); }
-
-    [[nodiscard]] bool operator==(const Quaternion& rhs) const noexcept {
+    [[nodiscard]] constexpr Quaternion operator-() const noexcept { return Quaternion(-w, -x, -y, -z); }
+    [[nodiscard]] constexpr bool operator==(const Quaternion& rhs) const noexcept {
         return w==rhs.w && x==rhs.x && y==rhs.y && z==rhs.z;
     }
-
-    [[nodiscard]] bool operator!=(const Quaternion& rhs) const noexcept {
+    [[nodiscard]] constexpr bool operator!=(const Quaternion& rhs) const noexcept {
         return !(*this == rhs);
     }
 
