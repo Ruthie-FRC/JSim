@@ -18,11 +18,15 @@ int main() {
         config.angular_damping_per_s = 0.0;
         config.enable_gravity = false;
 
-        frcsim::PhysicsWorld world(config);
-        frcsim::RigidBody& body = world.createBody(1.0);
+        frcsim::RigidBody body(1.0);
 
         body.applyForce(frcsim::Vector3(10.0, 0.0, 0.0));
-        world.step();
+        body.integrate(
+            config.fixed_dt_s,
+            config.integration_method,
+            frcsim::Vector3::zero(),
+            config.linear_damping_per_s,
+            config.angular_damping_per_s);
 
         assert(std::fabs(body.linearVelocity().x - 0.1) < 1e-9);
         std::cout << "  ✓ Direct force application works\n";

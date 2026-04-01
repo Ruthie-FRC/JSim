@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(FRCSimPhysicsLibrary VERSION 0.1.0 LANGUAGES CXX)
 
+include(CTest)
+
 option(FRCSIM_BUILD_EXAMPLES "Build examples" ON)
 option(FRCSIM_BUILD_TESTS "Build tests" ON)
 
@@ -25,29 +27,38 @@ endif()
 if(FRCSIM_BUILD_TESTS)
 add_executable(frcsim_rigidbody_test vendordep/tests/rigidbody_test.cpp)
 target_link_libraries(frcsim_rigidbody_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_rigidbody_test COMMAND frcsim_rigidbody_test)
 
 add_executable(frcsim_magnus_test vendordep/tests/magnus_test.cpp)
 target_link_libraries(frcsim_magnus_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_magnus_test COMMAND frcsim_magnus_test)
 
 add_executable(frcsim_modular_body_test vendordep/tests/modular_body_test.cpp)
 target_link_libraries(frcsim_modular_body_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_modular_body_test COMMAND frcsim_modular_body_test)
 
 # New comprehensive test suites
 add_executable(frcsim_math_test vendordep/tests/math_test.cpp)
 target_link_libraries(frcsim_math_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_math_test COMMAND frcsim_math_test)
 
 add_executable(frcsim_integration_test vendordep/tests/integration_test.cpp)
 target_link_libraries(frcsim_integration_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_integration_test COMMAND frcsim_integration_test)
 
 add_executable(frcsim_assembly_test vendordep/tests/assembly_test.cpp)
 target_link_libraries(frcsim_assembly_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_assembly_test COMMAND frcsim_assembly_test)
 
 add_executable(frcsim_boundary_test vendordep/tests/boundary_test.cpp)
 target_link_libraries(frcsim_boundary_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_boundary_test COMMAND frcsim_boundary_test)
 
 add_executable(frcsim_deformable_test vendordep/tests/deformable_test.cpp)
 target_link_libraries(frcsim_deformable_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_deformable_test COMMAND frcsim_deformable_test)
 
 add_executable(frcsim_forces_test vendordep/tests/forces_test.cpp)
 target_link_libraries(frcsim_forces_test PRIVATE frcsim_physics)
+add_test(NAME frcsim_forces_test COMMAND frcsim_forces_test)
 endif()
