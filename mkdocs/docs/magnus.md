@@ -2,6 +2,15 @@
 
 This page explains the spin-induced side force model used by RenSim.
 
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| omega | Spin vector | rad/s |
+| v | Linear velocity vector | m/s |
+| k_m | Magnus coefficient | model coefficient |
+| F_m | Magnus force | N-equivalent model force |
+
 ## Implemented model
 
 Relevant code and tests:
@@ -35,6 +44,12 @@ Example used by test:
 
 So side force is positive Y in that frame.
 
+Interpretation process:
+
+1. Identify velocity and spin directions in the same frame.
+2. Apply right-hand rule to omega x v.
+3. Scale by k_m.
+
 ## Sign table quick check
 
 - +Z x +X = +Y
@@ -46,6 +61,8 @@ If measured curve bends opposite expected side, either spin sign or frame transf
 ## Units and coefficient meaning
 
 k_m sets force magnitude scale and is tuned empirically in this implementation.
+
+Because Magnus implementations vary across simulators, treat k_m as an identified parameter rather than a universal constant.
 
 Practical behavior:
 
@@ -63,6 +80,8 @@ $$
 
 Magnus mainly deflects path laterally while drag reduces speed and gravity drives vertical drop.
 
+In practice, trajectory curvature depends on all three terms and their time-varying coupling through speed.
+
 ## Validation recipe
 
 1. Set velocity along +X.
@@ -76,3 +95,8 @@ Magnus mainly deflects path laterally while drag reduces speed and gravity drive
 - Using v x omega instead of omega x v.
 - Mixing world and body spin vectors.
 - Tuning k_m before confirming sign and frame correctness.
+
+## Validation in RenSim
+
+- vendordep/tests/magnus_test.cpp checks canonical omega x v sign
+- vendordep/tests/forces_test.cpp checks integration with broader force pipeline

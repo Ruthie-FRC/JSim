@@ -2,6 +2,19 @@
 
 This page explains drag equations used by RenSim and how projected area and coefficients affect force.
 
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| rho | Air density | kg/m^3 |
+| C_d | Drag coefficient | dimensionless |
+| A | Reference/projected area | m^2 |
+| v | Speed magnitude | m/s |
+| v_hat | Velocity unit direction | dimensionless |
+| q | Dynamic pressure | Pa |
+| k_1 | Linear drag coefficient | N/(m/s) |
+| k_2 | Quadratic drag coefficient | N/(m/s)^2 |
+
 ## Implemented model pieces
 
 Relevant code and tests:
@@ -32,6 +45,11 @@ $$
 F_d = -|F_d| \hat{v}
 $$
 
+Physical interpretation:
+
+- drag magnitude grows with speed squared
+- force direction always opposes motion through fluid
+
 ## Combined linear + quadratic drag
 
 Detailed diagnostics in Vector3 include both terms:
@@ -46,6 +64,11 @@ with:
 - $$k_2 = \frac{1}{2}\rho C_d A$$ in N/(m/s)^2
 
 This helps tune low-speed damping and high-speed aerodynamic loss independently.
+
+Implementation interpretation:
+
+- linear term dominates as v approaches 0
+- quadratic term dominates at higher speed
 
 ## Dynamic pressure
 
@@ -70,6 +93,11 @@ For rigid bodies, area can be inferred from configured geometry and velocity dir
 - Cylinder: blend of end-cap and side projection based on axis alignment
 
 Cylinder projected-area behavior is validated in forces tests using both local-axis and world-axis setters.
+
+For a cylinder aligned by axis vector a and velocity direction d:
+
+- end-cap contribution scales with alignment magnitude |a dot d|
+- side contribution scales with transverse component sqrt(1 - (a dot d)^2)
 
 ## Numeric example
 
@@ -106,6 +134,8 @@ Interpretation:
 - ratio ~ 1: drag is comparable to gravity
 - ratio > 1: drag dominates trajectory shape
 
+This ratio is useful when deciding whether gravity-only approximations are acceptable for a gamepiece trajectory.
+
 ## Tuning guidance
 
 - Start with physically plausible C_d and A.
@@ -124,3 +154,7 @@ Check:
 - drag direction is opposite velocity
 - detailed diagnostics fields are populated and positive
 - invalid input fails closed to zero force
+
+Recommended additional check:
+
+- compare simulated terminal-speed trend against expected drag balance for representative masses

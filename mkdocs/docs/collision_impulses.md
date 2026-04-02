@@ -2,6 +2,18 @@
 
 This page describes the math conventions RenSim uses for boundary interactions and the impulse model intended for contact response.
 
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| phi | Signed distance | m |
+| n | Contact normal | unit vector |
+| e | Coefficient of restitution | dimensionless |
+| mu | Friction coefficient | dimensionless |
+| j_n | Normal impulse magnitude | N*s |
+| j_t | Tangential impulse magnitude | N*s |
+| m_eff | Effective mass along contact direction | kg |
+
 ## Current implementation status
 
 - Boundary data structures are implemented.
@@ -40,6 +52,8 @@ Interpretation:
 - $$\phi = 0$$ touching
 - $$\phi < 0$$ penetration depth is $$-|\phi|$$
 
+This sign convention should be used consistently in collision detection and correction terms.
+
 ## Normal impulse (single contact)
 
 Let relative normal velocity before solve be $$v_n^-$$ and coefficient of restitution be e.
@@ -60,6 +74,13 @@ $$
 
 with rotational coupling handled through contact Jacobian terms in full rigid-body form.
 
+Implementation process (conceptual):
+
+1. Compute relative velocity at contact point.
+2. Project onto normal to obtain closing speed.
+3. Compute impulse magnitude from restitution and effective mass.
+4. Apply equal-and-opposite impulses to involved bodies.
+
 ## Tangential friction impulse
 
 Compute candidate tangential impulse $$j_t$$ and clamp by Coulomb limit:
@@ -71,6 +92,8 @@ $$
 - static friction if within limit
 - dynamic friction if clamped to limit
 
+The clamp step is critical to prevent non-physical tangential impulse magnitudes.
+
 ## Timestep sensitivity and stabilization
 
 Discrete solvers are sensitive to dt. Practical guidance:
@@ -78,6 +101,8 @@ Discrete solvers are sensitive to dt. Practical guidance:
 - use fixed dt
 - prefer several solver iterations over one very large impulse
 - add positional correction (baumgarte or split impulse) to reduce drift
+
+Solver tuning should be treated as a numerical method problem, not only a physical coefficient problem.
 
 ## Numeric example (normal-only)
 
@@ -113,3 +138,5 @@ When detector/solver implementation is expanded, add tests for:
 - restitution sign and magnitude
 - friction clamp behavior
 - stack stability across timesteps
+
+Also include regression tests for frame/sign conventions in contact normals and impulse directions.
