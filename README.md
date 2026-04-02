@@ -10,7 +10,7 @@
 
 RenSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
-## What Is In This Repository
+## Repository Contents
 
 This is a monorepo with core physics code, runtime apps, examples, and documentation tooling.
 
