@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="RenSim is a modular FRC physics library.">
+        <meta name="description" content="Professional documentation for the RenSim FRC physics library.">
       
       
         <meta name="author" content="Ruthie-FRC">
@@ -50,6 +50,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="assets/stylesheets/extra.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -320,10 +322,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#why-rensim" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        Why RenSim
       
     </span>
   </a>
@@ -342,17 +344,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#quick-start" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -361,13 +352,63 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C++
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+  <a href="#documentation-map" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        Documentation Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-and-contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community and Contribution
       
     </span>
   </a>
@@ -473,15 +514,20 @@
     
     
     
+      
+        
+        
+      
     
-    <li class="md-nav__item md-nav__item--nested">
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -824,10 +870,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#key-capabilities-implementaion-ongoing" class="md-nav__link">
+  <a href="#why-rensim" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Capabilities (implementaion ongoing)
+        Why RenSim
       
     </span>
   </a>
@@ -846,17 +892,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#quick-start" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -865,13 +900,63 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C++
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
+  <a href="#documentation-map" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Contributing
+        Documentation Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-and-contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community and Contribution
       
     </span>
   </a>
@@ -905,64 +990,59 @@
 
 <h1 id="rensim">RenSim<a class="headerlink" href="#rensim" title="Permanent link">&para;</a></h1>
 <p>RenSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.</p>
-<h3 id="key-capabilities-implementaion-ongoing">Key Capabilities (implementaion ongoing)<a class="headerlink" href="#key-capabilities-implementaion-ongoing" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Project Status</p>
+<p>RenSim is under active development. Core simulation features are available, and additional capabilities are being added iteratively.</p>
+</div>
+<h2 id="why-rensim">Why RenSim<a class="headerlink" href="#why-rensim" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Unified Physics Engine:</strong></li>
-<li>Rigid body, drivetrain, and mechanism simulation</li>
-<li>Realistic field, collision, and sensor modeling</li>
-<li><strong>Multi-language Bindings:</strong></li>
-<li>Native C++ core</li>
-<li>Python and Java bindings for rapid prototyping and integration</li>
-<li><strong>Simulation Runtime:</strong></li>
-<li>Plug-and-play robot code simulation</li>
-<li>Sensor pipelines and WPILib bridge</li>
-<li><strong>CAD Import:</strong></li>
-<li>Load URDF, STL, and more for custom robots and fields</li>
-<li><strong>Extensible &amp; Modular:</strong></li>
-<li>Add your own models, forces, and plugins</li>
+<li>Unified physics engine for rigid-body, drivetrain, and mechanism simulation</li>
+<li>Multi-language support with native C++ and Python/Java bindings</li>
+<li>Simulation runtime components for robot code and sensor pipelines</li>
+<li>CAD import workflows for URDF, STL, and related geometry formats</li>
+<li>Modular architecture for custom models, forces, and plugins</li>
 </ul>
-<h3 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h3>
+<h2 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Accuracy:</strong> Realistic, physically-based simulation for FRC robots and game elements</li>
-<li><strong>Integration:</strong> Seamless workflow from CAD to code to simulation</li>
-<li><strong>Accessibility:</strong> Usable by teams of all experience levels, with Python/Java/C++ support</li>
-<li><strong>Open Source:</strong> Community-driven, MIT-licensed</li>
+<li>Accuracy: physically grounded simulation for FRC robots and game elements</li>
+<li>Integration: seamless workflow from CAD to code to simulation</li>
+<li>Accessibility: practical for teams of varied experience levels</li>
+<li>Open source: community-driven and MIT-licensed</li>
 </ul>
-<hr />
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="api_usage/">API Usage</a>: How to use the library in your code</li>
-<li><a href="integrators/">Integrators</a>: Numerical integration methods used by the physics engine</li>
-<li><a href="vector/">Vector3</a>: 3D vector operations and helpers</li>
-<li><a href="quaternion/">Quaternion</a>: 3D orientation and rotation utilities</li>
-<li><a href="architecture/">Architecture</a>: System design and extensibility</li>
-<li><a href="physics_reference/">Physics Reference</a>: Underlying models and equations</li>
-</ul>
-<hr />
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># C++</span>
-<span class="c1"># See examples/cpp/minimal_world.cpp</span>
-
-<span class="c1"># Python</span>
-pip<span class="w"> </span>install<span class="w"> </span>frcsim-physics
-python<span class="w"> </span>examples/python/simple_world_demo.py
-
-<span class="c1"># Java</span>
-<span class="c1"># See examples/java/ShooterPredictionExample.java</span>
+<h3 id="c">C++<a class="headerlink" href="#c" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>-j
+ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
 </code></pre></div>
-<hr />
-<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<p>We welcome issues, pull requests, and ideas from the FRC and robotics community.</p>
+<h3 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>frcsim-physics
+python<span class="w"> </span>examples/python/simple_world_demo.py
+</code></pre></div>
+<h3 id="java">Java<a class="headerlink" href="#java" title="Permanent link">&para;</a></h3>
+<p>Use the example in <code>examples/java/ShooterPredictionExample.java</code> as a starting point.</p>
+<h2 id="documentation-map">Documentation Map<a class="headerlink" href="#documentation-map" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="api_usage/">API Usage</a>: integrating RenSim into applications</li>
+<li><a href="architecture/">Architecture</a>: subsystem layout and extension model</li>
+<li><a href="physics_reference/">Physics Reference</a>: models, assumptions, and equations</li>
+<li><a href="math_index/">Math Overview</a>: math modules and conventions</li>
+<li><a href="integrators/">Integrators</a>: numerical integration methods</li>
+<li><a href="vector/">Vector3</a>, <a href="matrix/">Matrix3</a>, <a href="quaternion/">Quaternion</a>: core math primitives</li>
+<li><a href="units_and_conventions/">Units and Conventions</a>: coordinate and unit standards</li>
+</ul>
+<h2 id="community-and-contribution">Community and Contribution<a class="headerlink" href="#community-and-contribution" title="Permanent link">&para;</a></h2>
+<p>Contributions are welcome from teams, mentors, and developers across the FRC ecosystem.</p>
+<ul>
+<li>Report bugs and request features in <a href="https://github.com/Ruthie-FRC/RenSim/issues">GitHub Issues</a></li>
+<li>Propose improvements through pull requests</li>
+<li>Follow project standards in the repository documentation</li>
+</ul>
 <!--
 <div align="center">
   <img src="assets/images/frc_field.png" alt="FRC Field" width="400"/>
 </div>
 -->
-
-<hr />
-<div align="center">
-  <b>Simulate. Innovate. Win.</b>
-</div>
 
 
 
@@ -1018,7 +1098,7 @@ python<span class="w"> </span>examples/python/simple_world_demo.py
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "announce.dismiss", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>

@@ -2,7 +2,7 @@ site_name: RenSim
 repo_url: https://github.com/Ruthie-FRC/RenSim
 repo_name: Ruthie-FRC/RenSim
 site_description: >-
-  RenSim is a modular FRC physics library.
+  Professional documentation for the RenSim FRC physics library.
 site_author: Ruthie-FRC
 edit_uri: edit/main/mkdocs/docs/
 
@@ -28,6 +28,7 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
+    - navigation.sections
     - navigation.top
     - search.suggest
     - search.highlight
@@ -56,9 +57,15 @@ nav:
 plugins:
   - search
 
+extra_css:
+  - assets/stylesheets/extra.css
+
 markdown_extensions:
   - admonition
   - codehilite
+  - attr_list
+  - md_in_html
+  - tables
   - toc:
       permalink: true
   - pymdownx.superfences
