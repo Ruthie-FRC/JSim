@@ -1,89 +1,160 @@
-# Integrators (`frcsim::Integrator`)
+# Integrators (frcsim::Integrator)
 
-This page documents the integrators provided in the `frcsim` physics library, which are used for updating positions, velocities, and orientations in physics simulations.
+This page explains the numerical integration methods used in RenSim and how to choose between them.
 
-## Overview
+## Source and scope
 
-The `Integrator` struct provides static methods for several common numerical integration techniques used in real-time physics engines. These methods are designed for use with the library's `Vector3` and `Quaternion` types.
+Primary implementation:
 
----
+- core/driver/include/frcsim/math/integrators.hpp
 
-## Methods
+Validation tests:
 
-### 1. `integrateLinear`
-**Type:** Semi-Implicit Euler (a.k.a. Symplectic Euler)
+- vendordep/tests/integration_test.cpp
 
-- **Usage:**
-  - `integrateLinear(position, velocity, acceleration, dt)`
-- **Description:**
-  - Updates velocity and position using the semi-implicit Euler method, which is stable and widely used in real-time physics.
-  - 
-    $$
-    \text{velocity} \mathrel{+}= \text{acceleration} \times dt \\
-    \text{position} \mathrel{+}= \text{velocity} \times dt
-    $$
+## State equations
 
----
+Linear dynamics are integrated from:
 
-### 2. `integrateLinearExplicit`
-**Type:** Explicit Euler
+$$
+\dot{x} = v, \quad \dot{v} = a
+$$
 
-- **Usage:**
-  - `integrateLinearExplicit(position, velocity, acceleration, dt)`
-- **Description:**
-  - Updates position and velocity using the explicit Euler method. Less stable than semi-implicit Euler, but useful for debugging or predictor steps.
-  - 
-    $$
-    \text{position} \mathrel{+}= \text{velocity} \times dt \\
-    \text{velocity} \mathrel{+}= \text{acceleration} \times dt
-    $$
+Angular dynamics use quaternion kinematics:
 
----
+$$
+\dot{q} = \frac{1}{2} \omega_q q
+$$
 
-### 3. `integrateAngular`
-**Type:** Quaternion Integration
+with $$\omega_q = (0, \omega_x, \omega_y, \omega_z)$$.
 
-- **Usage:**
-  - `integrateAngular(orientation, angularVelocity, dt)`
-- **Description:**
-  - Integrates orientation using angular velocity and quaternion algebra.
-  - Quaternion derivative:
-    $$
-    \dot{q} = 0.5 \cdot \omega_{quat} \cdot q
-    $$
-    where $\omega_{quat} = (0, \omega_x, \omega_y, \omega_z)$
+## Method comparison
 
----
+| Method | Order (global) | Cost | Typical stability in real-time sims | Notes |
+|---|---|---|---|---|
+| Explicit Euler | 1 | Low | Weak for stiff dynamics | Good for debugging and simple predictors |
+| Semi-Implicit Euler | 1 | Low | Better for energy behavior in mechanics | Default-style choice in many engines |
+| RK2 (midpoint) | 2 | Medium | Better accuracy per step | Useful for fast projectiles and smoother trajectories |
 
-### 4. `integrateAngularVelocity`
-**Type:** Angular Velocity Update
+## Linear integration methods
 
-- **Usage:**
-  - `integrateAngularVelocity(angularVelocity, angularAcceleration, dt)`
-- **Description:**
-  - Updates angular velocity using angular acceleration.
-  - 
-    $$
-    \omega \mathrel{+}= \alpha \times dt
-    $$
+### Semi-Implicit Euler (integrateLinear)
 
----
+Update order:
 
-### 5. `integrateLinearRK2`
-**Type:** Runge-Kutta 2nd Order (Midpoint)
+$$
+v_{n+1} = v_n + a_n dt
+$$
 
-- **Usage:**
-  - `integrateLinearRK2(position, velocity, acceleration, dt)`
-- **Description:**
-  - Uses the midpoint (RK2) method for more accurate integration, useful for projectiles or high-speed mechanisms.
+$$
+x_{n+1} = x_n + v_{n+1} dt
+$$
 
----
+Why it is commonly used:
 
-## See Also
-- [`Vector3`](vector.md)
-- [`Quaternion`](quaternion.md)
-- [Physics Reference](physics_reference.md)
+- more stable than explicit Euler for many mechanical systems
+- better long-run behavior for velocity-coupled motion
 
----
+### Explicit Euler (integrateLinearExplicit)
 
-*This documentation was generated for the file: `core/physics-core/include/frcsim/math/integrators.hpp`*
+Update order:
+
+$$
+x_{n+1} = x_n + v_n dt
+$$
+
+$$
+v_{n+1} = v_n + a_n dt
+$$
+
+Use when:
+
+- you need the old-state predictor style update
+- you are debugging step ordering
+
+### RK2 midpoint (integrateLinearRK2)
+
+RenSim midpoint-style update:
+
+$$
+v_{mid} = v_n + a_n \frac{dt}{2}
+$$
+
+$$
+x_{n+1} = x_n + v_{mid} dt
+$$
+
+$$
+v_{n+1} = v_n + a_n dt
+$$
+
+Use when:
+
+- projectile motion needs less trajectory error at same dt
+- you want better accuracy without moving to full RK4 cost
+
+## Angular integration
+
+### Angular velocity update (integrateAngularVelocity)
+
+$$
+\omega_{n+1} = \omega_n + \alpha_n dt
+$$
+
+### Quaternion update (integrateAngular)
+
+RenSim computes:
+
+$$
+dq = 0.5 (\omega_q q)
+$$
+
+$$
+q_{n+1} = q_n + dq dt
+$$
+
+and then normalizes if needed.
+
+Why normalization matters:
+
+- floating-point drift causes $$|q| \neq 1$$ over time
+- non-unit quaternions produce scaling/rotation artifacts
+
+## Error and timestep guidance
+
+- Explicit and semi-implicit Euler are first-order globally: error scales approximately with dt.
+- RK2 is second-order globally: error scales approximately with $$dt^2$$.
+- Halving dt usually improves Euler methods notably, but cost doubles.
+
+Practical guidance for FRC-like simulation loops:
+
+- keep fixed dt
+- start near 0.01 s to 0.02 s for many robot dynamics loops
+- reduce dt for stiff spring contacts, high-speed impacts, or high angular rates
+
+## Energy behavior and drift expectations
+
+- Explicit Euler can over-inject or dissipate energy depending on system.
+- Semi-implicit Euler often gives better qualitative energy behavior in rigid-body motion.
+- RK2 typically reduces trajectory drift but still needs appropriate dt.
+
+## Choose this method when
+
+- choose Semi-Implicit Euler for general real-time rigid-body stepping
+- choose Explicit Euler for diagnostics and predictor workflows
+- choose RK2 when projectile or fast mechanism accuracy needs improvement at same dt
+
+## Validation in RenSim
+
+Use vendordep/tests/integration_test.cpp to verify:
+
+- explicit vs semi-implicit ordering differences
+- expected free-fall position/velocity bounds over fixed simulated time
+- damping trends and kinematic body behavior
+
+## Related Pages
+
+- [Units and Conventions](units_and_conventions.md)
+- [Vector3](vector.md)
+- [Quaternion](quaternion.md)
+- [Matrix3](matrix.md)

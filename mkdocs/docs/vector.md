@@ -1,73 +1,193 @@
-# Vector3 (`frcsim::Vector3`)
+# Vector3 (frcsim::Vector3)
 
-This page documents the `Vector3` struct in the `frcsim` physics library, which represents a 3D vector and provides a wide range of vector operations for physics simulations.
+This page explains Vector3 operations as physics tools: geometry, forces, and units.
 
----
+## Source and scope
 
-## Overview
+Primary implementation:
 
-`Vector3` is a 3D vector type with double-precision components (`x`, `y`, `z`). It supports arithmetic, geometric, and physics-related operations, and is used throughout the library for positions, velocities, forces, and more.
+- core/driver/include/frcsim/math/vector.hpp
 
----
+Validation tests:
 
-## Members
-- **x, y, z**: The vector components (double)
+- vendordep/tests/math_test.cpp
+- vendordep/tests/forces_test.cpp
+- vendordep/tests/magnus_test.cpp
 
----
+## Core geometric operations
 
-## Key Methods & Operations
+### Dot product
 
-### Constructors
-- `Vector3()` — Zero vector
-- `Vector3(double x, double y, double z)` — Initialize with values
+$$
+a \cdot b = |a||b|\cos\theta
+$$
 
-### Arithmetic
-- `+`, `-`, `*`, `/` (with scalars and vectors)
-- Compound assignment: `+=`, `-=`, `*=`, `/=`
+Use cases:
 
-### Norms & Normalization
-- `norm2()` — Squared magnitude
-- `norm()` — Magnitude
-- `normalized()` — Returns normalized vector
-- `isZero(eps)` — Checks if vector is near zero
+- projection magnitude
+- measuring alignment
+- speed along an axis
 
-### Dot & Cross Product
-- `dot(const Vector3&)` — Dot product
-- `cross(const Vector3&)` — Cross product
+### Cross product
 
-### Utility
-- `clamp(min, max)` — Clamp each component
-- `lerp(a, b, t)` — Linear interpolation
-- `distance(a, b)` — Distance between vectors
-- `projectOnto(axis)` — Projection onto another vector
-- `reflect(n)` — Reflect across a normal
-- `torque(r)` — Torque at a point
+$$
+a \times b
+$$
 
-### Physics Helpers
-- `magnusForce(velocity, omega, k)` — Magnus effect force
-- `dragForce(v, Cd, A, rho)` — Drag force
-- `dynamicGravity(velocity, spin, g, magnusCoeff, gravityEffect)` — Gravity with Magnus effect
-- `tractionForce(normal, frictionCoeff, normalForce)` — Traction/friction force
+Use cases:
 
-### Constants
-- `zero()` — Zero vector
-- `unitX()`, `unitY()`, `unitZ()` — Unit vectors
+- torque direction and magnitude
+- normal vectors
+- Magnus side-force direction
 
-### Other
-- `hasNaN()` — Check for NaN components
-- `operator[]` — Element access
-- `operator<<` — Output stream
+Right-hand rule defines sign.
 
----
+### Norm and normalization
 
-## Example Usage
-```cpp
-frcsim::Vector3 a(1.0, 2.0, 3.0);
-frcsim::Vector3 b = a.normalized();
-double d = a.dot(b);
-frcsim::Vector3 f = frcsim::Vector3::dragForce(a, 0.5, 0.1);
-```
+$$
+|v| = \sqrt{v_x^2 + v_y^2 + v_z^2}
+$$
 
----
+Normalized direction:
 
-*This documentation was generated for the file: `physics-core/include/frcsim/math/vector.hpp`*
+$$
+\hat{v} = \frac{v}{|v|}
+$$
+
+Always guard near-zero magnitude.
+
+## Projection, reflection, and interpolation
+
+### Projection onto axis
+
+$$
+\operatorname{proj}_{a}(v) = a \frac{v \cdot a}{a \cdot a}
+$$
+
+### Reflection about normal n
+
+$$
+v_{refl} = v - 2(v \cdot n)n
+$$
+
+Expected when n is unit length.
+
+### Linear interpolation
+
+$$
+\operatorname{lerp}(a,b,t) = a(1-t) + bt
+$$
+
+## Torque helper
+
+Vector3 torque helper implements:
+
+$$
+	au = r \times F
+$$
+
+Units:
+
+- r in m
+- F in N
+- tau in N*m
+
+Worked example:
+
+- $$r = (1,0,0)$$ m
+- $$F = (0,10,0)$$ N
+- $$\tau = (0,0,10)$$ N*m
+
+This sign and magnitude match integration tests for force-at-point behavior.
+
+## Physics helper formulas and units
+
+### magnusForce(velocity, omega, k)
+
+Equation:
+
+$$
+F_m = k(\omega \times v)
+$$
+
+Units:
+
+- velocity: m/s
+- omega: rad/s
+- k: tuned coefficient
+- result: N-equivalent force term
+
+### dragForce(v, Cd, A, rho)
+
+Equation:
+
+$$
+F_d = -\frac{1}{2}\rho C_d A |v|^2 \hat{v}
+$$
+
+Units:
+
+- v: m/s
+- Cd: dimensionless
+- A: m^2
+- rho: kg/m^3
+- force: N
+
+Detailed variant exposes diagnostics such as dynamic pressure, linear drag term, and total drag magnitude.
+
+### dynamicGravity(velocity, spin, g, magnusCoeff, gravityEffect)
+
+Equation form:
+
+$$
+a = (0,0,-g*gravityEffect) + magnusForce(velocity, spin, magnusCoeff)
+$$
+
+Units:
+
+- returned vector is acceleration-like term (m/s^2 interpretation in integration context)
+
+### tractionForce(normal, frictionCoeff, normalForce)
+
+Equation:
+
+$$
+F_t = normal * (\mu N)
+$$
+
+Units:
+
+- normal: unitless direction
+- frictionCoeff (mu): dimensionless
+- normalForce (N): newtons
+- result: N
+
+## Free-body style examples
+
+Example 1: wheel-ground traction on flat ground
+
+- normal direction: +Z
+- mu = 0.8
+- normal force = 100 N
+- traction magnitude = 80 N in +Z direction from helper form
+
+Example 2: drag and thrust along X
+
+- thrust = +5 N on X
+- drag = -1.2 N on X
+- net force = +3.8 N on X
+- acceleration = net/mass
+
+## Common mistakes
+
+- using unnormalized normals in reflection/traction
+- reversing cross-product operand order
+- mixing force (N) and acceleration (m/s^2)
+- applying drag in same direction as velocity
+
+## Related Pages
+
+- [Units and Conventions](units_and_conventions.md)
+- [Aerodynamics Math](aerodynamics.md)
+- [Magnus Effect Math](magnus.md)
+- [Matrix3](matrix.md)

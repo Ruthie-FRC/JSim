@@ -1,0 +1,126 @@
+# Aerodynamics Math
+
+This page explains drag equations used by RenSim and how projected area and coefficients affect force.
+
+## Implemented model pieces
+
+Relevant code and tests:
+
+- core/physics-core/include/frcsim/aerodynamics/drag_model.hpp
+- core/driver/include/frcsim/math/vector.hpp
+- core/driver/include/frcsim/rigidbody/rigid_body.hpp
+- vendordep/tests/forces_test.cpp
+
+## Quadratic drag
+
+RenSim uses the standard magnitude model:
+
+$$
+|F_d| = \frac{1}{2} \rho C_d A v^2
+$$
+
+where:
+
+- rho: air density (kg/m^3)
+- C_d: drag coefficient (dimensionless)
+- A: reference area (m^2)
+- v: speed (m/s)
+
+Direction is opposite velocity:
+
+$$
+F_d = -|F_d| \hat{v}
+$$
+
+## Combined linear + quadratic drag
+
+Detailed diagnostics in Vector3 include both terms:
+
+$$
+|F_d| = k_1 v + k_2 v^2
+$$
+
+with:
+
+- $$k_1$$ in N/(m/s)
+- $$k_2 = \frac{1}{2}\rho C_d A$$ in N/(m/s)^2
+
+This helps tune low-speed damping and high-speed aerodynamic loss independently.
+
+## Dynamic pressure
+
+RenSim reports dynamic pressure:
+
+$$
+q = \frac{1}{2} \rho v^2
+$$
+
+and uses:
+
+$$
+|F_{d,quad}| = q C_d A
+$$
+
+## Projected area from body geometry
+
+For rigid bodies, area can be inferred from configured geometry and velocity direction.
+
+- Sphere: $$A = \pi r^2$$
+- Box: weighted projected area from dimensions and direction cosines
+- Cylinder: blend of end-cap and side projection based on axis alignment
+
+Cylinder projected-area behavior is validated in forces tests using both local-axis and world-axis setters.
+
+## Numeric example
+
+Given:
+
+- rho = 1.225 kg/m^3
+- C_d = 0.47
+- A = 0.01 m^2
+- v = 10 m/s
+
+Then:
+
+$$
+q = 0.5 * 1.225 * 10^2 = 61.25\ \text{Pa}
+$$
+
+$$
+|F_d| = q C_d A = 61.25 * 0.47 * 0.01 = 0.287875\ \text{N}
+$$
+
+Direction is opposite the velocity vector.
+
+## Drag vs effective gravity
+
+DragModel exposes comparison against effective gravity acceleration:
+
+$$
+\text{ratio} = \frac{|a_{drag}|}{|g_{eff}|}
+$$
+
+Interpretation:
+
+- ratio << 1: drag is minor
+- ratio ~ 1: drag is comparable to gravity
+- ratio > 1: drag dominates trajectory shape
+
+## Tuning guidance
+
+- Start with physically plausible C_d and A.
+- Add linear term only if low-speed damping is under-modeled.
+- Keep signs frame-consistent before tuning coefficients.
+- Validate with speed-decay and drop tests, not just one timestep.
+
+## Validation in RenSim
+
+Use:
+
+- vendordep/tests/forces_test.cpp
+
+Check:
+
+- drag direction is opposite velocity
+- detailed diagnostics fields are populated and positive
+- invalid input fails closed to zero force

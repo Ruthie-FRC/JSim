@@ -44,7 +44,9 @@ nav:
   - Math:
       - Integrators: integrators.md
       - Vector3: vector.md
+      - Matrix3: matrix.md
       - Quaternion: quaternion.md
+      - Math Docs Backlog: math_docs_backlog.md
 
 plugins:
   - search
