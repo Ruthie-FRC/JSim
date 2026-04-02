@@ -124,6 +124,20 @@ pre {
   transition: color 160ms ease, background-color 160ms ease, opacity 160ms ease, transform 160ms ease;
 }
 
+/* Keep header bar text and icons consistently white */
+.md-header,
+.md-header__title,
+.md-header__topic,
+.md-header__topic .md-ellipsis,
+.md-header__button,
+.md-header__button .md-icon,
+.md-header__button svg,
+.md-header__option,
+.md-header a {
+  color: #ffffff !important;
+  fill: currentColor;
+}
+
 .md-nav__link:hover,
 .md-tabs__link:hover,
 .md-social__link:hover,
