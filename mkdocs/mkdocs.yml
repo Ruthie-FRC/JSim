@@ -33,8 +33,6 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
-    - navigation.sections
-    - navigation.indexes
     - navigation.top
     - toc.follow
     - search.suggest
@@ -76,6 +74,9 @@ extra:
 
 extra_css:
   - assets/stylesheets/extra.css
+
+extra_javascript:
+  - assets/javascripts/external-links.js
 
 markdown_extensions:
   - admonition
