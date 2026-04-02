@@ -1,5 +1,4 @@
 # RenSim
-
 RenSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
 !!! info "Project Status"
