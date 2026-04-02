@@ -44,7 +44,7 @@ pre {
 
 .md-content__inner > h1 + p {
   font-size: 1.04rem;
-  color: var(--rensim-text-secondary);
+  color: var(--md-default-fg-color--light);
   margin-bottom: 1.35rem;
 }
 
