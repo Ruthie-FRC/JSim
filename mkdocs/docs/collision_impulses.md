@@ -12,7 +12,7 @@ This page describes the math conventions RenSim uses for boundary interactions a
 | mu | Friction coefficient | dimensionless |
 | j_n | Normal impulse magnitude | N*s |
 | j_t | Tangential impulse magnitude | N*s |
-| m_eff | Effective mass along contact direction | kg |
+| k_n | Effective inverse mass along contact normal | 1/kg |
 
 ## Current implementation status
 
@@ -61,10 +61,10 @@ Let relative normal velocity before solve be $$v_n^-$$ and coefficient of restit
 For scalar impulse j along normal n:
 
 $$
-j = -\frac{(1+e) v_n^-}{m_{eff}}
+j = -\frac{(1+e) v_n^-}{k_n}
 $$
 
-where $$m_{eff}$$ is effective mass at contact along n.
+where $$k_n$$ is the effective inverse mass along the contact normal.
 
 Apply impulse:
 
@@ -111,7 +111,7 @@ Given:
 - mass m = 2 kg
 - incoming normal velocity $$v_n^- = -3$$ m/s
 - restitution e = 0.5
-- no rotational coupling so $$m_{eff} = 1/m = 0.5$$ in inverse-mass form
+- no rotational coupling so $$k_n = 1/m = 0.5\ \text{kg}^{-1}$$
 
 Then impulse magnitude:
 
