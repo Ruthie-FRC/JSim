@@ -26,12 +26,15 @@ class RigidBody {
 			kCustom,
 			kSphere,
 			kBox,
+			kCylinder,
 		};
 
 		Shape shape{Shape::kCustom};
 		double reference_area_m2{0.0};
 		double radius_m{0.0};
 		Vector3 box_dimensions_m{0.0, 0.0, 0.0};
+		double cylinder_length_m{0.0};
+		Vector3 cylinder_axis_local{0.0, 0.0, 1.0};
 	};
 
 	explicit RigidBody(double mass_kg = 1.0) { setMassKg(mass_kg); }
@@ -96,6 +99,27 @@ class RigidBody {
 					std::abs(velocity_direction.y) * dims.x * dims.z +
 					std::abs(velocity_direction.z) * dims.x * dims.y;
 			}
+				case AerodynamicGeometry::Shape::kCylinder: {
+					const double radius_m = std::max(0.0, geometry.radius_m);
+					const double length_m = std::max(0.0, geometry.cylinder_length_m);
+					if (radius_m <= 0.0 || length_m <= 0.0) {
+						return 0.0;
+					}
+
+					const Vector3 velocity_direction_world = velocity_world.isZero() ? Vector3::unitX() : velocity_world.normalized();
+					Vector3 cylinder_axis_local = geometry.cylinder_axis_local.normalized();
+					if (cylinder_axis_local.isZero()) {
+						cylinder_axis_local = Vector3::unitZ();
+					}
+
+					const Vector3 velocity_direction_local = orientation_.inverse().rotate(velocity_direction_world);
+					const double axis_alignment = std::abs(velocity_direction_local.dot(cylinder_axis_local));
+					const double side_alignment = std::sqrt(std::max(0.0, 1.0 - axis_alignment * axis_alignment));
+
+					const double endcap_area_m2 = 3.14159265358979323846 * radius_m * radius_m * axis_alignment;
+					const double side_area_m2 = 2.0 * radius_m * length_m * side_alignment;
+					return endcap_area_m2 + side_area_m2;
+				}
 			case AerodynamicGeometry::Shape::kCustom:
 			default:
 				return 0.0;

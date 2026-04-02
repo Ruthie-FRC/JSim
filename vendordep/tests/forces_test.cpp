@@ -196,6 +196,28 @@ int main() {
         std::cout << "  ✓ Body geometry drives projected drag area\n";
     }
 
+    // ===== Aerodynamics: Cylinder Geometry Projects By Orientation =====
+    {
+        frcsim::RigidBody body(1.0);
+        frcsim::RigidBody::AerodynamicGeometry geometry;
+        geometry.shape = frcsim::RigidBody::AerodynamicGeometry::Shape::kCylinder;
+        geometry.radius_m = 0.1;
+        geometry.cylinder_length_m = 0.5;
+
+        body.setAerodynamicGeometry(geometry);
+        body.setOrientation(frcsim::Quaternion());
+
+        const double area_end_on = body.dragReferenceAreaM2(frcsim::Vector3(0.0, 0.0, 10.0));
+        const double area_side_on = body.dragReferenceAreaM2(frcsim::Vector3(10.0, 0.0, 0.0));
+
+        const double expected_end_on = 3.14159265358979323846 * 0.1 * 0.1;
+        const double expected_side_on = 2.0 * 0.1 * 0.5;
+
+        assert(std::fabs(area_end_on - expected_end_on) < 1e-9);
+        assert(std::fabs(area_side_on - expected_side_on) < 1e-9);
+        std::cout << "  ✓ Cylinder projected drag area follows orientation\n";
+    }
+
     // ===== Aerodynamics: Invalid Drag Inputs Return Zero Force =====
     {
         const auto details = frcsim::Vector3::dragForceDetailed(

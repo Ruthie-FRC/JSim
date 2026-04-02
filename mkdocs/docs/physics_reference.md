@@ -37,7 +37,7 @@ Aerodynamic drag is modeled with a projected cross-sectional area. For rigid bod
 
 Drag can also be compared against effective gravity on a per-body basis, which is useful for judging whether aerodynamic forces are small, comparable, or dominant relative to weight.
 
-The current body geometry support covers custom reference areas and simple box/sphere approximations.
+The current body geometry support covers custom reference areas and simple box/sphere/cylinder approximations.
 
 ## Numerical Considerations
 
