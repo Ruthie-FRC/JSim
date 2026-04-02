@@ -2,6 +2,16 @@
 
 This page explains quaternion math used by RenSim for stable 3D orientation updates.
 
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| q | Orientation quaternion | dimensionless |
+| q_dot | Quaternion derivative | 1/s |
+| omega | Angular velocity vector | rad/s |
+| omega_q | Pure quaternion built from omega | rad/s |
+| p | Pure quaternion embedding of a vector | varies |
+
 ## Source and scope
 
 Primary implementation:
@@ -56,6 +66,16 @@ The rotated vector is the xyz part of $$p'$$.
 
 RenSim rotate helper uses conjugate for unit quaternions, which is efficient and stable when normalization is maintained.
 
+### Why conjugate is valid in rotate()
+
+For unit quaternions, inverse equals conjugate:
+
+$$
+q^{-1} = q^*
+$$
+
+This avoids explicit division and improves numerical robustness in hot loops.
+
 ## Axis-angle conversion
 
 From axis u and angle theta:
@@ -65,6 +85,15 @@ q = \left(\cos\frac{\theta}{2},\ u\sin\frac{\theta}{2}\right)
 $$
 
 Near zero angle, axis is not uniquely defined; implementation falls back to a default axis when needed.
+
+## Quaternion to rotation matrix mapping
+
+RenSim exposes conversion to 3x3 rotation matrix. This matrix should remain orthonormal if q is normalized.
+
+Validation checks after conversion:
+
+- $$R^TR \approx I$$
+- $$\det(R) \approx 1$$
 
 ## Why q and -q are equivalent
 
@@ -83,6 +112,11 @@ RenSim behavior:
 - flips sign when needed for shortest path
 - falls back to normalized lerp when quaternions are very close
 
+Reason for fallback:
+
+- avoids division by very small sin(theta)
+- improves numerical conditioning for tiny angular differences
+
 ## Quaternion integration and normalization
 
 RenSim angular integration uses:
@@ -97,6 +131,19 @@ Why normalization frequency matters:
 
 - too infrequent: drift accumulates and rotation quality degrades
 - every step: robust and simple for real-time simulation
+
+## Practical implementation process
+
+Per integration step:
+
+1. Compute angular acceleration from torques and inertia.
+2. Update omega.
+3. Build omega_q.
+4. Compute q_dot.
+5. Update q with forward step.
+6. Normalize if needed.
+
+This order matches the intended rigid-body update flow in RenSim.
 
 ## Worked 90-degree example
 

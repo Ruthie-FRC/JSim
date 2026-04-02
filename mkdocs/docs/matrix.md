@@ -1,10 +1,21 @@
-# Matrix3 (`frcsim::Matrix3`)
+# Matrix3 (frcsim::Matrix3)
 
-This page explains how `Matrix3` is used mathematically in RenSim, including frame transforms, inertia-tensor rotation, and common numerical pitfalls.
+This page explains how Matrix3 is used in RenSim for coordinate transforms, inertia mapping, and rotational dynamics.
 
-## Why this page exists
+## Purpose
 
-`Matrix3` is central to rotational dynamics, coordinate transforms, and body-to-world inertia conversion. This page focuses on meaning and usage, not just API signatures.
+Matrix3 is central to rotational dynamics, coordinate transforms, and body-to-world inertia conversion. The goal is to explain both formula meaning and implementation implications.
+
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| R | Rotation matrix | dimensionless |
+| I_b | Inertia tensor in body frame | kg*m^2 |
+| I_w | Inertia tensor in world frame | kg*m^2 |
+| tau | Torque | N*m |
+| alpha | Angular acceleration | rad/s^2 |
+| v_b, v_w | Same vector in body/world frame | varies |
 
 ## Conventions Used in RenSim
 
@@ -19,7 +30,7 @@ Before applying formulas, keep these conventions consistent.
   - Orthogonality: $$R^TR = I$$
   - Unit determinant: $$\det(R) = 1$$
 
-## Core Operations and Physical Meaning
+## Core operations and physical meaning
 
 ### Determinant
 
@@ -75,7 +86,7 @@ $$
 
 So a body +X force appears as world +Y after this orientation.
 
-## Inertia Tensor Transform (Body to World)
+## Inertia tensor transform (body to world)
 
 A rigid body usually stores inertia in body principal axes as $I_b$.
 
@@ -85,9 +96,9 @@ $$
 I_w = R_{wb} I_b R_{wb}^T
 $$
 
-This is the standard congruence transform that preserves positive definiteness and physical meaning under rotation.
+This is the standard congruence transform. It preserves symmetric positive-definite structure under rotation.
 
-### Why this matters
+### Why this matters in simulation
 
 Angular acceleration in world frame is approximately:
 
@@ -95,9 +106,9 @@ $$
 \alpha_w = I_w^{-1}\tau_w
 $$
 
-Using the wrong frame or wrong transform order will produce incorrect spin response.
+Using the wrong frame or transform order causes incorrect spin response, especially when principal moments are anisotropic.
 
-## Inertia Transform Numeric Example
+## Inertia transform numeric example
 
 Let:
 
@@ -112,9 +123,35 @@ $$
 I_w = \operatorname{diag}(1, 2, 3)\,\text{kg·m}^2
 $$
 
-Interpretation: the body's principal inertia axes rotated with the body, so world-axis inertias change accordingly.
+Interpretation: principal inertia directions rotate with the body, so apparent world-axis moments change with attitude.
 
-## Numerical Stability Notes
+## Derivation sketch for I_w = R I_b R^T
+
+Starting from angular momentum in body coordinates:
+
+$$
+L_b = I_b \omega_b
+$$
+
+Map to world frame:
+
+$$
+L_w = R L_b = R I_b \omega_b
+$$
+
+and with $$\omega_b = R^T \omega_w$$:
+
+$$
+L_w = R I_b R^T \omega_w
+$$
+
+Therefore:
+
+$$
+I_w = R I_b R^T
+$$
+
+## Numerical stability notes
 
 - Keep rotation matrices orthonormal. If generated from quaternions, ensure quaternion normalization is maintained upstream.
 - Guard near-singular inversions with determinant/condition checks.
@@ -136,8 +173,8 @@ Interpretation: the body's principal inertia axes rotated with the body, so worl
 
 Use math and dynamics tests to sanity-check conventions and transforms:
 
-- `vendordep/tests/math_test.cpp`
-- `vendordep/tests/integration_test.cpp`
+- vendordep/tests/math_test.cpp
+- vendordep/tests/integration_test.cpp
 
 A practical validation sequence:
 

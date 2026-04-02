@@ -2,6 +2,17 @@
 
 This page explains Vector3 operations as physics tools: geometry, forces, and units.
 
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| v | Generic vector quantity | varies |
+| F | Force vector | N |
+| r | Lever-arm vector | m |
+| tau | Torque vector | N*m |
+| omega | Angular velocity vector | rad/s |
+| mu | Friction coefficient | dimensionless |
+
 ## Source and scope
 
 Primary implementation:
@@ -56,6 +67,15 @@ $$
 
 Always guard near-zero magnitude.
 
+## Coordinate and frame discipline
+
+Vector operations are only physically meaningful when vectors are expressed in the same frame.
+
+- Correct: $$tau_w = r_w \times F_w$$
+- Incorrect: mixing $$r_b$$ with $$F_w$$
+
+If data sources differ by frame, transform first and then compute.
+
 ## Projection, reflection, and interpolation
 
 ### Projection onto axis
@@ -99,6 +119,11 @@ Worked example:
 - $$\tau = (0,0,10)$$ N*m
 
 This sign and magnitude match integration tests for force-at-point behavior.
+
+Interpretation:
+
+- magnitude: $$|\tau| = |r||F|\sin\theta$$
+- direction: right-hand rule perpendicular to the r/F plane
 
 ## Physics helper formulas and units
 
@@ -162,6 +187,8 @@ Units:
 - normalForce (N): newtons
 - result: N
 
+Note: this helper applies force along supplied normal direction. In full contact models, friction is typically tangential to the normal.
+
 ## Free-body style examples
 
 Example 1: wheel-ground traction on flat ground
@@ -184,6 +211,12 @@ Example 2: drag and thrust along X
 - reversing cross-product operand order
 - mixing force (N) and acceleration (m/s^2)
 - applying drag in same direction as velocity
+
+## Validation in RenSim
+
+- vendordep/tests/math_test.cpp: dot/cross/norm/normalization checks
+- vendordep/tests/forces_test.cpp: drag diagnostics and force accumulation
+- vendordep/tests/magnus_test.cpp: cross-product sign for Magnus direction
 
 ## Related Pages
 

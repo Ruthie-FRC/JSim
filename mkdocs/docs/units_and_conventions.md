@@ -1,6 +1,14 @@
 # Units and Conventions
 
-This page defines common units, axis conventions, and frame rules used across RenSim math docs.
+This page defines shared notation, units, frame conventions, and sign rules used across all RenSim math documentation.
+
+## Notation standard
+
+- Scalars: italic lower-case (for example, m, t, dt).
+- Vectors: bold lower-case in equations (for example, v, F, omega).
+- Matrices/tensors: upper-case (for example, R, I).
+- Body-frame quantities: subscript b.
+- World-frame quantities: subscript w.
 
 ## Base units
 
@@ -21,6 +29,15 @@ This page defines common units, axis conventions, and frame rules used across Re
 - Cross product: right-hand rule
 - Torque from lever arm and force: $$\tau = r \times F$$
 
+## Matrix and rotation conventions
+
+- Vectors are treated as column vectors.
+- Transform convention: $$v_w = R_{wb} v_b$$.
+- Rotation inverse for orthonormal R: $$R^{-1} = R^T$$.
+- Proper rotation checks:
+  - $$R^T R = I$$
+  - $$\det(R)=1$$
+
 ## Frame naming
 
 - Body frame quantities use subscript b.
@@ -34,6 +51,13 @@ This page defines common units, axis conventions, and frame rules used across Re
 - Vector rotation uses:
   - $$v' = q v q^{-1}$$
 - q and -q encode the same orientation.
+
+## Time-stepping conventions
+
+- dt is always in seconds.
+- Fixed dt is preferred for deterministic behavior.
+- Semi-implicit Euler order: velocity first, then position.
+- Explicit Euler order: position first, then velocity.
 
 ## Integrator conventions
 
@@ -54,6 +78,15 @@ This page defines common units, axis conventions, and frame rules used across Re
 - Contact normal points from surface toward permitted space.
 - Positive separation means no penetration.
 - Impulses along normal oppose closing velocity.
+
+## Documentation quality checklist
+
+For each equation in this doc set:
+
+- Define each symbol once.
+- Include units for each term.
+- State the frame of each vector quantity.
+- Specify sign convention when direction matters.
 
 ## Common mistakes checklist
 

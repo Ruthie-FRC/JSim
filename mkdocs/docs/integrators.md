@@ -1,6 +1,18 @@
 # Integrators (frcsim::Integrator)
 
-This page explains the numerical integration methods used in RenSim and how to choose between them.
+This page explains the numerical integration methods used in RenSim, their error properties, and practical method-selection tradeoffs.
+
+## Symbols
+
+| Symbol | Meaning | Units |
+|---|---|---|
+| x | Position | m |
+| v | Linear velocity | m/s |
+| a | Linear acceleration | m/s^2 |
+| q | Orientation quaternion | dimensionless |
+| omega | Angular velocity | rad/s |
+| alpha | Angular acceleration | rad/s^2 |
+| dt | Fixed timestep | s |
 
 ## Source and scope
 
@@ -35,6 +47,14 @@ with $$\omega_q = (0, \omega_x, \omega_y, \omega_z)$$.
 | Explicit Euler | 1 | Low | Weak for stiff dynamics | Good for debugging and simple predictors |
 | Semi-Implicit Euler | 1 | Low | Better for energy behavior in mechanics | Default-style choice in many engines |
 | RK2 (midpoint) | 2 | Medium | Better accuracy per step | Useful for fast projectiles and smoother trajectories |
+
+## Error model summary
+
+- Explicit Euler local truncation error: O(dt^2), global error: O(dt).
+- Semi-implicit Euler local truncation error: O(dt^2), global error: O(dt).
+- RK2 midpoint local truncation error: O(dt^3), global error: O(dt^2).
+
+Practical implication: reducing dt improves all methods, but RK2 usually achieves smaller trajectory error at equal dt.
 
 ## Linear integration methods
 
@@ -115,6 +135,10 @@ $$
 
 and then normalizes if needed.
 
+### Why q integration is written this way
+
+Quaternion derivative is linear in angular velocity and quaternion state. A forward update is computationally cheap and robust in real-time loops when followed by normalization.
+
 Why normalization matters:
 
 - floating-point drift causes $$|q| \neq 1$$ over time
@@ -132,6 +156,13 @@ Practical guidance for FRC-like simulation loops:
 - start near 0.01 s to 0.02 s for many robot dynamics loops
 - reduce dt for stiff spring contacts, high-speed impacts, or high angular rates
 
+Rule-of-thumb process:
+
+1. Start with fixed dt used by your runtime loop.
+2. Verify stability in worst-case contact and high-rate spin scenes.
+3. If unstable, reduce dt before changing physical coefficients.
+4. If stable but inaccurate, prefer RK2 for the affected subsystem.
+
 ## Energy behavior and drift expectations
 
 - Explicit Euler can over-inject or dissipate energy depending on system.
@@ -143,6 +174,19 @@ Practical guidance for FRC-like simulation loops:
 - choose Semi-Implicit Euler for general real-time rigid-body stepping
 - choose Explicit Euler for diagnostics and predictor workflows
 - choose RK2 when projectile or fast mechanism accuracy needs improvement at same dt
+
+## Worked free-fall comparison (one step)
+
+Given $$x_0=0$$, $$v_0=0$$, $$a=-9.81$$, $$dt=0.01$$:
+
+- Explicit Euler:
+	- $$x_1 = x_0 + v_0 dt = 0$$
+	- $$v_1 = v_0 + a dt = -0.0981$$
+- Semi-implicit Euler:
+	- $$v_1 = -0.0981$$
+	- $$x_1 = x_0 + v_1 dt = -0.000981$$
+
+This illustrates why step ordering affects short-horizon position estimates.
 
 ## Validation in RenSim
 
