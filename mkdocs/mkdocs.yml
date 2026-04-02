@@ -34,7 +34,6 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.sections
-    - navigation.expand
     - navigation.top
     - toc.follow
     - search.suggest
@@ -42,7 +41,6 @@ theme:
     - content.code.copy
     - content.action.edit
     - announce.dismiss
-    - header.autohide
 
 nav:
   - Home: index.md

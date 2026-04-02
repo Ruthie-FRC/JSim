@@ -4,6 +4,8 @@
   --rensim-accent: #e17b2d;
   --rensim-surface: #f4f8fc;
   --rensim-border: rgba(11, 53, 89, 0.16);
+  --rensim-text-primary: rgba(11, 53, 89, 0.94);
+  --rensim-text-secondary: rgba(11, 53, 89, 0.74);
   --rensim-shadow: 0 10px 30px rgba(11, 53, 89, 0.08);
   --rensim-shadow-hover: 0 14px 36px rgba(11, 53, 89, 0.14);
   --rensim-font-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", sans-serif;
@@ -42,7 +44,7 @@ pre {
 
 .md-content__inner > h1 + p {
   font-size: 1.04rem;
-  color: rgba(0, 0, 0, 0.74);
+  color: var(--rensim-text-secondary);
   margin-bottom: 1.35rem;
 }
 
@@ -56,6 +58,21 @@ pre {
 .md-typeset h1 {
   color: var(--rensim-brand-dark);
   font-weight: 750;
+}
+
+.md-typeset,
+.md-content__inner,
+.md-nav,
+.md-nav__title,
+.md-nav__list,
+.md-header,
+.md-footer,
+.md-typeset p,
+.md-typeset li,
+.md-typeset table,
+.md-typeset blockquote,
+.md-typeset figcaption {
+  color: var(--rensim-text-primary);
 }
 
 .md-typeset h2 {
@@ -132,10 +149,18 @@ pre {
   --md-default-fg-color--light: rgba(255, 255, 255, 0.78);
   --md-default-bg-color: #0f1a24;
   --md-default-bg-color--light: #132230;
+  --rensim-text-primary: rgba(240, 247, 252, 0.94);
+  --rensim-text-secondary: rgba(240, 247, 252, 0.76);
+  --rensim-border: rgba(135, 182, 212, 0.2);
+  --rensim-surface: #132230;
 }
 
 [data-md-color-scheme="slate"] .md-typeset h1 {
   color: #87b6d4;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background: rgba(135, 182, 212, 0.12);
 }
 
 @keyframes rensim-fade-up {
