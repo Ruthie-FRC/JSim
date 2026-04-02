@@ -3,7 +3,7 @@
 RenSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
 !!! info "Project Status"
-    RenSim is under active development. Core simulation features are available, and additional capabilities are being added iteratively.
+    RenSim is under active development. Core simulation features and additional capabilities are being added iteratively.
 
 ## Why RenSim
 
