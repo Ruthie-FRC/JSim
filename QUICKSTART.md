@@ -44,9 +44,9 @@ cd vendordep
 ## Java Usage Example
 
 ```java
-import com.vendor.physics.PhysicsWorld;
-import com.vendor.physics.PhysicsBody;
-import com.vendor.physics.Vec3;
+import rensim.PhysicsWorld;
+import rensim.PhysicsBody;
+import rensim.Vec3;
 
 try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
     // Create a 1 kg body at (0, 0, 1) m
