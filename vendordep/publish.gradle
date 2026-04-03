@@ -47,8 +47,6 @@ ext.addTaskToCopyAllOutputs = { task ->
     copyAllOutputs.from task.archiveFile
 }
 
-def artifactGroupId = 'com.vendor.frc'
-def baseArtifactId = 'Vendor'
 def driverZipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-driver_CLS"
 def zipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-cpp_CLS"
 def javaBaseName = "_GROUP_rensim_ID_${baseArtifactId}-java_CLS"
