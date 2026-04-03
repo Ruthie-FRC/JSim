@@ -27,12 +27,10 @@ Complete vendordep package with:
 
 ## Building
 
-### Native (C++)
+### Core Build and Native Tests (Gradle)
 ```bash
-mkdir build && cd build
-cmake ..
-cmake --build . -j4
-ctest  # Run all tests
+bash scripts/build.sh
+bash scripts/run-tests.sh
 ```
 
 ### Vendordep (Java)
@@ -109,7 +107,7 @@ All 9 core tests pass:
 - Boundary structures
 - Deformable body scaffolding
 
-Run `ctest --output-on-failure` in the build directory to validate your environment.
+Run `bash scripts/run-tests.sh` from the repository root to validate your environment.
 
 ## Prerelease Notes
 

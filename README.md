@@ -16,11 +16,10 @@ This repository is organized as a monorepo containing the core simulation engine
 
 ## Quick Start
 
-### Build (C++)
+### Build (Gradle)
 
 ```bash
-cmake -S . -B build
-cmake --build build -j
+bash scripts/build.sh
 ```
 
 ### Run Tests
@@ -37,10 +36,10 @@ Pass additional Gradle flags when needed:
 ./scripts/run-tests.sh --info
 ```
 
-Run native CTest suites from the CMake build directory:
+Run Gradle-driven native + Java tests directly:
 
 ```bash
-ctest --test-dir build --output-on-failure
+bash scripts/run-tests.sh
 ```
 
 ### Preview Docs Locally
@@ -72,7 +71,7 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 - `cad-import/`: CAD and geometry import utilities
 - `examples/`: language-specific examples (C++, Java, Python)
 - `mkdocs/`: docs source and MkDocs configuration
-- `vendordep/`: WPILib vendordep packaging and Gradle-based testing
+- `vendordep/`: WPILib vendordep packaging and Gradle-based build/testing
 
 ## Documentation
 

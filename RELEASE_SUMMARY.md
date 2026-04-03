@@ -64,7 +64,7 @@ RenSim is a **fully functional physics simulation library** for FRC teams. This 
 
 | Metric | Status |
 |--------|--------|
-| **CMake Build** | ✅ Passes cleanly |
+| **Gradle Build** | ✅ Passes cleanly |
 | **All Tests** | ✅ 9/9 passing (0.05s) |
 | **No TODOs** | ✅ All critical code complete |
 | **API Stability** | ✅ Core methods stable |
@@ -88,13 +88,13 @@ See INTEGRATION_GUIDE.md for detailed examples.
 2. **No soft bodies** - rigid bodies only
 3. **No field boundaries** - structure exists but logic disabled for v0.2
 4. **No CAD import** - utilities present but not wired
-5. **Gradle build** requires Java 17+ (not Java 25)
+5. **Gradle build** requires Java 21 (Java 25 is unsupported)
 
 These are intentionally scoped for v0.2 based on FRC team feedback.
 
 ## File Checklist
 
-- [x] `CMakeLists.txt` - Build system ready
+- [x] `vendordep/build.gradle` - Build system ready
 - [x] `core/driver/src/joints.cpp` - Constraint solvers implemented
 - [x] `vendor dep/src/main/driver/cpp/VendorJNI.cpp` - JNI bindings complete
 - [x] `vendordep/src/main/java/com/vendor/physics/*.java` - Java API ready
@@ -115,14 +115,14 @@ These are intentionally scoped for v0.2 based on FRC team feedback.
 ## Validation Commands
 
 ```bash
-# Clean build
-rm -rf build && cmake -B build && cmake --build build -j4
+# Clean/build
+bash scripts/build.sh
 
 # Run tests
-ctest --test-dir build --output-on-failure
+bash scripts/run-tests.sh
 
 # Expected result
-# 100% tests passed, 0 tests failed out of 9
+# BUILD SUCCESSFUL and test suites pass
 ```
 
 ---

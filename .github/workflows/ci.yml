@@ -18,5 +18,8 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Build with Gradle
+        run: bash scripts/build.sh
+
       - name: Run test suite
         run: bash scripts/run-tests.sh

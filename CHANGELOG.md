@@ -64,11 +64,10 @@ This is a **prerelease**. Core physics API (PhysicsWorld, RigidBody) is stable. 
 - **examples**: Usage demonstrations for C++ and Java
 
 ### Build System
-- **CMake 3.20+**: For native C++ development and testing
-- **Gradle 8.14.3**: For WPILib vendordep and Java packaging
+- **Gradle 8.14.3**: For native C++, JNI, and Java builds/tests
 
 ### Testing
-Run `ctest --output-on-failure` after CMake build to validate:
+Run `bash scripts/run-tests.sh` to validate:
 - Core physics algorithms
 - Integration methods
 - Joint constraint solving

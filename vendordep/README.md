@@ -37,8 +37,8 @@ Use `rensim::PhysicsWorld` from `src/main/native/include/header.h`.
 
 ## Build Notes
 
-- Native CMake build and tests for core physics pass via the top-level project.
-- Vendordep Gradle build requires a WPILib-compatible JDK (typically Java 17 or 21 depending on WPILib release).
+- Native and Java builds/tests are driven by vendordep Gradle tasks.
+- Vendordep Gradle build requires a WPILib-compatible JDK (Java 21 recommended).
 
 ## Release Packaging
 

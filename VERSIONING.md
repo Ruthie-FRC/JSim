@@ -27,12 +27,11 @@ RenSim uses **date-based versioning**: `YYYY.MM.DD.patch-no`
 
 Update these files when bumping version:
 
-1. **CMakeLists.txt** - Line 3, `project(... VERSION ...)`
-2. **vendordep/publish.gradle** - `def pubVersion = '...'`
-3. **CHANGELOG.md** - Section header and date
-4. **QUICKSTART.md** - Title (if mentioning version)
-5. **README.md** - Status line (if mentioning version)
-6. **RELEASE_SUMMARY.md** - Title and version field
+1. **vendordep/publish.gradle** - `def pubVersion = '...'`
+2. **CHANGELOG.md** - Section header and date
+3. **QUICKSTART.md** - Title (if mentioning version)
+4. **README.md** - Status line (if mentioning version)
+5. **RELEASE_SUMMARY.md** - Title and version field
 
 ## Release Workflow
 
@@ -50,10 +49,10 @@ Update these files when bumping version:
 
 ### Release Checklist
 
-1. Update all 6 version files above
-2. Run `cmake -B build && cmake --build build -j4`
-3. Run `ctest --test-dir build --output-on-failure`
-4. Verify tests pass (9/9)
+1. Update all 5 version files above
+2. Run `bash scripts/build.sh`
+3. Run `bash scripts/run-tests.sh`
+4. Verify tests pass
 5. Commit with message: `Release 2026.04.DD.X`
 6. Tag: `git tag 2026.04.DD.X && git push --tags`
 7. Create GitHub release with CHANGELOG section
