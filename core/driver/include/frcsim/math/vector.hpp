@@ -70,7 +70,7 @@ struct alignas(16) Vector3 {
     }
 
     // Planar helpers
-    constexpr double planarSpeed() const noexcept { return std::sqrt(x * x + y * y); }
+    double planarSpeed() const noexcept { return std::sqrt(x * x + y * y); }
     constexpr Vector3 xy() const noexcept { return {x, y, 0.0}; }
     Vector3 planarDir() const noexcept {
         double mag = planarSpeed();
