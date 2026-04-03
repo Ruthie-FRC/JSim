@@ -16,32 +16,23 @@ This repository is organized as a monorepo containing the core simulation engine
 
 ## Quick Start
 
-### Build (C++)
+### Build and Test (Gradle)
 
 ```bash
-cmake -S . -B build
-cmake --build build -j
+cd vendordep
+./gradlew test
 ```
 
 ### Run Tests
 
-Run the full test helper used in CI:
+Run the vendordep Gradle test task used in CI:
 
 ```bash
-./scripts/run-tests.sh
+cd vendordep
+./gradlew test
 ```
 
-Pass additional Gradle flags when needed:
-
-```bash
-./scripts/run-tests.sh --info
-```
-
-Run native CTest suites from the CMake build directory:
-
-```bash
-ctest --test-dir build --output-on-failure
-```
+This command runs Java tests plus the standalone native verification suite in `vendordep/tests/` through Gradle.
 
 ### Preview Docs Locally
 
@@ -72,7 +63,7 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 - `cad-import/`: CAD and geometry import utilities
 - `examples/`: language-specific examples (C++, Java, Python)
 - `mkdocs/`: docs source and MkDocs configuration
-- `vendordep/`: WPILib vendordep packaging and Gradle-based testing
+- `vendordep/`: WPILib vendordep packaging and Gradle-based build/testing
 
 ## Documentation
 

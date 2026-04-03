@@ -27,12 +27,10 @@ Complete vendordep package with:
 
 ## Building
 
-### Native (C++)
+### Core Build and Native Tests (Gradle)
 ```bash
-mkdir build && cd build
-cmake ..
-cmake --build . -j4
-ctest  # Run all tests
+cd vendordep
+./gradlew test
 ```
 
 ### Vendordep (Java)
@@ -109,7 +107,21 @@ All 9 core tests pass:
 - Boundary structures
 - Deformable body scaffolding
 
-Run `ctest --output-on-failure` in the build directory to validate your environment.
+Run `cd vendordep && ./gradlew test` to validate your environment.
+
+## Prerelease Verification
+
+Run the full prerelease gate from repository root:
+
+```bash
+cd vendordep
+./gradlew test
+```
+
+Expected verification signals:
+- Gradle reports `BUILD SUCCESSFUL`.
+- The test command prints `Running legacy native test:` entries for all standalone native suites in `vendordep/tests/`.
+- No assertion failures or non-zero exits occur while running legacy native tests.
 
 ## Prerelease Notes
 

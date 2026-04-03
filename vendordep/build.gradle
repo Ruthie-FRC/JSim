@@ -66,6 +66,101 @@ if (project.hasProperty('onlylinuxathena') || project.hasProperty('onlylinuxarm3
     test.enabled = false
 }
 
+def crossCompileOnlyProperties = [
+  'onlylinuxathena',
+  'onlylinuxarm32',
+  'onlylinuxarm64',
+  'onlywindowsarm64',
+  'onlylinuxsystemcore'
+]
+def isCrossCompileOnlyMode = crossCompileOnlyProperties.any { project.hasProperty(it) }
+def isLinuxHost = System.getProperty('os.name').toLowerCase().contains('linux')
+def legacyNativeTestSources = fileTree("${rootDir}/tests") {
+  include '*.cpp'
+}
+
+tasks.register('compileLegacyNativeTests') {
+  group = 'verification'
+  description = 'Compiles standalone native tests in vendordep/tests.'
+
+  inputs.files(legacyNativeTestSources)
+  inputs.files(
+    file("${rootDir}/../core/driver/src/physics_world.cpp"),
+    file("${rootDir}/../core/driver/src/rigid_assembly.cpp"),
+    file("${rootDir}/../core/driver/src/joints.cpp")
+  )
+  outputs.dir(layout.buildDirectory.dir('legacy-native-tests'))
+
+  onlyIf {
+    isLinuxHost && !isCrossCompileOnlyMode
+  }
+
+  doLast {
+    def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
+    outputDir.mkdirs()
+
+    def sortedTestFiles = legacyNativeTestSources.files.sort { a, b -> a.name <=> b.name }
+    if (sortedTestFiles.isEmpty()) {
+      throw new GradleException('No legacy native test sources were found in vendordep/tests (*.cpp).')
+    }
+
+    sortedTestFiles.each { testFile ->
+      def executableName = testFile.name.replaceFirst(/\.cpp$/, '')
+      def executablePath = new File(outputDir, executableName)
+      logger.lifecycle("Compiling legacy native test: ${testFile.name}")
+
+      exec {
+        commandLine 'g++',
+          '-std=c++20',
+          '-O0',
+          '-g0',
+          "-I${rootDir}/../core/driver/include",
+          "-I${rootDir}/../core/physics-core/include",
+          "-I${rootDir}/src/main/driver/include",
+          "${rootDir}/../core/driver/src/physics_world.cpp",
+          "${rootDir}/../core/driver/src/rigid_assembly.cpp",
+          "${rootDir}/../core/driver/src/joints.cpp",
+          testFile.absolutePath,
+          '-o',
+          executablePath.absolutePath
+      }
+    }
+
+    def builtExecutables = outputDir.listFiles()?.findAll { it.isFile() } ?: []
+    if (builtExecutables.size() != sortedTestFiles.size()) {
+      throw new GradleException("Legacy native test build produced ${builtExecutables.size()} executables for ${sortedTestFiles.size()} sources.")
+    }
+  }
+}
+
+tasks.register('runLegacyNativeTests') {
+  group = 'verification'
+  description = 'Runs standalone native tests compiled from vendordep/tests.'
+  dependsOn(tasks.named('compileLegacyNativeTests'))
+
+  onlyIf {
+    isLinuxHost && !isCrossCompileOnlyMode
+  }
+
+  doLast {
+    def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
+    def executables = outputDir.listFiles()?.findAll { it.isFile() }?.sort { a, b -> a.name <=> b.name } ?: []
+
+    if (executables.isEmpty()) {
+      throw new GradleException('No legacy native test executables were found to run.')
+    }
+
+    executables.each { executable ->
+      logger.lifecycle("Running legacy native test: ${executable.name}")
+      exec {
+        commandLine executable.absolutePath
+      }
+    }
+  }
+}
+
+test.dependsOn(tasks.named('runLegacyNativeTests'))
+
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
     options.encoding = 'UTF-8'
@@ -75,6 +170,7 @@ tasks.withType(JavaCompile) {
 javadoc {
     options {
         links "https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/", 'https://github.wpilib.org/allwpilib/docs/release/java/'
+    addBooleanOption('Werror', true)
     }
 }
 

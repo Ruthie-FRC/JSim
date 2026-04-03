@@ -26,8 +26,8 @@ The architecture is designed to support extension through additional force model
 
 ## Build and Test
 
-- CMake drives native builds.
-- CTest executes test binaries.
+- Gradle drives native, JNI, and Java builds.
+- Gradle test tasks execute native and Java test binaries.
 - Helper scripts streamline configure/build/test workflows.
 
 ## Documentation Strategy

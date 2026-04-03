@@ -18,8 +18,8 @@ struct Quaternion {
     [[nodiscard]] constexpr double norm2() const noexcept { return w*w + x*x + y*y + z*z; }
     [[nodiscard]] double norm() const noexcept { return std::sqrt(norm2()); }
 
-    [[nodiscard]] constexpr bool isIdentity(double eps=1e-12) const noexcept { return std::abs(w-1.0)<eps && std::abs(x)<eps && std::abs(y)<eps && std::abs(z)<eps; }
-    [[nodiscard]] constexpr bool hasNaN() const noexcept { return std::isnan(w)||std::isnan(x)||std::isnan(y)||std::isnan(z); }
+    [[nodiscard]] bool isIdentity(double eps=1e-12) const noexcept { return std::abs(w-1.0)<eps && std::abs(x)<eps && std::abs(y)<eps && std::abs(z)<eps; }
+    [[nodiscard]] bool hasNaN() const noexcept { return std::isnan(w)||std::isnan(x)||std::isnan(y)||std::isnan(z); }
 
     [[nodiscard]] Quaternion normalized() const noexcept {
         double n = norm();

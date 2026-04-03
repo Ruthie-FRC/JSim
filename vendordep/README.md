@@ -37,8 +37,8 @@ Use `rensim::PhysicsWorld` from `src/main/native/include/header.h`.
 
 ## Build Notes
 
-- Native CMake build and tests for core physics pass via the top-level project.
-- Vendordep Gradle build requires a WPILib-compatible JDK (typically Java 17 or 21 depending on WPILib release).
+- Native and Java builds/tests are driven by vendordep Gradle tasks.
+- Vendordep Gradle build requires a WPILib-compatible JDK (Java 21 recommended).
 
 ## Release Packaging
 
@@ -46,5 +46,5 @@ Use `rensim::PhysicsWorld` from `src/main/native/include/header.h`.
 Before prerelease publishing:
 
 1. Set desired version in `publish.gradle` (`pubVersion`).
-2. Run `./gradlew build` in this folder on a supported JDK.
+2. Run `./gradlew test` in this folder on a supported JDK.
 3. Validate artifacts in `build/outputs` and `build/repos`.

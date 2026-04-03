@@ -1,13 +1,6 @@
 # Build directories
 build/
-cmake-build-*/
 dist/
-
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-*.cmake
 
 # Compiled objects and libraries
 *.o
@@ -83,10 +76,8 @@ vendor/
 frcsim_*
 !vendordep/tests/*.cpp
 
-# CMake and build artifacts
+# Build metadata artifacts
 compile_commands.json
-CTestTestfile.cmake
-DartConfiguration.tcl
 
 # IDE cache and language server
 .ccls-cache/
