@@ -30,6 +30,8 @@ Run the full test helper used in CI:
 ./scripts/run-tests.sh
 ```
 
+This command runs Java tests plus the standalone native verification suite in `vendordep/tests/` through Gradle.
+
 Pass additional Gradle flags when needed:
 
 ```bash

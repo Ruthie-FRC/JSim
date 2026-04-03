@@ -92,14 +92,19 @@ tasks.register('compileLegacyNativeTests') {
   outputs.dir(layout.buildDirectory.dir('legacy-native-tests'))
 
   onlyIf {
-    isLinuxHost && !isCrossCompileOnlyMode && !legacyNativeTestSources.isEmpty()
+    isLinuxHost && !isCrossCompileOnlyMode
   }
 
   doLast {
     def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
     outputDir.mkdirs()
 
-    legacyNativeTestSources.files.sort { a, b -> a.name <=> b.name }.each { testFile ->
+    def sortedTestFiles = legacyNativeTestSources.files.sort { a, b -> a.name <=> b.name }
+    if (sortedTestFiles.isEmpty()) {
+      throw new GradleException('No legacy native test sources were found in vendordep/tests (*.cpp).')
+    }
+
+    sortedTestFiles.each { testFile ->
       def executableName = testFile.name.replaceFirst(/\.cpp$/, '')
       def executablePath = new File(outputDir, executableName)
       logger.lifecycle("Compiling legacy native test: ${testFile.name}")
@@ -120,6 +125,11 @@ tasks.register('compileLegacyNativeTests') {
           executablePath.absolutePath
       }
     }
+
+    def builtExecutables = outputDir.listFiles()?.findAll { it.isFile() } ?: []
+    if (builtExecutables.size() != sortedTestFiles.size()) {
+      throw new GradleException("Legacy native test build produced ${builtExecutables.size()} executables for ${sortedTestFiles.size()} sources.")
+    }
   }
 }
 
@@ -129,12 +139,16 @@ tasks.register('runLegacyNativeTests') {
   dependsOn(tasks.named('compileLegacyNativeTests'))
 
   onlyIf {
-    isLinuxHost && !isCrossCompileOnlyMode && !legacyNativeTestSources.isEmpty()
+    isLinuxHost && !isCrossCompileOnlyMode
   }
 
   doLast {
     def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
     def executables = outputDir.listFiles()?.findAll { it.isFile() }?.sort { a, b -> a.name <=> b.name } ?: []
+
+    if (executables.isEmpty()) {
+      throw new GradleException('No legacy native test executables were found to run.')
+    }
 
     executables.each { executable ->
       logger.lifecycle("Running legacy native test: ${executable.name}")

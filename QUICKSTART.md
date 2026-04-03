@@ -109,6 +109,20 @@ All 9 core tests pass:
 
 Run `bash scripts/run-tests.sh` from the repository root to validate your environment.
 
+## Prerelease Verification
+
+Run the full prerelease gate from repository root:
+
+```bash
+bash scripts/build.sh
+bash scripts/run-tests.sh
+```
+
+Expected verification signals:
+- Gradle reports `BUILD SUCCESSFUL` for both commands.
+- The test command prints `Running legacy native test:` entries for all standalone native suites in `vendordep/tests/`.
+- No assertion failures or non-zero exits occur while running legacy native tests.
+
 ## Prerelease Notes
 
 This release provides a **solid foundation for physics-based simulations**. The constraint solver and force integration are production-ready for:

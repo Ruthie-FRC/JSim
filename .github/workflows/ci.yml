@@ -21,5 +21,15 @@ jobs:
       - name: Build with Gradle
         run: bash scripts/build.sh
 
+      - name: Verify legacy native test sources exist
+        run: |
+          set -euo pipefail
+          count=$(find vendordep/tests -maxdepth 1 -type f -name '*.cpp' | wc -l)
+          if [ "$count" -lt 1 ]; then
+            echo "No standalone native tests found in vendordep/tests" >&2
+            exit 1
+          fi
+          echo "Found $count standalone native test source files."
+
       - name: Run test suite
         run: bash scripts/run-tests.sh
