@@ -105,6 +105,24 @@ public class GamePieceProjectile implements GamePiece {
     timeSinceLaunchSeconds += dtSeconds;
 
     Vec3 current = positionAt(timeSinceLaunchSeconds);
+    Vec3 velocity = velocityAt(timeSinceLaunchSeconds);
+
+    if (options.aerodynamics().enableDrag()) {
+      double drag = options.aerodynamics().dragCoefficient();
+      double speed = velocity.norm();
+      double dragScale = Math.max(1.0 - drag * speed * dtSeconds, 0.0);
+      velocity = velocity.scale(dragScale);
+    }
+
+    if (options.aerodynamics().enableMagnus()) {
+      double magnus = options.aerodynamics().magnusCoefficient();
+      velocity = velocity.add(new Vec3(-velocity.y() * magnus * dtSeconds,
+          velocity.x() * magnus * dtSeconds, 0.0));
+    }
+
+    current = new Vec3(current.x() + velocity.x() * dtSeconds,
+        current.y() + velocity.y() * dtSeconds,
+        current.z() + velocity.z() * dtSeconds);
     Vec3 target = targetPositionSupplier.get();
     Vec3 delta = target.subtract(current);
     if (Math.abs(delta.x()) <= targetToleranceMeters.x()
@@ -120,7 +138,7 @@ public class GamePieceProjectile implements GamePiece {
       return;
     }
 
-    double edge = 2.0;
+    double edge = options.tolerances().outOfFieldMarginMeters();
     if (current.x() < -edge || current.x() > options.boundaries().widthMeters() + edge
         || current.y() < -edge || current.y() > options.boundaries().heightMeters() + edge) {
       outOfField = true;

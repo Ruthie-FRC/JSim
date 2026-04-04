@@ -52,6 +52,8 @@ public class GamePieceOnFieldSimulation implements GamePiece {
     this.body.setLinearVelocity(initialVelocityMps);
     this.body.setGravityEnabled(false);
     this.body.setSphereCollider(info.radiusMeters(), info.coefficientOfRestitution());
+    this.body.setLinearVelocity(initialVelocityMps.scale(1.0 - arena.options.friction().rollingResistance()));
+    arena.registerRoundBody(this.body, info.radiusMeters());
     this.yawRad = initialPose.yawRad();
   }
 
