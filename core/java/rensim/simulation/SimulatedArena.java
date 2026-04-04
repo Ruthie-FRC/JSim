@@ -60,6 +60,8 @@ public abstract class SimulatedArena {
    */
   public record RectObstacle(double widthMeters, double heightMeters, Pose2 pose) {}
 
+  private record RoundBody(PhysicsBody body, double radiusMeters) {}
+
   protected final SimulationOptions options;
   protected final FieldMap fieldMap;
   protected final PhysicsWorld world;
@@ -69,6 +71,7 @@ public abstract class SimulatedArena {
   protected final List<IntakeSimulation> intakeSimulations = new ArrayList<>();
   protected final Set<GamePieceOnFieldSimulation> gamePiecesOnField = new HashSet<>();
   protected final Set<GamePieceProjectile> gamePieceProjectiles = new HashSet<>();
+  private final List<RoundBody> roundBodies = new ArrayList<>();
 
   /**
    * Creates a simulated arena with configurable options and field map.
@@ -113,8 +116,12 @@ public abstract class SimulatedArena {
 
     world.step();
 
+    if (options.boundaries().enableWalls()) {
+      applyBoundaryConstraints();
+    }
+
     for (IntakeSimulation intake : intakeSimulations) {
-      intake.removeObtainedGamePieces(this, defaultIntakePose(), 0.5);
+      intake.removeObtainedGamePieces(this, defaultIntakePose(), options.tolerances().intakeRadiusMeters());
     }
 
     for (Simulatable custom : customSimulations) {
@@ -220,7 +227,64 @@ public abstract class SimulatedArena {
     PhysicsBody body = world.createBody(massKg);
     body.setPosition(new Vec3(pose.xMeters(), pose.yMeters(), 0.0));
     body.setGravityEnabled(false);
+    registerRoundBody(body, 0.45);
     return new RigidBody(body);
+  }
+
+  void registerRoundBody(PhysicsBody body, double radiusMeters) {
+    if (!(radiusMeters > 0.0)) {
+      throw new IllegalArgumentException("radiusMeters must be > 0");
+    }
+    roundBodies.add(new RoundBody(Objects.requireNonNull(body), radiusMeters));
+  }
+
+  private void applyBoundaryConstraints() {
+    double width = options.boundaries().widthMeters();
+    double height = options.boundaries().heightMeters();
+    double restitution = options.collision().defaultRestitution();
+    double tangentialDamping = options.friction().boundaryTangentialDamping();
+    double velocityDeadband = options.tolerances().velocityDeadbandMps();
+
+    for (RoundBody round : roundBodies) {
+      Vec3 p = round.body().position();
+      Vec3 v = round.body().linearVelocity();
+      double r = round.radiusMeters();
+
+      double x = p.x();
+      double y = p.y();
+      double vx = v.x();
+      double vy = v.y();
+
+      if (x - r < 0.0) {
+        x = r;
+        vx = Math.abs(vx) * restitution;
+        vy *= (1.0 - tangentialDamping);
+      } else if (x + r > width) {
+        x = width - r;
+        vx = -Math.abs(vx) * restitution;
+        vy *= (1.0 - tangentialDamping);
+      }
+
+      if (y - r < 0.0) {
+        y = r;
+        vy = Math.abs(vy) * restitution;
+        vx *= (1.0 - tangentialDamping);
+      } else if (y + r > height) {
+        y = height - r;
+        vy = -Math.abs(vy) * restitution;
+        vx *= (1.0 - tangentialDamping);
+      }
+
+      if (Math.abs(vx) <= velocityDeadband) {
+        vx = 0.0;
+      }
+      if (Math.abs(vy) <= velocityDeadband) {
+        vy = 0.0;
+      }
+
+      round.body().setPosition(new Vec3(x, y, 0.0));
+      round.body().setLinearVelocity(new Vec3(vx, vy, 0.0));
+    }
   }
 
   private Pose2 defaultIntakePose() {

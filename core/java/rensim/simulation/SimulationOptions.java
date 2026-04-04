@@ -69,23 +69,63 @@ public final class SimulationOptions {
     }
   }
 
+  /** Global friction options used by drivetrain and boundary interactions. */
+  public record Friction(double linearDragPerSecond, double angularDragPerSecond,
+      double boundaryTangentialDamping, double rollingResistance) {
+    public Friction {
+      if (linearDragPerSecond < 0.0 || angularDragPerSecond < 0.0) {
+        throw new IllegalArgumentException("drag values must be >= 0");
+      }
+      if (boundaryTangentialDamping < 0.0 || boundaryTangentialDamping > 1.0) {
+        throw new IllegalArgumentException("boundaryTangentialDamping must be in [0, 1]");
+      }
+      if (rollingResistance < 0.0 || rollingResistance > 1.0) {
+        throw new IllegalArgumentException("rollingResistance must be in [0, 1]");
+      }
+    }
+  }
+
+  /** Numerical tolerances used in contacts, intake checks, and culling. */
+  public record Tolerances(double contactSlopMeters, double velocityDeadbandMps,
+      double intakeRadiusMeters, double outOfFieldMarginMeters) {
+    public Tolerances {
+      if (contactSlopMeters < 0.0) {
+        throw new IllegalArgumentException("contactSlopMeters must be >= 0");
+      }
+      if (velocityDeadbandMps < 0.0) {
+        throw new IllegalArgumentException("velocityDeadbandMps must be >= 0");
+      }
+      if (!(intakeRadiusMeters > 0.0)) {
+        throw new IllegalArgumentException("intakeRadiusMeters must be > 0");
+      }
+      if (outOfFieldMarginMeters < 0.0) {
+        throw new IllegalArgumentException("outOfFieldMarginMeters must be >= 0");
+      }
+    }
+  }
+
   private final Timing timing;
   private final Collision collision;
   private final Boundaries boundaries;
   private final Aerodynamics aerodynamics;
   private final Projectile projectile;
+  private final Friction friction;
+  private final Tolerances tolerances;
   private final Vec3 gravityMps2;
 
   /**
    * Creates simulation options with explicit feature groups.
    */
   public SimulationOptions(Timing timing, Collision collision, Boundaries boundaries,
-      Aerodynamics aerodynamics, Projectile projectile, Vec3 gravityMps2) {
+      Aerodynamics aerodynamics, Projectile projectile, Friction friction,
+      Tolerances tolerances, Vec3 gravityMps2) {
     this.timing = Objects.requireNonNull(timing);
     this.collision = Objects.requireNonNull(collision);
     this.boundaries = Objects.requireNonNull(boundaries);
     this.aerodynamics = Objects.requireNonNull(aerodynamics);
     this.projectile = Objects.requireNonNull(projectile);
+    this.friction = Objects.requireNonNull(friction);
+    this.tolerances = Objects.requireNonNull(tolerances);
     this.gravityMps2 = Objects.requireNonNull(gravityMps2);
   }
 
@@ -99,6 +139,8 @@ public final class SimulationOptions {
         new Boundaries(16.54, 8.02, true),
         new Aerodynamics(true, true, 0.08, 0.03, 1.5),
         new Projectile(true, 100, 0.05),
+          new Friction(0.15, 0.10, 0.30, 0.08),
+          new Tolerances(1.0e-4, 1.0e-3, 0.5, 2.0),
         new Vec3(0.0, 0.0, -9.81));
   }
 
@@ -120,6 +162,14 @@ public final class SimulationOptions {
 
   public Projectile projectile() {
     return projectile;
+  }
+
+  public Friction friction() {
+    return friction;
+  }
+
+  public Tolerances tolerances() {
+    return tolerances;
   }
 
   public Vec3 gravityMps2() {
