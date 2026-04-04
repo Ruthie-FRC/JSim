@@ -57,6 +57,8 @@ public final class SensorPacketIO {
    * @return ordered map with scalar telemetry values
    */
   public static Map<String, Double> flattenForNetworkTables(SensorPacket packet) {
+    packet.requireWorldFrames();
+
     Map<String, Double> out = new LinkedHashMap<>();
     out.put("sim/tick", (double) packet.tick());
     out.put("sim/time_s", packet.timeSeconds());
@@ -98,9 +100,11 @@ public final class SensorPacketIO {
           required(node, "name").asText(),
           required(node, "x_m").asDouble(),
           required(node, "y_m").asDouble(),
+          FrameTag.fromToken(required(node, "position_frame_tag").asText()),
           required(node, "vx_mps").asDouble(),
           required(node, "vy_mps").asDouble(),
-          required(node, "speed_mps").asDouble()));
+          required(node, "speed_mps").asDouble(),
+          FrameTag.fromToken(required(node, "velocity_frame_tag").asText())));
     }
 
     return new SensorPacket(tick, timeSeconds, contactCount, bodies);

@@ -23,6 +23,8 @@ RenSim is organized as a modular monorepo with clear separation between core phy
 - Python runtime simulation produces typed telemetry packets in `apps/sim-runtime/telemetry_schema.py`.
 - Graphics rendering consumes timeline frames via `apps/sim-runtime/graphics_bridge.py` and `apps/viewer-plugin/`.
 - Java consumers parse the same JSONL telemetry format through `core/java/rensim/simulation/telemetry/SensorPacketIO.java`.
+- Telemetry packets carry explicit frame tags per body: `position_frame_tag` and `velocity_frame_tag` with values `w` (world) or `b` (body).
+- Telemetry API boundaries validate SI field names (`*_m`, `*_mps`, `*_s`) and finite/non-negative values before flatten/export.
 - Flattened NetworkTables-style key layout is shared across Python and Java:
 	- `sim/tick`, `sim/time_s`, `sim/contact_count`
 	- `sim/body/{i}/x_m`, `sim/body/{i}/y_m`, `sim/body/{i}/vx_mps`, `sim/body/{i}/vy_mps`, `sim/body/{i}/speed_mps`

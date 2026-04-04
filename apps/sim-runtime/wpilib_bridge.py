@@ -16,6 +16,7 @@ def flatten_for_networktables(packet: Dict[str, object] | SensorPacket) -> Dict[
 	"""Flattens structured sensor packets into scalar keys for NT-like transport."""
 
 	typed_packet = _coerce_packet(packet)
+	typed_packet.require_world_frames()
 
 	out: Dict[str, float] = {
 		"sim/tick": float(typed_packet.tick),

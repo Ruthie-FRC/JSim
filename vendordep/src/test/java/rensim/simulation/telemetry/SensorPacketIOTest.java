@@ -1,6 +1,7 @@
 package rensim.simulation.telemetry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public class SensorPacketIOTest {
   @Test
   void parseJsonLinesProducesTypedPackets() {
     String jsonl = """
-        {"tick":1,"time_s":0.02,"contact_count":0,"bodies":[{"name":"robot","x_m":2.2,"y_m":4.0,"vx_mps":3.4,"vy_mps":0.0,"speed_mps":3.4}]}
-        {"tick":2,"time_s":0.04,"contact_count":1,"bodies":[{"name":"robot","x_m":2.27,"y_m":4.0,"vx_mps":3.3,"vy_mps":0.0,"speed_mps":3.3},{"name":"note_a","x_m":6.0,"y_m":4.0,"vx_mps":-0.5,"vy_mps":0.0,"speed_mps":0.5}]}
+        {"tick":1,"time_s":0.02,"contact_count":0,"bodies":[{"name":"robot","x_m":2.2,"y_m":4.0,"position_frame_tag":"w","vx_mps":3.4,"vy_mps":0.0,"speed_mps":3.4,"velocity_frame_tag":"w"}]}
+        {"tick":2,"time_s":0.04,"contact_count":1,"bodies":[{"name":"robot","x_m":2.27,"y_m":4.0,"position_frame_tag":"w","vx_mps":3.3,"vy_mps":0.0,"speed_mps":3.3,"velocity_frame_tag":"w"},{"name":"note_a","x_m":6.0,"y_m":4.0,"position_frame_tag":"w","vx_mps":-0.5,"vy_mps":0.0,"speed_mps":0.5,"velocity_frame_tag":"w"}]}
         """;
 
     List<SensorPacket> packets = SensorPacketIO.parseJsonLines(jsonl);
@@ -32,8 +33,8 @@ public class SensorPacketIOTest {
         0.14,
         2,
         List.of(
-            new BodyTelemetry("robot", 2.9, 4.2, 3.1, 0.0, 3.1),
-            new BodyTelemetry("note_a", 6.1, 4.0, -0.2, 0.0, 0.2)));
+        new BodyTelemetry("robot", 2.9, 4.2, FrameTag.WORLD, 3.1, 0.0, 3.1, FrameTag.WORLD),
+        new BodyTelemetry("note_a", 6.1, 4.0, FrameTag.WORLD, -0.2, 0.0, 0.2, FrameTag.WORLD)));
 
     Map<String, Double> flat = SensorPacketIO.flattenForNetworkTables(packet);
     assertEquals(13, flat.size());
@@ -42,5 +43,36 @@ public class SensorPacketIOTest {
     assertEquals(2.0, flat.get("sim/contact_count"));
     assertTrue(flat.containsKey("sim/body/0/x_m"));
     assertTrue(flat.containsKey("sim/body/1/speed_mps"));
+  }
+
+  @Test
+  void flattenRejectsBodyFrameData() {
+    SensorPacket packet = new SensorPacket(
+        3,
+        0.06,
+        0,
+        List.of(new BodyTelemetry("robot", 1.0, 2.0, FrameTag.BODY, 0.1, 0.0, 0.1, FrameTag.WORLD)));
+
+    assertThrows(IllegalArgumentException.class, () -> SensorPacketIO.flattenForNetworkTables(packet));
+  }
+
+  @Test
+  void parseRejectsInvalidFrameTag() {
+    String json =
+        "{" +
+        "\"tick\":1," +
+        "\"time_s\":0.02," +
+        "\"contact_count\":0," +
+        "\"bodies\":[{" +
+        "\"name\":\"robot\"," +
+        "\"x_m\":1.0," +
+        "\"y_m\":2.0," +
+        "\"position_frame_tag\":\"x\"," +
+        "\"vx_mps\":0.0," +
+        "\"vy_mps\":0.0," +
+        "\"speed_mps\":0.0," +
+        "\"velocity_frame_tag\":\"w\"}]}";
+
+    assertThrows(IllegalArgumentException.class, () -> SensorPacketIO.parseJsonLines(json));
   }
 }
