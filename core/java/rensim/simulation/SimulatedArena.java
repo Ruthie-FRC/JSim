@@ -209,6 +209,15 @@ public abstract class SimulatedArena {
   }
 
   /**
+   * Registers opponent robot simulation behavior.
+   */
+  public synchronized void addOpponentRobotSimulation(OpponentRobotSimulation opponentSimulation) {
+    Objects.requireNonNull(opponentSimulation);
+    addDriveTrainSimulation(opponentSimulation.drive());
+    addCustomSimulation(opponentSimulation);
+  }
+
+  /**
    * Registers intake simulation.
    */
   public synchronized void addIntakeSimulation(IntakeSimulation intakeSimulation) {
