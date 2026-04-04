@@ -27,7 +27,7 @@ public final class PhysicsBody {
    * @param positionMeters the new position in meters
    */
   public void setPosition(Vec3 positionMeters) {
-    world.setBodyPosition(bodyIndex, positionMeters);
+    world.setBodyPosition(bodyIndex, positionMeters.x(), positionMeters.y(), positionMeters.z());
   }
 
   /**
@@ -36,5 +36,33 @@ public final class PhysicsBody {
    * @param velocityMps the new linear velocity in meters per second
    */
   public void setLinearVelocity(Vec3 velocityMps) {
-    world.setBodyLinearVelocity(bodyIndex, velocityMps);
+    world.setBodyLinearVelocity(bodyIndex, velocityMps.x(), velocityMps.y(), velocityMps.z());
   }
+
+  /**
+   * Enables or disables gravity for this body.
+   *
+   * @param enabled true to enable gravity
+   */
+  public void setGravityEnabled(boolean enabled) {
+    world.setBodyGravityEnabled(bodyIndex, enabled);
+  }
+
+  /**
+   * Gets the current world-space position in meters.
+   *
+   * @return the body position
+   */
+  public Vec3 position() {
+    return world.getBodyPosition(bodyIndex);
+  }
+
+  /**
+   * Gets the current world-space linear velocity in meters per second.
+   *
+   * @return the body linear velocity
+   */
+  public Vec3 linearVelocity() {
+    return world.getBodyLinearVelocity(bodyIndex);
+  }
+}

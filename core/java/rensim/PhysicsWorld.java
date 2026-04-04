@@ -72,6 +72,20 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
+	 * Enables or disables gravity for the given body.
+	 *
+	 * @param bodyIndex native body index
+	 * @param enabled true to enable gravity
+	 */
+	void setBodyGravityEnabled(int bodyIndex, boolean enabled) {
+		ensureOpen();
+		int rc = VendorJNI.setBodyGravityEnabled(worldHandle, bodyIndex, enabled);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to set body gravity enabled: rc=" + rc);
+		}
+	}
+
+	/**
 	 * Gets the world position for the given body.
 	 *
 	 * @param bodyIndex native body index
