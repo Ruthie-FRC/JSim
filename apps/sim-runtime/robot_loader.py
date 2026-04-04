@@ -1,0 +1,69 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import List, Tuple
+
+
+Vec2 = Tuple[float, float]
+
+
+@dataclass(frozen=True)
+class BodySpec:
+	"""Configuration for a circular rigid body used in 2D arena simulation."""
+
+	name: str
+	mass_kg: float
+	radius_m: float
+	position_m: Vec2
+	velocity_mps: Vec2
+	color: str
+
+
+@dataclass(frozen=True)
+class SimulationScenario:
+	"""Scenario describing arena geometry and rigid bodies to spawn."""
+
+	name: str
+	field_width_m: float
+	field_height_m: float
+	gravity_mps2: Vec2
+	restitution: float
+	bodies: List[BodySpec]
+
+
+def load_default_scenario() -> SimulationScenario:
+	"""Returns a default FRC-style top-down scenario with robot and game pieces."""
+
+	return SimulationScenario(
+		name="maple_style_arena_demo",
+		field_width_m=16.54,
+		field_height_m=8.02,
+		gravity_mps2=(0.0, 0.0),
+		restitution=0.45,
+		bodies=[
+			BodySpec(
+				name="robot",
+				mass_kg=54.0,
+				radius_m=0.44,
+				position_m=(2.2, 3.9),
+				velocity_mps=(2.8, 1.4),
+				color="#0a6e8a",
+			),
+			BodySpec(
+				name="note_a",
+				mass_kg=0.24,
+				radius_m=0.18,
+				position_m=(7.7, 4.2),
+				velocity_mps=(-0.9, 0.3),
+				color="#f28f3b",
+			),
+			BodySpec(
+				name="note_b",
+				mass_kg=0.24,
+				radius_m=0.18,
+				position_m=(11.4, 2.3),
+				velocity_mps=(-1.1, 0.7),
+				color="#f28f3b",
+			),
+		],
+	)
