@@ -28,6 +28,9 @@ public class GamePieceProjectile implements GamePiece {
   private boolean hitGround;
   private boolean outOfField;
   private double timeSinceLaunchSeconds;
+  private Vec3 simulatedPositionMeters;
+  private Vec3 simulatedVelocityMps;
+  private Runnable touchGroundCallback = () -> {};
 
   /**
    * Creates a projectile simulation with target checking.
@@ -61,6 +64,14 @@ public class GamePieceProjectile implements GamePiece {
   }
 
   /**
+   * Sets a callback for touchdown events.
+   */
+  public GamePieceProjectile onTouchGround(Runnable callback) {
+    this.touchGroundCallback = Objects.requireNonNull(callback);
+    return this;
+  }
+
+  /**
    * Sets trajectory preview callback.
    */
   public GamePieceProjectile withProjectileTrajectoryDisplayCallBack(
@@ -79,6 +90,8 @@ public class GamePieceProjectile implements GamePiece {
     this.hitGround = false;
     this.outOfField = false;
     this.timeSinceLaunchSeconds = 0.0;
+    this.simulatedPositionMeters = initialPositionMeters;
+    this.simulatedVelocityMps = initialVelocityMps;
 
     int previewSteps = options.projectile().previewSteps();
     double step = options.timing().fixedDtSeconds() * options.timing().subTicksPerRobotPeriod();
@@ -104,8 +117,8 @@ public class GamePieceProjectile implements GamePiece {
     }
     timeSinceLaunchSeconds += dtSeconds;
 
-    Vec3 current = positionAt(timeSinceLaunchSeconds);
-    Vec3 velocity = velocityAt(timeSinceLaunchSeconds);
+    Vec3 current = simulatedPositionMeters;
+    Vec3 velocity = simulatedVelocityMps.add(new Vec3(0.0, 0.0, gravityMps2 * dtSeconds));
 
     if (options.aerodynamics().enableDrag()) {
       double drag = options.aerodynamics().dragCoefficient();
@@ -123,6 +136,8 @@ public class GamePieceProjectile implements GamePiece {
     current = new Vec3(current.x() + velocity.x() * dtSeconds,
         current.y() + velocity.y() * dtSeconds,
         current.z() + velocity.z() * dtSeconds);
+    simulatedPositionMeters = current;
+    simulatedVelocityMps = velocity;
     Vec3 target = targetPositionSupplier.get();
     Vec3 delta = target.subtract(current);
     if (Math.abs(delta.x()) <= targetToleranceMeters.x()
@@ -135,6 +150,7 @@ public class GamePieceProjectile implements GamePiece {
 
     if (current.z() <= touchGroundHeightMeters) {
       hitGround = true;
+      touchGroundCallback.run();
       return;
     }
 
@@ -153,11 +169,14 @@ public class GamePieceProjectile implements GamePiece {
       return null;
     }
     Vec3 p = positionAt(timeSinceLaunchSeconds);
+    if (simulatedPositionMeters != null) {
+      p = simulatedPositionMeters;
+    }
     return new GamePieceOnFieldSimulation(
         arena,
         info,
         new Pose2(p.x(), p.y(), 0.0),
-        new Vec3(initialVelocityMps.x(), initialVelocityMps.y(), 0.0));
+        new Vec3(simulatedVelocityMps.x(), simulatedVelocityMps.y(), 0.0));
   }
 
   /**
@@ -196,12 +215,18 @@ public class GamePieceProjectile implements GamePiece {
 
   @Override
   public Pose3 pose() {
-    return poseAt(timeSinceLaunchSeconds);
+    if (!launched || simulatedPositionMeters == null) {
+      return poseAt(timeSinceLaunchSeconds);
+    }
+    return new Pose3(simulatedPositionMeters, 0.0);
   }
 
   @Override
   public Vec3 velocityMps() {
-    return velocityAt(timeSinceLaunchSeconds);
+    if (!launched || simulatedVelocityMps == null) {
+      return velocityAt(timeSinceLaunchSeconds);
+    }
+    return simulatedVelocityMps;
   }
 
   @Override
