@@ -12,6 +12,9 @@ import rensim.PhysicsBody;
 import rensim.PhysicsWorld;
 import rensim.Vec3;
 import rensim.simulation.drivesims.SwerveDriveSimulation;
+import rensim.simulation.gamepiece.GamePieceData;
+import rensim.simulation.projectile.ProjectileLaunchPlan;
+import rensim.simulation.projectile.ProjectileTargetingSolver;
 
 /**
  * Maple-style simulation world orchestrator using RenSim physics primitives.
@@ -218,10 +221,53 @@ public abstract class SimulatedArena {
   }
 
   /**
+   * Adds grounded game piece from canonical data definition.
+   */
+  public synchronized GamePieceOnFieldSimulation addGamePiece(GamePieceData data, Pose2 pose,
+      Vec3 initialVelocityMps) {
+    Objects.requireNonNull(data);
+    Objects.requireNonNull(pose);
+    Objects.requireNonNull(initialVelocityMps);
+    GamePieceOnFieldSimulation piece =
+        new GamePieceOnFieldSimulation(this, data.toInfo(), pose, initialVelocityMps);
+    addGamePiece(piece);
+    return piece;
+  }
+
+  /**
    * Adds projectile game piece.
    */
   public synchronized void addProjectile(GamePieceProjectile projectile) {
     gamePieceProjectiles.add(Objects.requireNonNull(projectile));
+  }
+
+  /**
+   * Launches a projectile toward a target using fixed launch speed.
+   */
+  public synchronized GamePieceProjectile launchPieceAtTarget(GamePieceData data, Pose2 launchPose,
+      double launchHeightMeters, Vec3 targetPositionMeters, double launchSpeedMps,
+      boolean highArc, Runnable onHitTarget) {
+    Objects.requireNonNull(data);
+    Objects.requireNonNull(launchPose);
+    Objects.requireNonNull(targetPositionMeters);
+    Objects.requireNonNull(onHitTarget);
+
+    Vec3 from = new Vec3(launchPose.xMeters(), launchPose.yMeters(), launchHeightMeters);
+    ProjectileLaunchPlan plan = ProjectileTargetingSolver
+        .solveBySpeed(from, targetPositionMeters, launchSpeedMps, options.gravityMps2().z(), highArc)
+        .orElseThrow(() -> new IllegalArgumentException("No ballistic solution for given launch parameters"));
+
+    GamePieceProjectile projectile = new GamePieceProjectile(
+        data.toInfo(),
+        from,
+        plan.velocityMps(),
+        () -> targetPositionMeters,
+        new Vec3(0.5, 0.5, 0.5),
+        options.gravityMps2().z(),
+        onHitTarget).enableBecomesGamePieceOnFieldAfterTouchGround();
+    projectile.launch(options);
+    addProjectile(projectile);
+    return projectile;
   }
 
   /**
