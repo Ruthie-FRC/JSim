@@ -1,10 +1,14 @@
 package rensim.jni;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
- * Public JNI facade for RenSim Java APIs.
+ * JNI entry points for the vendor physics driver.
  */
 public class VendorJNI {
   private VendorJNI() {}
+
+  static boolean libraryLoaded = false;
 
   /**
    * Configures whether the native library is loaded during static initialization.
@@ -12,13 +16,15 @@ public class VendorJNI {
   public static class Helper {
     private Helper() {}
 
+    private static final AtomicBoolean extractOnStaticLoad = new AtomicBoolean(true);
+
     /**
      * Returns whether the driver loads during static initialization.
      *
      * @return true when the driver loads on static initialization
      */
     public static boolean getExtractOnStaticLoad() {
-      return com.vendor.jni.VendorJNI.Helper.getExtractOnStaticLoad();
+      return extractOnStaticLoad.get();
     }
 
     /**
@@ -27,7 +33,14 @@ public class VendorJNI {
      * @param load the new value
      */
     public static void setExtractOnStaticLoad(boolean load) {
-      com.vendor.jni.VendorJNI.Helper.setExtractOnStaticLoad(load);
+      extractOnStaticLoad.set(load);
+    }
+  }
+
+  static {
+    if (Helper.getExtractOnStaticLoad()) {
+      System.loadLibrary("VendorDriver");
+      libraryLoaded = true;
     }
   }
 
@@ -35,7 +48,11 @@ public class VendorJNI {
    * Forces the native library to load.
    */
   public static synchronized void forceLoad() {
-    com.vendor.jni.VendorJNI.forceLoad();
+    if (libraryLoaded) {
+      return;
+    }
+    System.loadLibrary("VendorDriver");
+    libraryLoaded = true;
   }
 
   /**
@@ -43,9 +60,7 @@ public class VendorJNI {
    *
    * @return the value returned by the driver
    */
-  public static int initialize() {
-    return com.vendor.jni.VendorJNI.initialize();
-  }
+  public static native int initialize();
 
   /**
    * Creates a native world handle.
@@ -54,18 +69,14 @@ public class VendorJNI {
    * @param enableGravity true to enable gravity for the world
    * @return the native world handle
    */
-  public static long createWorld(double fixedDtSeconds, boolean enableGravity) {
-    return com.vendor.jni.VendorJNI.createWorld(fixedDtSeconds, enableGravity);
-  }
+  public static native long createWorld(double fixedDtSeconds, boolean enableGravity);
 
   /**
    * Destroys a native world handle.
    *
    * @param worldHandle the native world handle to destroy
    */
-  public static void destroyWorld(long worldHandle) {
-    com.vendor.jni.VendorJNI.destroyWorld(worldHandle);
-  }
+  public static native void destroyWorld(long worldHandle);
 
   /**
    * Creates a body in the given world and returns its native index.
@@ -74,9 +85,7 @@ public class VendorJNI {
    * @param massKg the body mass in kilograms
    * @return the native body index
    */
-  public static int createBody(long worldHandle, double massKg) {
-    return com.vendor.jni.VendorJNI.createBody(worldHandle, massKg);
-  }
+  public static native int createBody(long worldHandle, double massKg);
 
   /**
    * Sets a body's position in meters.
@@ -88,10 +97,8 @@ public class VendorJNI {
    * @param zMeters the z position in meters
    * @return zero on success
    */
-  public static int setBodyPosition(long worldHandle, int bodyIndex, double xMeters, double yMeters,
-      double zMeters) {
-    return com.vendor.jni.VendorJNI.setBodyPosition(worldHandle, bodyIndex, xMeters, yMeters, zMeters);
-  }
+  public static native int setBodyPosition(long worldHandle, int bodyIndex, double xMeters, double yMeters,
+      double zMeters);
 
   /**
    * Sets a body's linear velocity in meters per second.
@@ -103,10 +110,8 @@ public class VendorJNI {
    * @param vzMps the z velocity in meters per second
    * @return zero on success
    */
-  public static int setBodyLinearVelocity(long worldHandle, int bodyIndex, double vxMps, double vyMps,
-      double vzMps) {
-    return com.vendor.jni.VendorJNI.setBodyLinearVelocity(worldHandle, bodyIndex, vxMps, vyMps, vzMps);
-  }
+  public static native int setBodyLinearVelocity(long worldHandle, int bodyIndex, double vxMps, double vyMps,
+      double vzMps);
 
   /**
    * Enables or disables gravity for a body.
@@ -116,9 +121,7 @@ public class VendorJNI {
    * @param enabled true to enable gravity, false to disable it
    * @return zero on success
    */
-  public static int setBodyGravityEnabled(long worldHandle, int bodyIndex, boolean enabled) {
-    return com.vendor.jni.VendorJNI.setBodyGravityEnabled(worldHandle, bodyIndex, enabled);
-  }
+  public static native int setBodyGravityEnabled(long worldHandle, int bodyIndex, boolean enabled);
 
   /**
    * Sets the world's gravity vector in meters per second squared.
@@ -129,9 +132,7 @@ public class VendorJNI {
    * @param gzMps2 the z gravity component in meters per second squared
    * @return zero on success
    */
-  public static int setWorldGravity(long worldHandle, double gxMps2, double gyMps2, double gzMps2) {
-    return com.vendor.jni.VendorJNI.setWorldGravity(worldHandle, gxMps2, gyMps2, gzMps2);
-  }
+  public static native int setWorldGravity(long worldHandle, double gxMps2, double gyMps2, double gzMps2);
 
   /**
    * Advances the world by the given number of steps.
@@ -140,9 +141,7 @@ public class VendorJNI {
    * @param steps the number of steps to advance
    * @return zero on success
    */
-  public static int stepWorld(long worldHandle, int steps) {
-    return com.vendor.jni.VendorJNI.stepWorld(worldHandle, steps);
-  }
+  public static native int stepWorld(long worldHandle, int steps);
 
   /**
    * Reads a body's position into {@code outXyzMeters}.
@@ -152,9 +151,7 @@ public class VendorJNI {
    * @param outXyzMeters the output array that receives the position
    * @return zero on success
    */
-  public static int getBodyPosition(long worldHandle, int bodyIndex, double[] outXyzMeters) {
-    return com.vendor.jni.VendorJNI.getBodyPosition(worldHandle, bodyIndex, outXyzMeters);
-  }
+  public static native int getBodyPosition(long worldHandle, int bodyIndex, double[] outXyzMeters);
 
   /**
    * Reads a body's linear velocity into {@code outVxyzMps}.
@@ -164,7 +161,5 @@ public class VendorJNI {
    * @param outVxyzMps the output array that receives the linear velocity
    * @return zero on success
    */
-  public static int getBodyLinearVelocity(long worldHandle, int bodyIndex, double[] outVxyzMps) {
-    return com.vendor.jni.VendorJNI.getBodyLinearVelocity(worldHandle, bodyIndex, outVxyzMps);
-  }
+  public static native int getBodyLinearVelocity(long worldHandle, int bodyIndex, double[] outVxyzMps);
 }

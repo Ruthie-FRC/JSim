@@ -7,8 +7,8 @@ ext.licenseFile = files("$rootDir/../LICENSE.txt")
 
 def templateVendorFile = "RenSim.json"
 
-def artifactGroupId = (project.findProperty('artifactGroupId') ?: 'com.vendor.frc').toString()
-def baseArtifactId = (project.findProperty('baseArtifactId') ?: 'Vendor').toString()
+def artifactGroupId = 'com.vendor.frc'
+def baseArtifactId = 'Vendor'
 ext.pubVersion = System.getenv("releaseVersion") ?: System.getenv("releaseName") ?: "test"
 
 def outputsFolder = file("$buildDir/outputs")
