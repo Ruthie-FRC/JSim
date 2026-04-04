@@ -6,10 +6,12 @@ package rensim;
 public final class PhysicsBody {
   private final PhysicsWorld world;
   private final int bodyIndex;
+  private final int bodyId;
 
-  PhysicsBody(PhysicsWorld world, int bodyIndex) {
+  PhysicsBody(PhysicsWorld world, int bodyIndex, int bodyId) {
     this.world = world;
     this.bodyIndex = bodyIndex;
+    this.bodyId = bodyId;
   }
 
   /**
@@ -19,6 +21,15 @@ public final class PhysicsBody {
    */
   public int bodyIndex() {
     return bodyIndex;
+  }
+
+  /**
+   * Gets the unique body identifier used for tracking across frames.
+   *
+   * @return the body ID
+   */
+  public int id() {
+    return bodyId;
   }
 
   /**

@@ -1,12 +1,23 @@
 package rensim;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import rensim.jni.VendorJNI;
 
 /**
  * Thin Java wrapper around the native physics world implementation.
  */
-public final class PhysicsWorld implements AutoCloseable {
+public final class PhysicsWorld implements AutoCloseable, WorldStateView {
 	private long worldHandle;
+	private int nextBodyId = 0;
+	private final List<PhysicsBody> bodies = new ArrayList<>();
+	private Vec3 gravity = new Vec3(0.0, 0.0, -9.81);
+	private long stepCount = 0;
+	private double accumulatedTimeSeconds = 0.0;
+	private double fixedDtSeconds;
 
 	/**
 	 * Creates a native physics world.
@@ -16,6 +27,7 @@ public final class PhysicsWorld implements AutoCloseable {
 	 */
 	public PhysicsWorld(double fixedDtSeconds, boolean enableGravity) {
 		VendorJNI.forceLoad();
+		this.fixedDtSeconds = fixedDtSeconds;
 		this.worldHandle = VendorJNI.createWorld(fixedDtSeconds, enableGravity);
 		if (worldHandle == 0) {
 			throw new IllegalStateException("Failed to create native PhysicsWorld");
@@ -32,9 +44,13 @@ public final class PhysicsWorld implements AutoCloseable {
 		ensureOpen();
 		int index = VendorJNI.createBody(worldHandle, massKg);
 		if (index < 0) {
+		this.gravity = Objects.requireNonNull(gravityMps2, "gravityMps2 cannot be null");
 			throw new IllegalStateException("Failed to create body");
 		}
-		return new PhysicsBody(this, index);
+		int bodyId = nextBodyId++;
+		PhysicsBody body = new PhysicsBody(this, index, bodyId);
+		bodies.add(body);
+		return body;
 	}
 
 	/**
@@ -65,6 +81,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = VendorJNI.stepWorld(worldHandle, steps);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to step world");
+		stepCount += steps;
+		accumulatedTimeSeconds += steps * fixedDtSeconds;
 		}
 	}
 
@@ -109,6 +127,67 @@ public final class PhysicsWorld implements AutoCloseable {
 		if (rc != 0) {
 			throw new IllegalArgumentException("Invalid body index for getBodyLinearVelocity");
 		}
+	@Override
+	public int bodyCount() {
+		ensureOpen();
+		return bodies.size();
+	}
+
+	@Override
+	public List<BodyStateView> bodies() {
+		ensureOpen();
+		List<BodyStateView> views = new ArrayList<>();
+		for (PhysicsBody body : bodies) {
+			Vec3 pos = bodyPosition(body.bodyIndex());
+			Vec3 vel = bodyLinearVelocity(body.bodyIndex());
+			views.add(new BodyStateImpl(body.id(), 1.0, pos, vel, true));
+		}
+		return Collections.unmodifiableList(views);
+	}
+
+	@Override
+	public BodyStateView findBody(int bodyId) {
+		ensureOpen();
+		for (PhysicsBody body : bodies) {
+			if (body.id() == bodyId) {
+				Vec3 pos = bodyPosition(body.bodyIndex());
+				Vec3 vel = bodyLinearVelocity(body.bodyIndex());
+				return new BodyStateImpl(bodyId, 1.0, pos, vel, true);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Vec3 gravity() {
+		ensureOpen();
+		return gravity;
+	}
+
+	@Override
+	public long stepCount() {
+		ensureOpen();
+		return stepCount;
+	}
+
+	@Override
+	public double accumulatedTimeSeconds() {
+		ensureOpen();
+		return accumulatedTimeSeconds;
+	}
+
+	@Override
+	public FrameSnapshot captureFrame() {
+		ensureOpen();
+		List<FrameSnapshot.BodySnapshot> bodySnapshots = new ArrayList<>();
+		for (PhysicsBody body : bodies) {
+			Vec3 pos = bodyPosition(body.bodyIndex());
+			Vec3 vel = bodyLinearVelocity(body.bodyIndex());
+			bodySnapshots.add(new FrameSnapshot.BodySnapshot(body.id(), 1.0, pos, vel));
+		}
+		return new FrameSnapshot(stepCount, accumulatedTimeSeconds, Collections.unmodifiableList(bodySnapshots));
+	}
+
 		return new Vec3(out[0], out[1], out[2]);
 	}
 
