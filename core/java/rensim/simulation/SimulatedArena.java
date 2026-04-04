@@ -68,6 +68,7 @@ public abstract class SimulatedArena {
 
   protected final List<SwerveDriveSimulation> driveTrainSimulations = new ArrayList<>();
   protected final List<Simulatable> customSimulations = new ArrayList<>();
+  protected final List<Goal> goals = new ArrayList<>();
   protected final List<IntakeSimulation> intakeSimulations = new ArrayList<>();
   protected final Set<GamePieceOnFieldSimulation> gamePiecesOnField = new HashSet<>();
   protected final Set<GamePieceProjectile> gamePieceProjectiles = new HashSet<>();
@@ -127,6 +128,10 @@ public abstract class SimulatedArena {
     for (Simulatable custom : customSimulations) {
       custom.simulationSubTick(subTickNum);
     }
+
+    for (Goal goal : goals) {
+      goal.simulationSubTick(subTickNum);
+    }
   }
 
   /**
@@ -153,6 +158,13 @@ public abstract class SimulatedArena {
    */
   public synchronized void addCustomSimulation(Simulatable customSimulation) {
     customSimulations.add(Objects.requireNonNull(customSimulation));
+  }
+
+  /**
+   * Registers a scoring goal simulation.
+   */
+  public synchronized void addGoal(Goal goal) {
+    goals.add(Objects.requireNonNull(goal));
   }
 
   /**
@@ -193,6 +205,39 @@ public abstract class SimulatedArena {
    */
   public synchronized Set<GamePieceProjectile> gamePieceLaunched() {
     return Set.copyOf(gamePieceProjectiles);
+  }
+
+  /**
+   * Returns all registered goals.
+   */
+  public synchronized List<Goal> goals() {
+    return List.copyOf(goals);
+  }
+
+  /**
+   * Directly manipulates a grounded piece pose.
+   */
+  public synchronized void setGamePiecePose(GamePieceOnFieldSimulation piece, Pose2 pose) {
+    Objects.requireNonNull(piece);
+    piece.setPoseOnField(Objects.requireNonNull(pose));
+  }
+
+  /**
+   * Directly manipulates a grounded piece velocity.
+   */
+  public synchronized void setGamePieceVelocity(GamePieceOnFieldSimulation piece, Vec3 velocityMps) {
+    Objects.requireNonNull(piece);
+    piece.setVelocity(Objects.requireNonNull(velocityMps));
+  }
+
+  /**
+   * Applies an impulse-like velocity delta to a grounded piece.
+   */
+  public synchronized void applyGamePieceVelocityDelta(GamePieceOnFieldSimulation piece,
+      Vec3 deltaVelocityMps) {
+    Objects.requireNonNull(piece);
+    Objects.requireNonNull(deltaVelocityMps);
+    piece.setVelocity(piece.velocityMps().add(deltaVelocityMps));
   }
 
   /**

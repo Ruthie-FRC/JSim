@@ -65,6 +65,22 @@ public class GamePieceOnFieldSimulation implements GamePiece {
   }
 
   /**
+   * Sets world-space pose for this grounded piece.
+   */
+  public void setPoseOnField(Pose2 pose) {
+    Objects.requireNonNull(pose);
+    body.setPosition(new Vec3(pose.xMeters(), pose.yMeters(), 0.0));
+    yawRad = pose.yawRad();
+  }
+
+  /**
+   * Returns collision radius in meters.
+   */
+  public double radiusMeters() {
+    return info.radiusMeters();
+  }
+
+  /**
    * Gets 2D pose on field plane.
    */
   public Pose2 poseOnField() {
