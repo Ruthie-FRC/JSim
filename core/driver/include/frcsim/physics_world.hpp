@@ -6,6 +6,7 @@
 
 #include "frcsim/field/boundary.hpp"
 #include "frcsim/forces/force_generator.hpp"
+#include "frcsim/gamepiece/ball_physics.hpp"
 #include "frcsim/rigidbody/rigid_assembly.hpp"
 #include "frcsim/rigidbody/rigid_body.hpp"
 
@@ -44,6 +45,12 @@ class PhysicsWorld {
 		std::vector<RigidAssembly>& assemblies() { return assemblies_; }
 		const std::vector<RigidAssembly>& assemblies() const { return assemblies_; }
 
+		BallPhysicsSim3D& createBall(const BallPhysicsSim3D::Config& config = BallPhysicsSim3D::Config(),
+								 const BallPhysicsSim3D::BallProperties& properties =
+									 BallPhysicsSim3D::BallProperties());
+		std::vector<BallPhysicsSim3D>& balls() { return balls_; }
+		const std::vector<BallPhysicsSim3D>& balls() const { return balls_; }
+
 		void step();
 
 		std::size_t stepCount() const { return step_count_; }
@@ -57,6 +64,7 @@ class PhysicsWorld {
 
 		std::vector<RigidBody> bodies_{};
 		std::vector<RigidAssembly> assemblies_{};
+		std::vector<BallPhysicsSim3D> balls_{};
 		std::vector<EnvironmentalBoundary> boundaries_{};
 		std::vector<std::shared_ptr<ForceGenerator>> global_force_generators_{};
 

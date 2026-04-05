@@ -15,6 +15,12 @@ RigidAssembly& PhysicsWorld::createAssembly() {
 	return assemblies_.back();
 }
 
+BallPhysicsSim3D& PhysicsWorld::createBall(const BallPhysicsSim3D::Config& config,
+								   const BallPhysicsSim3D::BallProperties& properties) {
+	balls_.emplace_back(config, properties);
+	return balls_.back();
+}
+
 EnvironmentalBoundary& PhysicsWorld::addBoundary() {
 	boundaries_.emplace_back();
 	return boundaries_.back();
@@ -59,6 +65,10 @@ void PhysicsWorld::step() {
 		if (config_.enable_joint_constraints) {
 			assembly.solveConstraints(dt_s, 4);
 		}
+	}
+
+	for (auto& ball : balls_) {
+		ball.step(dt_s);
 	}
 
 	++step_count_;
