@@ -30,6 +30,12 @@ class BallGamepieceSim {
         double net_velocity_decay{0.2};
         double net_spin_decay{0.8};
         double net_downward_bias_mps2{2.0};
+
+        // Robot-ball contact/plowing tuning.
+        double robot_ball_contact_restitution{0.45};
+        double robot_ball_contact_friction{0.2};
+        double plow_ball_velocity_retention{0.7};
+        double plow_robot_velocity_gain{0.6};
     };
 
     struct RobotState {
@@ -358,10 +364,17 @@ class BallGamepieceSim {
 
             // Plowing behavior: transfer robot planar velocity into the ball.
             const Vector3 robot_planar_velocity(robot.velocity_mps.x, robot.velocity_mps.y, 0.0);
-            state.velocity_mps.x = 0.7 * state.velocity_mps.x + 0.6 * robot_planar_velocity.x;
-            state.velocity_mps.y = 0.7 * state.velocity_mps.y + 0.6 * robot_planar_velocity.y;
+            state.velocity_mps.x =
+                field_.plow_ball_velocity_retention * state.velocity_mps.x +
+                field_.plow_robot_velocity_gain * robot_planar_velocity.x;
+            state.velocity_mps.y =
+                field_.plow_ball_velocity_retention * state.velocity_mps.y +
+                field_.plow_robot_velocity_gain * robot_planar_velocity.y;
 
-            applyContactImpulse(state.velocity_mps, normal, 0.45, 0.2);
+            applyContactImpulse(state.velocity_mps,
+                                normal,
+                                field_.robot_ball_contact_restitution,
+                                field_.robot_ball_contact_friction);
         }
 
         ball.sim.setState(state);

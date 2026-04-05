@@ -6,6 +6,7 @@
 #include "frcsim/math/quaternion.hpp"
 #include "frcsim/math/vector.hpp"
 #include "frcsim/mechanisms/double_differential.hpp"
+#include "frcsim/mechanisms/shooter_wheel.hpp"
 
 namespace frcsim {
 
@@ -101,6 +102,10 @@ class TurretShooterSim {
         const Vector3 muzzle_position = muzzlePositionWorld();
         const Vector3 shot_velocity = base_velocity_mps_ + muzzleDirectionWorld() * std::max(0.0, muzzle_speed_mps);
         ball_.shoot(muzzle_position, shot_velocity, spin_radps);
+    }
+
+    void shootWithWheel(const ShooterWheelSim& wheel, const Vector3& spin_radps = Vector3::zero()) {
+        shoot(wheel.estimatedExitVelocityMps(), spin_radps);
     }
 
     void step(double dt_s) {

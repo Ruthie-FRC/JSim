@@ -28,7 +28,6 @@ int main() {
     assert(std::fabs(default_props.mass_kg - 0.216) < 1e-9);
     assert(std::fabs(default_props.radius_m - 0.075) < 1e-9);
 
-    // Add a cluster of loose balls near robot A to verify plowing + intake with many objects.
     for (int i = 0; i < 8; ++i) {
         frcsim::BallPhysicsSim3D::BallState state;
         state.position_m = frcsim::Vector3(1.35 + 0.08 * i, 2.0 + ((i % 2 == 0) ? 0.03 : -0.03), 0.075);
@@ -38,7 +37,6 @@ int main() {
 
     assert(sim.countBalls() == 8);
 
-    // Create a net boundary (user_id 2026) where scored balls should fall down.
     frcsim::EnvironmentalBoundary net;
     net.type = frcsim::BoundaryType::kBox;
     net.position_m = frcsim::Vector3(7.0, 2.0, 1.6);
@@ -47,7 +45,6 @@ int main() {
     net.is_active = true;
     sim.addFieldElement(net);
 
-    // Add a rigid wall plane for field element bounce behavior.
     frcsim::EnvironmentalBoundary wall;
     wall.type = frcsim::BoundaryType::kPlane;
     wall.position_m = frcsim::Vector3(4.0, 0.0, 0.0);
@@ -57,21 +54,17 @@ int main() {
     wall.is_active = true;
     sim.addFieldElement(wall);
 
-    // Step a short time: robot A should pick up one ball and plow others.
     for (int i = 0; i < 15; ++i) {
         sim.step(0.02);
     }
 
     assert(sim.robots()[robot_a_id].carried_ball_index != frcsim::BallGamepieceSim::kNoBall);
 
-    // Robot-to-robot contact should impede relative velocity.
-    const double relative_speed_before =
-        (robot_a.velocity_mps - robot_b.velocity_mps).norm();
+    const double relative_speed_before = (robot_a.velocity_mps - robot_b.velocity_mps).norm();
     const double relative_speed_after =
         (sim.robots()[robot_a_id].velocity_mps - sim.robots()[robot_b_id].velocity_mps).norm();
     assert(relative_speed_after < relative_speed_before + 1e-6);
 
-    // Fire carried ball with scalar speed and exit velocity override from robot-relative launch offset.
     frcsim::BallGamepieceSim::FireCommand fire;
     fire.launch_offset_m = frcsim::Vector3(0.45, 0.0, 0.55);
     fire.yaw_offset_rad = 0.0;
@@ -83,22 +76,18 @@ int main() {
     const bool fired = sim.fireBall(robot_a_id, fire);
     assert(fired);
 
-    // March long enough for one of the balls to interact with net and for field/walls/gravity behavior.
     for (int i = 0; i < 240; ++i) {
         sim.step(0.02);
     }
 
-    // Count API stays stable and net scoring can occur.
     assert(sim.countBalls() == 8);
     assert(sim.countScoredBalls() <= sim.countBalls());
 
-    // Running into field perimeter should clamp and stop robot, not move the field.
     sim.robots()[robot_a_id].position_m = frcsim::Vector3(16.50, 2.0, 0.0);
     sim.robots()[robot_a_id].velocity_mps = frcsim::Vector3(2.0, 0.0, 0.0);
     sim.step(0.02);
     assert(sim.robots()[robot_a_id].velocity_mps.x == 0.0);
 
-    // At least one loose ball should have moved from initial placement due to plowing/contacts.
     bool some_ball_moved = false;
     for (const auto& ball : sim.balls()) {
         if (ball.sim.state().position_m.x > 2.2) {
