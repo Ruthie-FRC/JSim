@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 #include "frcsim/mechanisms/shot_calculator.hpp"
@@ -38,6 +39,54 @@ int main() {
     assert(shot_blended.is_valid);
     assert(std::isfinite(shot_blended.hood_pitch_rad));
     assert(std::isfinite(shot_blended.flywheel_speed_mps));
+
+    // Refinement should provide a drag-aware correction on top of table interpolation.
+    frcsim::ShotCalculator3D::Config draggy = config;
+    draggy.min_distance_m = 1.0;
+    draggy.max_distance_m = 8.0;
+    draggy.ballistic_refinement_enabled = false;
+    draggy.air_density_kgpm3 = 1.225;
+    draggy.drag_scale = 1.0;
+    draggy.projectile_mass_kg = 0.27;
+    draggy.projectile_drag_coefficient = 0.47;
+    draggy.projectile_reference_area_m2 = 0.025;
+    draggy.assumed_spin_radps = frcsim::Vector3::zero();
+
+    frcsim::ShotCalculator3D baseline_calc(draggy);
+    baseline_calc.setLookupTable(std::vector<frcsim::ShotCalculator3D::TablePoint>{
+        {1.0, 0.40, 8.0, 0.20},
+        {4.0, 0.46, 10.0, 0.45},
+        {8.0, 0.52, 12.0, 0.90},
+    });
+
+    frcsim::ShotCalculator3D::Config refined_cfg = draggy;
+    refined_cfg.ballistic_refinement_enabled = true;
+    refined_cfg.ballistic_refinement_iterations = 5;
+    refined_cfg.ballistic_pitch_gain_radpm = 0.05;
+    refined_cfg.ballistic_speed_gain_mpspm = 0.9;
+    frcsim::ShotCalculator3D refined_calc(refined_cfg);
+    refined_calc.setLookupTable(std::vector<frcsim::ShotCalculator3D::TablePoint>{
+        {1.0, 0.40, 8.0, 0.20},
+        {4.0, 0.46, 10.0, 0.45},
+        {8.0, 0.52, 12.0, 0.90},
+    });
+
+    const frcsim::Vector3 far_target(7.0, 0.0, 2.2);
+    const auto baseline_shot = baseline_calc.calculateShot(shooter_origin, frcsim::Vector3::zero(), far_target, 2.0);
+    const auto refined_shot = refined_calc.calculateShot(shooter_origin, frcsim::Vector3::zero(), far_target, 2.0);
+    assert(baseline_shot.is_valid);
+    assert(refined_shot.is_valid);
+    assert(std::isfinite(refined_shot.hood_pitch_rad));
+    assert(std::isfinite(refined_shot.flywheel_speed_mps));
+    assert(refined_shot.flywheel_speed_mps >= baseline_shot.flywheel_speed_mps);
+
+    // Invalid numeric inputs should fail closed.
+    const auto bad_query = calculator.calculateShot(
+        frcsim::Vector3(std::numeric_limits<double>::quiet_NaN(), 0.0, 0.0),
+        frcsim::Vector3::zero(),
+        target,
+        2.5);
+    assert(!bad_query.is_valid);
 
     // Integration with turret differential math.
     frcsim::TurretShooterSim sim;
