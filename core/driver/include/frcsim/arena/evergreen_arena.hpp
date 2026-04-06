@@ -2,6 +2,7 @@
 
 #include "frcsim/arena/simulated_arena.hpp"
 #include "frcsim/field/field_wall.hpp"
+#include "frcsim/gamepiece/ball_gamepiece_presets.hpp"
 
 namespace frcsim {
 
@@ -12,8 +13,8 @@ class EvergreenArena : public SimulatedArena {
 
         BallGamepieceSim::GamePieceInfo default_ball;
         default_ball.type = "Ball";
-        default_ball.physics_config = BallGamepieceSim::defaultBallConfig();
-        default_ball.ball_properties = BallGamepieceSim::defaultBallProperties();
+        default_ball.physics_config = BallGamepiecePresets::evergreenBallConfig();
+        default_ball.ball_properties = BallGamepiecePresets::evergreenBallProperties();
         default_ball.spawn_on_ground_after_projectile = true;
         gamepieceSim().registerGamePieceType(default_ball);
 

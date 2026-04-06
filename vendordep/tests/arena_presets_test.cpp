@@ -21,7 +21,7 @@ int main() {
     const auto e_robot = evergreen.gamepieceSim().addRobot(robot);
     const auto r_robot = rebuilt.gamepieceSim().addRobot(robot);
 
-    frcsim::BallGamepieceSim::FireCommand cmd;
+    frcsim::BallGamepieceSim::ExitTrajectoryParameters cmd;
     cmd.pitch_rad = 0.45;
     cmd.mechanism_speed_mps = 7.0;
     cmd.gamepiece_type = "Ball";

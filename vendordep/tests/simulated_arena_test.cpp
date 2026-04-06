@@ -1,9 +1,10 @@
 #include <cassert>
 
 #include "frcsim/arena/simulated_arena.hpp"
+#include "frcsim/gamepiece/ball_gamepiece_presets.hpp"
 
 int main() {
-    frcsim::SimulatedArena arena(frcsim::BallGamepieceSim::season2026FieldConfig());
+    frcsim::SimulatedArena arena(frcsim::BallGamepiecePresets::season2026FieldConfig());
 
     frcsim::SimulatedArena::Timings timings;
     timings.robot_period_s = 0.02;
@@ -33,8 +34,8 @@ int main() {
     frcsim::BallPhysicsSim3D::BallState loose_ball;
     loose_ball.position_m = frcsim::Vector3(1.1, 2.0, 0.08);
     arena.gamepieceSim().addBall(loose_ball,
-                                 frcsim::BallGamepieceSim::season2026BallConfig(),
-                                 frcsim::BallGamepieceSim::season2026BallProperties());
+                                 frcsim::BallGamepiecePresets::season2026BallConfig(),
+                                 frcsim::BallGamepiecePresets::season2026BallProperties());
 
     frcsim::IntakeSimulation::Config intake_cfg;
     intake_cfg.robot_index = robot_id;
@@ -53,7 +54,7 @@ int main() {
     arena.simulationPeriodic();
     assert(callback_ticks == timings.simulation_subticks_per_period);
 
-    frcsim::BallGamepieceSim::FireCommand shot;
+    frcsim::BallGamepieceSim::ExitTrajectoryParameters shot;
     shot.launch_offset_m = frcsim::Vector3(0.45, 0.0, 0.7);
     shot.pitch_rad = 0.55;
     shot.mechanism_speed_mps = 8.5;

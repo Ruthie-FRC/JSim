@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "frcsim/gamepiece/ball_gamepiece_sim.hpp"
+#include "frcsim/gamepiece/ball_gamepiece_presets.hpp"
 
 int main() {
     frcsim::BallGamepieceSim::FieldConfig field;
@@ -25,15 +26,15 @@ int main() {
     const std::size_t robot_a_id = sim.addRobot(robot_a);
     const std::size_t robot_b_id = sim.addRobot(robot_b);
 
-    const auto default_props = frcsim::BallGamepieceSim::season2026BallProperties();
+    const auto default_props = frcsim::BallGamepiecePresets::season2026BallProperties();
     assert(std::fabs(default_props.mass_kg - 0.216) < 1e-9);
     assert(std::fabs(default_props.radius_m - 0.075) < 1e-9);
 
     for (int i = 0; i < 8; ++i) {
         frcsim::BallPhysicsSim3D::BallState state;
         state.position_m = frcsim::Vector3(1.35 + 0.08 * i, 2.0 + ((i % 2 == 0) ? 0.03 : -0.03), 0.075);
-        sim.addBall(state, frcsim::BallGamepieceSim::season2026BallConfig(),
-                    frcsim::BallGamepieceSim::season2026BallProperties());
+        sim.addBall(state, frcsim::BallGamepiecePresets::season2026BallConfig(),
+                frcsim::BallGamepiecePresets::season2026BallProperties());
     }
 
     assert(sim.countBalls() == 8);
@@ -66,7 +67,7 @@ int main() {
         (sim.robots()[robot_a_id].velocity_mps - sim.robots()[robot_b_id].velocity_mps).norm();
     assert(relative_speed_after < relative_speed_before + 1e-6);
 
-    frcsim::BallGamepieceSim::FireCommand fire;
+    frcsim::BallGamepieceSim::ExitTrajectoryParameters fire;
     fire.launch_offset_m = frcsim::Vector3(0.45, 0.0, 0.55);
     fire.yaw_offset_rad = 0.0;
     fire.pitch_rad = 0.85;
@@ -90,8 +91,8 @@ int main() {
 
     frcsim::BallGamepieceSim::GamePieceInfo projectile_ball_type;
     projectile_ball_type.type = "Ball";
-    projectile_ball_type.physics_config = frcsim::BallGamepieceSim::season2026BallConfig();
-    projectile_ball_type.ball_properties = frcsim::BallGamepieceSim::season2026BallProperties();
+    projectile_ball_type.physics_config = frcsim::BallGamepiecePresets::season2026BallConfig();
+    projectile_ball_type.ball_properties = frcsim::BallGamepiecePresets::season2026BallProperties();
     projectile_ball_type.spawn_on_ground_after_projectile = true;
     projectile_sim.registerGamePieceType(projectile_ball_type);
 
@@ -100,7 +101,7 @@ int main() {
     launcher.yaw_rad = 0.0;
     const std::size_t launcher_id = projectile_sim.addRobot(launcher);
 
-    frcsim::BallGamepieceSim::FireCommand projectile_fire;
+    frcsim::BallGamepieceSim::ExitTrajectoryParameters projectile_fire;
     projectile_fire.launch_offset_m = frcsim::Vector3(0.3, 0.0, 0.8);
     projectile_fire.pitch_rad = 0.35;
     projectile_fire.mechanism_speed_mps = 2.5;
