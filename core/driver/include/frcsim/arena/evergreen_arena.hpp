@@ -9,8 +9,6 @@ namespace frcsim {
 class EvergreenArena : public SimulatedArena {
   public:
     EvergreenArena() : SimulatedArena(BallGamepieceSim::evergreenFieldConfig()) {
-        gamepieceSim().configureEvergreenField();
-
         BallGamepieceSim::GamePieceInfo default_ball;
         default_ball.type = "Ball";
         default_ball.physics_config = BallGamepiecePresets::evergreenBallConfig();

@@ -87,7 +87,7 @@ int main() {
 
     // Maple-style projectile lifecycle: in-flight projectile can hit goal or become grounded piece.
     frcsim::BallGamepieceSim projectile_sim;
-    projectile_sim.configureEvergreenField();
+    projectile_sim.setFieldConfig(frcsim::BallGamepieceSim::evergreenFieldConfig());
 
     frcsim::BallGamepieceSim::GamePieceInfo projectile_ball_type;
     projectile_ball_type.type = "Ball";

@@ -216,13 +216,6 @@ class BallGamepieceSim {
         gamepiece_types_.clear();
     }
 
-    /** @brief Applies evergreen field configuration and clears dynamic field elements/goals. */
-    void configureEvergreenField() {
-        field_ = evergreenFieldConfig();
-        field_elements_.clear();
-        goals_.clear();
-    }
-
     /** @brief Adds a field element and returns a mutable reference to the stored copy. */
     EnvironmentalBoundary& addFieldElement(const EnvironmentalBoundary& boundary) {
         field_elements_.push_back(boundary);
