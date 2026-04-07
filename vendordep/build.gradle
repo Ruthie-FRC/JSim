@@ -1,31 +1,32 @@
 import edu.wpi.first.toolchain.*
 
 plugins {
-  id 'cpp'
-  id 'java'
-  id 'google-test'
-  id 'edu.wpi.first.wpilib.repositories.WPILibRepositoriesPlugin' version '2025.0'
-  id 'edu.wpi.first.NativeUtils' version '2026.0.1'
-  id 'edu.wpi.first.GradleJni' version '1.1.0'
-  id 'edu.wpi.first.GradleVsCode' version '2.1.0'
-  id 'org.ysb33r.doxygen' version "2.1.1"
+    id 'cpp'
+    id 'java'
+    id 'google-test'
+    id 'edu.wpi.first.wpilib.repositories.WPILibRepositoriesPlugin' version '2025.0'
+    id 'edu.wpi.first.NativeUtils' version '2026.0.1'
+    id 'edu.wpi.first.GradleJni' version '1.1.0'
+    id 'edu.wpi.first.GradleVsCode' version '2.1.0'
+    id 'org.ysb33r.doxygen' version "2.1.1"
+    id 'com.diffplug.spotless' version '6.20.0'
 }
 
 // WPILib Version
 ext.wpilibVersion = "2026.+"
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 if (project.hasProperty('releaseMode')) {
-  wpilibRepositories.addAllReleaseRepositories(project)
+    wpilibRepositories.addAllReleaseRepositories(project)
 } else {
-  wpilibRepositories.addAllDevelopmentRepositories(project)
+    wpilibRepositories.addAllDevelopmentRepositories(project)
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 var javaVersion = "17"
 
@@ -68,102 +69,102 @@ if (project.hasProperty('onlylinuxathena') || project.hasProperty('onlylinuxarm3
 }
 
 def crossCompileOnlyProperties = [
-  'onlylinuxathena',
-  'onlylinuxarm32',
-  'onlylinuxarm64',
-  'onlywindowsarm64',
-  'onlylinuxsystemcore'
+    'onlylinuxathena',
+    'onlylinuxarm32',
+    'onlylinuxarm64',
+    'onlywindowsarm64',
+    'onlylinuxsystemcore'
 ]
 def isCrossCompileOnlyMode = crossCompileOnlyProperties.any { project.hasProperty(it) }
 def isLinuxHost = System.getProperty('os.name').toLowerCase().contains('linux')
 def legacyNativeTestSources = fileTree("${rootDir}/tests") {
-  include '*.cpp'
+    include '*.cpp'
 }
-
-tasks.register('compileLegacyNativeTests') {
-  group = 'verification'
-  description = 'Compiles standalone native tests in vendordep/tests.'
-
-  inputs.files(legacyNativeTestSources)
-  inputs.files(
-    file("${rootDir}/../core/driver/src/physics_world.cpp"),
-    file("${rootDir}/../core/driver/src/rigid_assembly.cpp"),
-    file("${rootDir}/../core/driver/src/joints.cpp")
-  )
-  outputs.dir(layout.buildDirectory.dir('legacy-native-tests'))
-
-  onlyIf {
-    isLinuxHost && !isCrossCompileOnlyMode
-  }
-
-  doLast {
-    def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
-    outputDir.mkdirs()
-
-    // Remove stale executables from deleted/renamed tests to keep source/executable counts aligned.
-    outputDir.listFiles()?.findAll { it.isFile() }?.each { it.delete() }
-
-    def sortedTestFiles = legacyNativeTestSources.files.sort { a, b -> a.name <=> b.name }
-    if (sortedTestFiles.isEmpty()) {
-      throw new GradleException('No legacy native test sources were found in vendordep/tests (*.cpp).')
-    }
-
-    sortedTestFiles.each { testFile ->
-      def executableName = testFile.name.replaceFirst(/\.cpp$/, '')
-      def executablePath = new File(outputDir, executableName)
-      logger.lifecycle("Compiling legacy native test: ${testFile.name}")
-
-      exec {
-        commandLine 'g++',
-          '-std=c++20',
-          '-O0',
-          '-g0',
-          "-I${rootDir}/../core/driver/include",
-          "-I${rootDir}/../core/physics-core/include",
-          "-I${rootDir}/src/main/driver/include",
-          "${rootDir}/../core/driver/src/physics_world.cpp",
-          "${rootDir}/../core/driver/src/rigid_assembly.cpp",
-          "${rootDir}/../core/driver/src/joints.cpp",
-          testFile.absolutePath,
-          '-o',
-          executablePath.absolutePath
-      }
-    }
-
-    def builtExecutables = outputDir.listFiles()?.findAll { it.isFile() } ?: []
-    if (builtExecutables.size() != sortedTestFiles.size()) {
-      throw new GradleException("Legacy native test build produced ${builtExecutables.size()} executables for ${sortedTestFiles.size()} sources.")
-    }
-  }
-}
-
-tasks.register('runLegacyNativeTests') {
-  group = 'verification'
-  description = 'Runs standalone native tests compiled from vendordep/tests.'
-  dependsOn(tasks.named('compileLegacyNativeTests'))
-
-  onlyIf {
-    isLinuxHost && !isCrossCompileOnlyMode
-  }
-
-  doLast {
-    def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
-    def executables = outputDir.listFiles()?.findAll { it.isFile() }?.sort { a, b -> a.name <=> b.name } ?: []
-
-    if (executables.isEmpty()) {
-      throw new GradleException('No legacy native test executables were found to run.')
-    }
-
-    executables.each { executable ->
-      logger.lifecycle("Running legacy native test: ${executable.name}")
-      exec {
-        commandLine executable.absolutePath
-      }
-    }
-  }
-}
-
-test.dependsOn(tasks.named('runLegacyNativeTests'))
+//
+//tasks.register('compileLegacyNativeTests') {
+//    group = 'verification'
+//    description = 'Compiles standalone native tests in vendordep/tests.'
+//
+//    inputs.files(legacyNativeTestSources)
+//    inputs.files(
+//            file("${rootDir}/../core/driver/src/physics_world.cpp"),
+//            file("${rootDir}/../core/driver/src/rigid_assembly.cpp"),
+//            file("${rootDir}/../core/driver/src/joints.cpp")
+//            )
+//    outputs.dir(layout.buildDirectory.dir('legacy-native-tests'))
+//
+//    onlyIf {
+//        isLinuxHost && !isCrossCompileOnlyMode
+//    }
+//
+//    doLast {
+//        def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
+//        outputDir.mkdirs()
+//
+//        // Remove stale executables from deleted/renamed tests to keep source/executable counts aligned.
+//        outputDir.listFiles()?.findAll { it.isFile() }?.each { it.delete() }
+//
+//        def sortedTestFiles = legacyNativeTestSources.files.sort { a, b -> a.name <=> b.name }
+//        if (sortedTestFiles.isEmpty()) {
+//            throw new GradleException('No legacy native test sources were found in vendordep/tests (*.cpp).')
+//        }
+//
+//        sortedTestFiles.each { testFile ->
+//            def executableName = testFile.name.replaceFirst(/\.cpp$/, '')
+//            def executablePath = new File(outputDir, executableName)
+//            logger.lifecycle("Compiling legacy native test: ${testFile.name}")
+//
+//            exec {
+//                commandLine 'g++',
+//                        '-std=c++20',
+//                        '-O0',
+//                        '-g0',
+//                        "-I${rootDir}/../core/driver/include",
+//                        "-I${rootDir}/../core/physics-core/include",
+//                        "-I${rootDir}/src/main/driver/include",
+//                        "${rootDir}/../core/driver/src/physics_world.cpp",
+//                        "${rootDir}/../core/driver/src/rigid_assembly.cpp",
+//                        "${rootDir}/../core/driver/src/joints.cpp",
+//                        testFile.absolutePath,
+//                        '-o',
+//                        executablePath.absolutePath
+//            }
+//        }
+//
+//        def builtExecutables = outputDir.listFiles()?.findAll { it.isFile() } ?: []
+//        if (builtExecutables.size() != sortedTestFiles.size()) {
+//            throw new GradleException("Legacy native test build produced ${builtExecutables.size()} executables for ${sortedTestFiles.size()} sources.")
+//        }
+//    }
+//}
+//
+//tasks.register('runLegacyNativeTests') {
+//    group = 'verification'
+//    description = 'Runs standalone native tests compiled from vendordep/tests.'
+//    dependsOn(tasks.named('compileLegacyNativeTests'))
+//
+//    onlyIf {
+//        isLinuxHost && !isCrossCompileOnlyMode
+//    }
+//
+//    doLast {
+//        def outputDir = layout.buildDirectory.dir('legacy-native-tests').get().asFile
+//        def executables = outputDir.listFiles()?.findAll { it.isFile() }?.sort { a, b -> a.name <=> b.name } ?: []
+//
+//        if (executables.isEmpty()) {
+//            throw new GradleException('No legacy native test executables were found to run.')
+//        }
+//
+//        executables.each { executable ->
+//            logger.lifecycle("Running legacy native test: ${executable.name}")
+//            exec {
+//                commandLine executable.absolutePath
+//            }
+//        }
+//    }
+//}
+//
+//test.dependsOn(tasks.named('runLegacyNativeTests'))
 
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
@@ -174,12 +175,12 @@ tasks.withType(JavaCompile) {
 def enableExternalJavadocLinks = !gradle.startParameter.isOffline() && System.getenv('CI') == null
 
 javadoc {
-  failOnError = true
+    failOnError = true
     options {
-    if (enableExternalJavadocLinks) {
-      links "https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/", 'https://github.wpilib.org/allwpilib/docs/release/java/'
-    }
-    addBooleanOption('Werror', true)
+        if (enableExternalJavadocLinks) {
+            links "https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/", 'https://github.wpilib.org/allwpilib/docs/release/java/'
+        }
+        addBooleanOption('Werror', true)
     }
 }
 
@@ -189,11 +190,8 @@ doxygen {
     sourceSets {
         main {
             // Native C++ headers + sources
-			sources "src/main/native/include"
+            sources "src/main/native/include"
             sources "src/main/native/cpp"
-			sources "$rootDir/../core/driver/src"
-			sources "$rootDir/../core/driver/include"
-			
 
             // Java (for JNI + API docs)
             sources "src/main/java"
@@ -210,20 +208,73 @@ doxygen {
     }
 }
 
+spotless {
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**', '**/bin/**'
+        }
+        target fileTree("$rootDir/../core/java") {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**', '**/bin/**'
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    cpp {
+        target fileTree('.') {
+            include '**/*.hpp', '**/*.cpp', '**/*.c', '**/*.h'
+            exclude '**/build/**', '**/build-*/**', '**/bin/**'
+        }
+    }
+    groovyGradle {
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        greclipse()
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format 'xml', {
+        target fileTree('.') {
+            include '**/*.xml'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        eclipseWtp('xml')
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    format 'misc', {
+        target fileTree('.') {
+            include '**/*.md', '**/.gitignore'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+}
+
 
 // Set up exports properly
 nativeUtils {
-  exportsConfigs {
-    // Main library is just default empty. This will export everything
-    Vendor {
+    exportsConfigs {
+        // Main library is just default empty. This will export everything
+        Vendor {
+        }
     }
-  }
-  privateExportsConfigs {
-    // Only export explicit symbols from driver library
-    VendorDriver {
-      exportsFile = project.file("src/main/driver/symbols.txt")
+    privateExportsConfigs {
+        // Only export explicit symbols from driver library
+        VendorDriver {
+            exportsFile = project.file("src/main/driver/symbols.txt")
+        }
     }
-  }
 }
 
 ext.getCurrentArch = {
@@ -236,99 +287,101 @@ def systemArch = getCurrentArch()
 sourceSets {
     main {
         java {
-            srcDir "$rootDir/../core/java/"
+            srcDir "src/main/java/"
         }
     }
-//    test {
-//        java {
-//            srcDir "src/test/java"
-//        }
-//    } // TODO: Eventually write java unit tests
+    //    test {
+    //        java {
+    //            srcDir "src/test/java"
+    //        }
+    //    } // TODO: Eventually write java unit tests
 }
 
 
 model {
-  components {
-    Vendor(NativeLibrarySpec) {
-      sources {
-        cpp {
-          source {
-            srcDirs 'src/main/native/cpp'
-            include '**/*.cpp'
-          }
-          exportedHeaders {
-            srcDirs 'src/main/native/include'
-          }
-        }
-      }
-      binaries.all {
-        lib library: 'VendorDriver', linkage: 'shared'
-      }
-      nativeUtils.useRequiredLibrary(it, 'wpilib_shared')
-    }
-
-    VendorDriver(JniNativeLibrarySpec) {
-      enableCheckTask true
-      javaCompileTasks << compileJava
-      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.roborio)
-      // Leave these for future proofing
-      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.linuxarm32)
-      jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.linuxarm64)
-      sources {
-        cpp {
-          source {
-            srcDirs 'src/main/driver/cpp', "$rootDir/../core/driver/src"
-            include '**/*.cpp'
-          }
-          exportedHeaders {
-            srcDirs 'src/main/driver/include', "$rootDir/../core/driver/include"
-          }
-        }
-      }
-
-      nativeUtils.useRequiredLibrary(it, "driver_shared")
-    }
-  }
-  testSuites {
-    VendorTest {
-        sources.cpp {
-            source {
-                srcDir 'src/test/native/cpp'
-                include '**/*.cpp'
+    components {
+        Vendor(NativeLibrarySpec) {
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/main/native/cpp'
+                        include '**/*.cpp'
+                    }
+                    exportedHeaders {
+                        srcDirs 'src/main/native/include'
+                    }
+                }
             }
-        }
-
-        binaries.all {
-          lib library: 'VendorDriver', linkage: 'shared'
-
-          def arch = it.targetPlatform.name
-          if (systemArch == arch && it.buildType.name == 'debug') {
-            def filePath = it.tasks.install.installDirectory.get().toString() + File.separatorChar + 'lib'
-            test.dependsOn it.tasks.install
-            test.systemProperty 'java.library.path', filePath
-            test.environment 'LD_LIBRARY_PATH', filePath
-            test.workingDir filePath
-          }
-        }
-
-        nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
-    }
-
-    VendorDriverTest {
-        sources.cpp {
-            source {
-                srcDir 'src/test/driver/cpp'
-                include '**/*.cpp'
+            binaries.all {
+                lib library: 'VendorDriver', linkage: 'shared'
             }
+            nativeUtils.useRequiredLibrary(it, 'wpilib_shared', 'wpimath_shared')
         }
-        nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+
+        VendorDriver(JniNativeLibrarySpec) {
+            enableCheckTask true
+            javaCompileTasks << compileJava
+            jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.roborio)
+            // Leave these for future proofing
+            jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.linuxarm32)
+            jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.linuxarm64)
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/main/driver/cpp'
+                        include '**/*.cpp'
+                    }
+                    exportedHeaders {
+                        srcDirs 'src/main/driver/include'
+                    }
+                }
+            }
+
+            nativeUtils.useRequiredLibrary(it, "driver_shared")
+        }
     }
-  }
+    testSuites {
+        VendorTest {
+            sources.cpp {
+                source {
+                    srcDir 'src/test/native/cpp'
+                    include '**/*.cpp'
+                }
+            }
+
+            binaries.all {
+                lib library: 'VendorDriver', linkage: 'shared'
+
+                def arch = it.targetPlatform.name
+                if (systemArch == arch && it.buildType.name == 'debug') {
+                    def filePath = it.tasks.install.installDirectory.get().toString() + File.separatorChar + 'lib'
+                    test.dependsOn it.tasks.install
+                    test.systemProperty 'java.library.path', filePath
+                    test.environment 'LD_LIBRARY_PATH', filePath
+                    test.workingDir filePath
+                }
+            }
+
+            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+        }
+
+        VendorDriverTest {
+            sources.cpp {
+                source {
+                    srcDir 'src/test/driver/cpp'
+                    include '**/*.cpp'
+                }
+            }
+            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+        }
+    }
 }
+
+build.dependsOn spotlessApply
 
 
 apply from: 'publish.gradle'
 
 wrapper {
-  gradleVersion = '8.14.3'
+    gradleVersion = '8.14.3'
 }
