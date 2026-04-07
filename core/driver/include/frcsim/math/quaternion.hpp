@@ -22,7 +22,7 @@ struct Quaternion {
     [[nodiscard]] bool hasNaN() const noexcept { return std::isnan(w)||std::isnan(x)||std::isnan(y)||std::isnan(z); }
 
     [[nodiscard]] Quaternion normalized() const noexcept {
-        double n = norm();a
+        double n = norm();
         if (n < 1e-12) return Quaternion();
         return Quaternion(w/n, x/n, y/n, z/n);
     }
