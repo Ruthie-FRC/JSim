@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include <string>
 
 #include "frcsim/math/vector.hpp"
 
@@ -33,6 +32,16 @@ struct GoalStructure {
         kCustom,
     };
 
+    /** @brief Supported gamepiece type filters for scoring validation. */
+    enum class AcceptedType {
+        kAny,
+        kBall,
+        kCustom1,
+        kCustom2,
+        kCustom3,
+        kCustom4,
+    };
+
     /** Selected geometry mode for this goal. */
     Shape shape{Shape::kBox};
     /** Goal center in world coordinates. */
@@ -42,8 +51,8 @@ struct GoalStructure {
     /** Radius used when shape is kSphere. */
     double radius_m{0.25};
 
-    /** Accepted gamepiece type string. Empty accepts all types. */
-    std::string accepted_type{"Ball"};
+    /** Accepted gamepiece type enum. */
+    AcceptedType accepted_type{AcceptedType::kBall};
     /** If true, scoring is valid only for upward-moving objects unless overridden by custom validator. */
     bool require_positive_vertical_velocity{false};
 

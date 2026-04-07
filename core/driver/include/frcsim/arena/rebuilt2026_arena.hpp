@@ -12,17 +12,9 @@ namespace frcsim {
  */
 class Rebuilt2026Arena : public Season2026ArenaBase {
   public:
-    static constexpr double kRobotPeriodS = 0.02;
-    static constexpr int kSimulationSubticksPerPeriod = 5;
-
-        /** @brief Constructs the arena and applies rebuilt field map plus default timing values. */
-        Rebuilt2026Arena() : Season2026ArenaBase() {
+    /** @brief Constructs the arena and applies rebuilt field map plus default timing values. */
+    Rebuilt2026Arena() : Season2026ArenaBase() {
         applyFieldMap(rebuiltFieldMap());
-
-        Timings t;
-        t.robot_period_s = kRobotPeriodS;
-        t.simulation_subticks_per_period = kSimulationSubticksPerPeriod;
-        setTimings(t);
     }
 
     /**
@@ -63,14 +55,14 @@ class Rebuilt2026Arena : public Season2026ArenaBase {
         rebuilt_hub.shape = GoalStructure::Shape::kBox;
         rebuilt_hub.center_m = Vector3(7.0, 4.1, 1.7);
         rebuilt_hub.half_extents_m = Vector3(0.4, 0.4, 0.5);
-        rebuilt_hub.accepted_type = "Ball";
+        rebuilt_hub.accepted_type = GoalStructure::AcceptedType::kBall;
         map.goals.push_back(rebuilt_hub);
 
         GoalStructure outpost_goal;
         outpost_goal.shape = GoalStructure::Shape::kSphere;
         outpost_goal.center_m = Vector3(12.4, 4.1, 1.3);
         outpost_goal.radius_m = 0.45;
-        outpost_goal.accepted_type = "Ball";
+        outpost_goal.accepted_type = GoalStructure::AcceptedType::kBall;
         map.goals.push_back(outpost_goal);
 
         return map;

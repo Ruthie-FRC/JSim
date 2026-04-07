@@ -47,7 +47,27 @@ class SimulatedArena {
                 zone.center_m = goal.center_m;
                 zone.half_extents_m = goal.half_extents_m;
                 zone.radius_m = goal.radius_m;
-                zone.accepted_type = goal.accepted_type;
+                switch (goal.accepted_type) {
+                    case GoalStructure::AcceptedType::kAny:
+                        zone.accept_any_type = true;
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kBall;
+                        break;
+                    case GoalStructure::AcceptedType::kBall:
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kBall;
+                        break;
+                    case GoalStructure::AcceptedType::kCustom1:
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kCustom1;
+                        break;
+                    case GoalStructure::AcceptedType::kCustom2:
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kCustom2;
+                        break;
+                    case GoalStructure::AcceptedType::kCustom3:
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kCustom3;
+                        break;
+                    case GoalStructure::AcceptedType::kCustom4:
+                        zone.accepted_type = BallGamepieceSim::GamePieceType::kCustom4;
+                        break;
+                }
                 zone.require_positive_vertical_velocity = goal.require_positive_vertical_velocity;
                 zone.custom_velocity_validator = goal.custom_velocity_validator;
                 sim.addGoalZone(zone);
@@ -83,9 +103,15 @@ class SimulatedArena {
             });
     }
 
-    /** @brief Mutable access to underlying game-piece simulator. @return Mutable simulator reference. */
+    /**
+     * @brief Mutable access to underlying game-piece simulator.
+     * @return Mutable simulator reference.
+     */
     BallGamepieceSim& gamepieceSim() { return gamepiece_sim_; }
-    /** @brief Immutable access to underlying game-piece simulator. @return Const simulator reference. */
+    /**
+     * @brief Immutable access to underlying game-piece simulator.
+     * @return Const simulator reference.
+     */
     const BallGamepieceSim& gamepieceSim() const { return gamepiece_sim_; }
 
     /**
@@ -105,21 +131,33 @@ class SimulatedArena {
         robot_registered_callback_ = callback;
     }
 
-    /** @brief Updates timing parameters with safety clamps for minimum valid values. @param timings New timing values. */
+    /**
+     * @brief Updates timing parameters with safety clamps for minimum valid values.
+     * @param timings New timing values.
+     */
     void setTimings(const Timings& timings) {
         timings_.robot_period_s = std::max(1e-6, timings.robot_period_s);
         timings_.simulation_subticks_per_period = std::max(1, timings.simulation_subticks_per_period);
     }
 
-    /** @brief Returns active timing parameters. @return Immutable Timings reference. */
+    /**
+     * @brief Returns active timing parameters.
+     * @return Immutable Timings reference.
+     */
     const Timings& timings() const { return timings_; }
 
-    /** @brief Applies obstacles and goals from a field-map bundle. @param field_map Map to apply. */
+    /**
+     * @brief Applies obstacles and goals from a field-map bundle.
+     * @param field_map Map to apply.
+     */
     void applyFieldMap(const FieldMap& field_map) {
         field_map.applyTo(gamepiece_sim_);
     }
 
-    /** @brief Adds a custom per-subtick callback if callable is non-empty. @param custom_simulation Callback to append. */
+    /**
+     * @brief Adds a custom per-subtick callback if callable is non-empty.
+     * @param custom_simulation Callback to append.
+     */
     void addCustomSimulation(const CustomSimulation& custom_simulation) {
         if (custom_simulation) {
             custom_simulations_.push_back(custom_simulation);
@@ -136,9 +174,15 @@ class SimulatedArena {
         return intake_simulations_.back();
     }
 
-    /** @brief Mutable intake simulation list. @return Mutable list reference. */
+    /**
+     * @brief Mutable intake simulation list.
+     * @return Mutable list reference.
+     */
     std::vector<IntakeSimulation>& intakeSimulations() { return intake_simulations_; }
-    /** @brief Immutable intake simulation list. @return Const list reference. */
+    /**
+     * @brief Immutable intake simulation list.
+     * @return Const list reference.
+     */
     const std::vector<IntakeSimulation>& intakeSimulations() const { return intake_simulations_; }
 
     /**

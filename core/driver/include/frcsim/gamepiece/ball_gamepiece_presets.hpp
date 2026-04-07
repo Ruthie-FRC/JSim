@@ -104,7 +104,7 @@ inline void configureSeason2026Field(BallGamepieceSim& sim) {
     hub_goal.shape = BallGamepieceSim::GoalZone::Shape::kBox;
     hub_goal.center_m = net.position_m;
     hub_goal.half_extents_m = Vector3(0.35, 0.35, 0.45);
-    hub_goal.accepted_type = "Ball";
+    hub_goal.accepted_type = BallGamepieceSim::GamePieceType::kBall;
     hub_goal.require_positive_vertical_velocity = false;
     sim.addGoalZone(hub_goal);
 }

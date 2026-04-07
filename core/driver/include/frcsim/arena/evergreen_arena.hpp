@@ -45,7 +45,7 @@ class EvergreenArena : public SimulatedArena {
         center_goal.shape = GoalStructure::Shape::kSphere;
         center_goal.center_m = Vector3(8.27, 4.10, 1.4);
         center_goal.radius_m = 0.55;
-        center_goal.accepted_type = "Ball";
+        center_goal.accepted_type = GoalStructure::AcceptedType::kBall;
         map.goals.push_back(center_goal);
 
         return map;

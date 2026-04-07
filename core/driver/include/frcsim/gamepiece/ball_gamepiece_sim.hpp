@@ -34,6 +34,10 @@ class BallGamepieceSim {
     /** Built-in gamepiece type identifiers used by launch/projectile/registration APIs. */
     enum class GamePieceType {
         kBall,
+        kCustom1,
+        kCustom2,
+        kCustom3,
+        kCustom4,
     };
 
     /** Sentinel index representing no carried ball. */
@@ -176,8 +180,10 @@ class BallGamepieceSim {
         Vector3 half_extents_m{0.2, 0.2, 0.2};
         /** Radius for sphere zones. */
         double radius_m{0.25};
-        /** Accepted gamepiece type string; empty accepts all. */
-        std::string accepted_type{"Ball"};
+        /** Accepted gamepiece type enum for score checks. */
+        GamePieceType accepted_type{GamePieceType::kBall};
+        /** When true, accepts all gamepiece types. */
+        bool accept_any_type{false};
         /** Requires upward velocity at score time when true. */
         bool require_positive_vertical_velocity{false};
         /** Optional velocity-rule override. */
@@ -613,7 +619,7 @@ class BallGamepieceSim {
 
     bool checkProjectileGoalHit(const ProjectileEntity& projectile) const {
         for (const auto& goal : goals_) {
-            if (!goal.accepted_type.empty() && goal.accepted_type != gamePieceTypeName(projectile.type)) {
+            if (!goal.accept_any_type && goal.accepted_type != projectile.type) {
                 continue;
             }
             if (goal.require_positive_vertical_velocity && projectile.velocity_mps.z <= 0.0) {
@@ -660,6 +666,14 @@ class BallGamepieceSim {
         switch (type) {
             case GamePieceType::kBall:
                 return "Ball";
+            case GamePieceType::kCustom1:
+                return "Custom1";
+            case GamePieceType::kCustom2:
+                return "Custom2";
+            case GamePieceType::kCustom3:
+                return "Custom3";
+            case GamePieceType::kCustom4:
+                return "Custom4";
             default:
                 return "Ball";
         }
@@ -668,6 +682,22 @@ class BallGamepieceSim {
     static bool tryParseGamePieceType(const std::string& type_name, GamePieceType& out_type) {
         if (type_name == "Ball") {
             out_type = GamePieceType::kBall;
+            return true;
+        }
+        if (type_name == "Custom1") {
+            out_type = GamePieceType::kCustom1;
+            return true;
+        }
+        if (type_name == "Custom2") {
+            out_type = GamePieceType::kCustom2;
+            return true;
+        }
+        if (type_name == "Custom3") {
+            out_type = GamePieceType::kCustom3;
+            return true;
+        }
+        if (type_name == "Custom4") {
+            out_type = GamePieceType::kCustom4;
             return true;
         }
         return false;

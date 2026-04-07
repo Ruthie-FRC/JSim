@@ -9,8 +9,9 @@ namespace frcsim {
 /**
  * @brief Helper factory for perimeter wall obstacles.
  *
- * Coordinate conventions used throughout frcsim field geometry:
- * - +X points downfield from the origin corner.
+ * Coordinate conventions follow WPILib field coordinates (blue-alliance origin):
+ * - Origin is at the blue-alliance right-corner wall intersection when viewed from above.
+ * - +X points from blue toward red downfield.
  * - +Y points across the field width.
  * - +Z points upward.
  */
