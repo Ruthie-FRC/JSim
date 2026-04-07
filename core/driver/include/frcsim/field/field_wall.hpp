@@ -20,8 +20,14 @@ struct FieldWall {
      * @param min_corner_m Lower world-space corner of the field bounds.
      * @param max_corner_m Upper world-space corner of the field bounds.
      * @param wall_height_m Wall height in meters.
-     * @param restitution Wall restitution for collisions.
+        * @param restitution Wall restitution for collisions.
+        *        Default is 0.25, which models mostly energy-absorbing perimeter walls so balls
+        *        lose speed on impact instead of ping-ponging around the field.
+        *        Lower values (near 0) make impacts deaden quickly; higher values (near 1)
+        *        preserve more normal velocity and increase bounce height/distance.
      * @param friction Wall friction coefficient for tangential damping.
+        *        Default is 0.6 to provide noticeable sliding resistance at contact.
+        *        This balances "roll and settle" behavior versus prolonged wall-skimming.
      */
     static std::array<FieldObstacle, 4> makeAxisAlignedPerimeter(const Vector3& min_corner_m,
                                                                  const Vector3& max_corner_m,

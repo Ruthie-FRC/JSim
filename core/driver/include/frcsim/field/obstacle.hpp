@@ -17,9 +17,18 @@ struct FieldObstacle {
      * @brief Creates an infinite plane obstacle.
      * @param point_m A point on the plane in world coordinates.
      * @param orientation Plane orientation; local +Z is treated as outward normal.
-     * @param restitution Normal restitution coefficient.
-     * @param friction Tangential friction coefficient.
-     * @param user_id Optional tag for custom behavior grouping.
+        * @param restitution Normal restitution coefficient.
+        *        Default is 0.3, chosen as a conservative "not perfectly rigid" value for
+        *        common field elements (wood, polycarbonate, carpet transitions).
+        *        Lower values reduce bounce and help objects settle; higher values increase
+        *        rebound speed and can make trajectories livelier but less damped.
+        * @param friction Tangential friction coefficient.
+        *        Default is 0.6, which approximates moderate grip so glancing contacts lose
+        *        tangential speed without unrealistically sticking.
+        *        Lower values permit more sliding; higher values increase scrub/rolling slowdown.
+        * @param user_id Optional tag for custom behavior grouping.
+        *        Default is 0 (no special grouping). Use non-zero IDs to classify boundaries for
+        *        custom contact logic, filtering, analytics, or game-specific rules.
      */
     static FieldObstacle makePlane(const Vector3& point_m,
                                    const Quaternion& orientation,
@@ -41,9 +50,15 @@ struct FieldObstacle {
      * @param center_m Box center in world coordinates.
      * @param half_extents_m Positive half-lengths along local X/Y/Z axes.
      * @param orientation Box orientation quaternion.
-     * @param restitution Normal restitution coefficient.
-     * @param friction Tangential friction coefficient.
-     * @param user_id Optional tag for custom behavior grouping.
+        * @param restitution Normal restitution coefficient.
+        *        Default 0.3 keeps collisions plausibly inelastic for most FRC-style field
+        *        interactions while still allowing visible bounce in high-speed impacts.
+        * @param friction Tangential friction coefficient.
+        *        Default 0.6 gives balanced tangential damping (less endless sliding along walls,
+        *        without overly abrupt sticking in grazing contacts).
+        * @param user_id Optional tag for custom behavior grouping.
+        *        Default 0 means "unclassified"; assign other values when you need to
+        *        identify this obstacle in custom behavior or telemetry code.
      *
      * Quaternion note: use Quaternion::fromEuler(roll, pitch, yaw) to rotate away from axis alignment.
      */
@@ -70,9 +85,14 @@ struct FieldObstacle {
      * @param radius_m Cylinder radius.
      * @param half_height_m Half of cylinder height along local Z.
      * @param orientation Cylinder orientation quaternion.
-     * @param restitution Normal restitution coefficient.
-     * @param friction Tangential friction coefficient.
-     * @param user_id Optional tag for custom behavior grouping.
+        * @param restitution Normal restitution coefficient.
+        *        Default 0.3 for the same reason as other boundary factories: generally damped
+        *        contacts that still show rebound at speed.
+        * @param friction Tangential friction coefficient.
+        *        Default 0.6 to represent typical non-ice, non-rubberized field contact behavior.
+        * @param user_id Optional tag for custom behavior grouping.
+        *        Default 0; set to a custom ID when this cylinder must be distinguished from
+        *        other obstacles during contact handling.
      *
      * Example:
      * \code{.cpp}

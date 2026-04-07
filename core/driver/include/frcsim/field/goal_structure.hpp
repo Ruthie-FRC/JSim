@@ -17,6 +17,18 @@ struct GoalStructure {
          * @brief User-defined shape handled by custom_position_checker.
          *
          * To use this mode, set shape to kCustom and provide custom_position_checker.
+         * @example
+         * \code{.cpp}
+         * GoalStructure goal{};
+         * goal.shape = GoalStructure::Shape::kCustom;
+         * goal.center_m = Vector3(5.0, 2.0, 1.6);
+         * goal.custom_position_checker = [c = goal.center_m](const Vector3& p) {
+         *     // Example: accept points inside a simple vertical "capsule-like" scoring zone.
+         *     const Vector3 d = p - c;
+         *     const double radial = std::sqrt(d.x * d.x + d.y * d.y);
+         *     return radial <= 0.35 && d.z >= -0.25 && d.z <= 0.45;
+         * };
+         * \endcode
          */
         kCustom,
     };
