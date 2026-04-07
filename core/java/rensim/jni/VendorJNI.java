@@ -1,4 +1,4 @@
-package rensim_.jni;
+package rensim.jni;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
