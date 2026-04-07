@@ -97,7 +97,7 @@ class DoubleDifferentialMechanism {
 
     /**
      * @brief Solves inverse mapping from desired joint state to motor state.
-      * @param desired_joint_state Requested joint angles/rates.
+        * @param desired_joint_state Requested joint angles/rates.
      * @return InverseResult with valid=false when configuration is singular.
      */
     InverseResult inverse(const JointState& desired_joint_state) const {
