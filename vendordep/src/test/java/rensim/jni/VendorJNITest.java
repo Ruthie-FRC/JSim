@@ -3,6 +3,7 @@ package rensim.jni;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import rensim_.jni.VendorJNI;
 
 public class VendorJNITest {
   @Test

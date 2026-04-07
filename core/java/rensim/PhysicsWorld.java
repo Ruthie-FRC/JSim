@@ -1,6 +1,6 @@
 package rensim;
 
-import rensim.jni.VendorJNI;
+import rensim_.jni.VendorJNI;
 
 /**
  * Thin Java wrapper around the native physics world implementation.
