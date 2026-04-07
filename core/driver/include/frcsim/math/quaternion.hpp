@@ -13,8 +13,6 @@ struct Quaternion {
     constexpr Quaternion(double w_, double x_, double y_, double z_) noexcept : w(w_), x(x_), y(y_), z(z_) {}
     constexpr Quaternion(double w_, const Vector3& v) noexcept : w(w_), x(v.x), y(v.y), z(v.z) {}
 
-
-
     [[nodiscard]] constexpr double norm2() const noexcept { return w*w + x*x + y*y + z*z; }
     [[nodiscard]] double norm() const noexcept { return std::sqrt(norm2()); }
 
