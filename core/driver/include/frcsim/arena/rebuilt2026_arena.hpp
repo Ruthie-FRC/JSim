@@ -12,13 +12,16 @@ namespace frcsim {
  */
 class Rebuilt2026Arena : public Season2026ArenaBase {
   public:
+    static constexpr double kRobotPeriodS = 0.02;
+    static constexpr int kSimulationSubticksPerPeriod = 5;
+
         /** @brief Constructs the arena and applies rebuilt field map plus default timing values. */
         Rebuilt2026Arena() : Season2026ArenaBase() {
         applyFieldMap(rebuiltFieldMap());
 
         Timings t;
-        t.robot_period_s = 0.02;
-        t.simulation_subticks_per_period = 5;
+        t.robot_period_s = kRobotPeriodS;
+        t.simulation_subticks_per_period = kSimulationSubticksPerPeriod;
         setTimings(t);
     }
 
@@ -39,7 +42,7 @@ class Rebuilt2026Arena : public Season2026ArenaBase {
             map.obstacles.push_back(wall);
         }
 
-        // Example center structure + depots inspired by 2026 rebuilt arena structure.
+        // Rebuilt 2026 field  structure and depot obstacles.
         map.obstacles.push_back(FieldObstacle::makeBox(
             Vector3(7.35, 1.72, 0.5),
             Vector3(0.35, 0.25, 0.5),
