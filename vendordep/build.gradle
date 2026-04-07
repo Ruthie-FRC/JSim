@@ -9,6 +9,7 @@ plugins {
   id 'edu.wpi.first.GradleJni' version '1.1.0'
   id 'edu.wpi.first.GradleVsCode' version '2.1.0'
   id 'org.ysb33r.doxygen' version "2.1.1"
+  id 'com.diffplug.spotless' version '6.20.0'
 }
 
 // WPILib Version
@@ -210,6 +211,52 @@ doxygen {
     }
 }
 
+spotless {
+   java {
+      target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**', '**/bin/**'
+      }
+      toggleOffOn()
+      googleJavaFormat()
+      removeUnusedImports()
+      trimTrailingWhitespace()
+      endWithNewline()
+   }
+   cpp {
+    target 'src/native/**', 'src/driver/**' 
+   }
+   groovyGradle {
+      target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+      }
+      greclipse()
+      indentWithSpaces(4)
+      trimTrailingWhitespace()
+      endWithNewline()
+   }
+   format 'xml', {
+      target fileTree('.') {
+            include '**/*.xml'
+            exclude '**/build/**', '**/build-*/**'
+      }
+      eclipseWtp('xml')
+      trimTrailingWhitespace()
+      indentWithSpaces(2)
+      endWithNewline()
+   }
+   format 'misc', {
+      target fileTree('.') {
+            include '**/*.md', '**/.gitignore'
+            exclude '**/build/**', '**/build-*/**'
+      }
+      trimTrailingWhitespace()
+      indentWithSpaces(2)
+      endWithNewline()
+   }
+}
+
 
 // Set up exports properly
 nativeUtils {
@@ -325,6 +372,8 @@ model {
     }
   }
 }
+
+build.dependsOn spotlessApply
 
 
 apply from: 'publish.gradle'
