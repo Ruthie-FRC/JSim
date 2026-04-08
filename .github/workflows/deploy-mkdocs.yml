@@ -1,11 +1,14 @@
-# Deploy MkDocs docs to rensim.dev
+# Deploy Vendordep and MkDocs docs to rensim.dev
 
-name: Deploy docs to rensim.dev
+name: Deploy vendordep and docs to rensim.dev
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: "Release version number"
+        type: string
+        required: true
 
 permissions:
   contents: write
@@ -30,10 +33,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen
           pip install mkdocs mkdocs-material ghp-import
-      - name: Generate API docs
+      # TODO: Remove when SC
+      - name: Install roboRio toolchain
+        run: ./gradlew installRoboRioToolchain
+        
+      - name: Generate maven and API docs
         working-directory: vendordep
         run: |
-          ./gradlew javadoc doxygenDox
+          ./gradlew build publish
       - name: Build docs site and stage API references
         run: |
           mkdocs build --config-file mkdocs/mkdocs.yml
@@ -43,6 +50,12 @@ jobs:
 
           rsync -a --delete vendordep/build/docs/javadoc/ mkdocs/site/api/javadoc/
           rsync -a --delete vendordep/build/docs/doxygen/ mkdocs/site/api/doxygen/
+      # TODO: Preserve old versions using git checkout gh-pages -- maven/
+      - name: Stage maven on docs site
+        run: |
+          mkdir -p mkdocs/site/maven
+          mv vendordep/build/repos/RenSim.json mkdocs/site/
+          rsync -a --delete vendordep/build/maven/ mkdocs/site/maven/
       - name: Configure git identity for deployment
         run: |
           git config --global user.name github-actions[bot]
