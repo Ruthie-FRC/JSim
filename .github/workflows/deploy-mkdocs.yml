@@ -35,6 +35,7 @@ jobs:
           pip install mkdocs mkdocs-material ghp-import
       # TODO: Remove when SC
       - name: Install roboRio toolchain
+        working-directory: vendordep
         run: ./gradlew installRoboRioToolchain
         
       - name: Generate maven and API docs
