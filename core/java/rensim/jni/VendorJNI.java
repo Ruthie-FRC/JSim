@@ -3,8 +3,8 @@ package rensim.jni;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** JNI entry points for the vendor physics driver. */
-public class VendorJNI {
-  private VendorJNI() {}
+public class RenSimJNI {
+  private RenSimJNI() {}
 
   static boolean libraryLoaded = false;
 
@@ -35,7 +35,7 @@ public class VendorJNI {
 
   static {
     if (Helper.getExtractOnStaticLoad()) {
-      System.loadLibrary("VendorDriver");
+      System.loadLibrary("RenSimDriver");
       libraryLoaded = true;
     }
   }
@@ -45,7 +45,7 @@ public class VendorJNI {
     if (libraryLoaded) {
       return;
     }
-    System.loadLibrary("VendorDriver");
+    System.loadLibrary("RenSimDriver");
     libraryLoaded = true;
   }
 

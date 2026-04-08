@@ -117,12 +117,12 @@ doxygen {
 nativeUtils {
     exportsConfigs {
         // Main library is just default empty. This will export everything
-        Vendor {
+        RenSim {
         }
     }
     privateExportsConfigs {
         // Only export explicit symbols from driver library
-        VendorDriver {
+        RenSimDriver {
             exportsFile = project.file("src/main/driver/symbols.txt")
         }
     }
@@ -151,7 +151,7 @@ sourceSets {
 
 model {
     components {
-        Vendor(NativeLibrarySpec) {
+        RenSim(NativeLibrarySpec) {
             sources {
                 cpp {
                     source {
@@ -164,12 +164,12 @@ model {
                 }
             }
             binaries.all {
-                lib library: 'VendorDriver', linkage: 'shared'
+                lib library: 'RenSimDriver', linkage: 'shared'
             }
             nativeUtils.useRequiredLibrary(it, 'wpilib_shared', 'wpimath_shared')
         }
 
-        VendorDriver(JniNativeLibrarySpec) {
+        RenSimDriver(JniNativeLibrarySpec) {
             enableCheckTask true
             javaCompileTasks << compileJava
             jniCrossCompileOptions << JniCrossCompileOptions(nativeUtils.wpi.platforms.roborio)
@@ -192,7 +192,7 @@ model {
         }
     }
     testSuites {
-        VendorTest {
+        RenSimTest {
             sources.cpp {
                 source {
                     srcDir 'src/test/native/cpp'
@@ -201,7 +201,7 @@ model {
             }
 
             binaries.all {
-                lib library: 'VendorDriver', linkage: 'shared'
+                lib library: 'RenSimDriver', linkage: 'shared'
 
                 def arch = it.targetPlatform.name
                 if (systemArch == arch && it.buildType.name == 'debug') {
@@ -216,7 +216,7 @@ model {
             nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
         }
 
-        VendorDriverTest {
+        RenSimDriverTest {
             sources.cpp {
                 source {
                     srcDir 'src/test/driver/cpp'
