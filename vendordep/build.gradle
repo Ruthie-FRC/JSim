@@ -92,7 +92,10 @@ javadoc {
 // Outputs to build/docs/doxygen
 doxygen {
     sourceSets {
-        main {
+        main {          
+            // Name
+            option "project_name", "RenSim"
+
             // Native C++ headers + sources
             sources "src/main/native/include"
             sources "src/main/native/cpp"
