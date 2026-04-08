@@ -15,6 +15,11 @@ This repository is organized as a monorepo containing the core simulation engine
 
 ## Quick Start
 
+## Vendordep URL
+```
+https://rensim.dev/RenSim.json
+```
+
 ### Build and Test (Gradle)
 
 ```bash
