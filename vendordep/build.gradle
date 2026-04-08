@@ -234,7 +234,7 @@ tasks.register("wpiformat", Exec) {
 
     onlyIf {
         try {
-            ["wpiformat", "--version"].execute().waitFor() == 0
+            ["wpiformat", "-h"].execute().waitFor() == 0
         } catch (Exception ignored) {
             false
         }
