@@ -5,6 +5,8 @@
 #include "jni.h"
 #include "rensim_jni_RenSimJNI.h"
 
+#include <cstdint>
+
 #include "driverheader.h"
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -57,7 +59,7 @@ JNIEXPORT void JNICALL
 Java_rensim_jni_RenSimJNI_destroyWorld
   (JNIEnv*, jclass, jlong world_handle)
 {
-  c_rsDestroyWorld(static_cast<unsigned long long>(world_handle));
+  c_rsDestroyWorld(static_cast<uint64_t>(world_handle));
 }
 
 /*
@@ -70,7 +72,7 @@ Java_rensim_jni_RenSimJNI_createBody
   (JNIEnv*, jclass, jlong world_handle, jdouble mass_kg)
 {
   return static_cast<jint>(
-      c_rsCreateBody(static_cast<unsigned long long>(world_handle), mass_kg));
+      c_rsCreateBody(static_cast<uint64_t>(world_handle), mass_kg));
 }
 
 /*
@@ -84,7 +86,7 @@ Java_rensim_jni_RenSimJNI_setBodyPosition
    jdouble y_m, jdouble z_m)
 {
   return static_cast<jint>(
-      c_rsSetBodyPosition(static_cast<unsigned long long>(world_handle),
+      c_rsSetBodyPosition(static_cast<uint64_t>(world_handle),
                           body_index, x_m, y_m, z_m));
 }
 
@@ -99,7 +101,7 @@ Java_rensim_jni_RenSimJNI_setBodyLinearVelocity
    jdouble vy_mps, jdouble vz_mps)
 {
   return static_cast<jint>(
-      c_rsSetBodyLinearVelocity(static_cast<unsigned long long>(world_handle),
+      c_rsSetBodyLinearVelocity(static_cast<uint64_t>(world_handle),
                                 body_index, vx_mps, vy_mps, vz_mps));
 }
 
@@ -113,7 +115,7 @@ Java_rensim_jni_RenSimJNI_setBodyGravityEnabled
   (JNIEnv*, jclass, jlong world_handle, jint body_index, jboolean enabled)
 {
   return static_cast<jint>(
-      c_rsSetBodyGravityEnabled(static_cast<unsigned long long>(world_handle),
+      c_rsSetBodyGravityEnabled(static_cast<uint64_t>(world_handle),
                                 body_index, enabled ? 1 : 0));
 }
 
@@ -128,7 +130,7 @@ Java_rensim_jni_RenSimJNI_setWorldGravity
    jdouble gz_mps2)
 {
   return static_cast<jint>(
-      c_rsSetWorldGravity(static_cast<unsigned long long>(world_handle),
+      c_rsSetWorldGravity(static_cast<uint64_t>(world_handle),
                           gx_mps2, gy_mps2, gz_mps2));
 }
 
@@ -142,7 +144,7 @@ Java_rensim_jni_RenSimJNI_stepWorld
   (JNIEnv*, jclass, jlong world_handle, jint steps)
 {
   return static_cast<jint>(
-      c_rsStepWorld(static_cast<unsigned long long>(world_handle), steps));
+      c_rsStepWorld(static_cast<uint64_t>(world_handle), steps));
 }
 
 /*
@@ -163,7 +165,7 @@ Java_rensim_jni_RenSimJNI_getBodyPosition
   double y = 0.0;
   double z = 0.0;
   const int rc = c_rsGetBodyPosition(
-      static_cast<unsigned long long>(world_handle), body_index, &x, &y, &z);
+      static_cast<uint64_t>(world_handle), body_index, &x, &y, &z);
   if (rc != 0) {
     return rc;
   }
@@ -191,7 +193,7 @@ Java_rensim_jni_RenSimJNI_getBodyLinearVelocity
   double vy = 0.0;
   double vz = 0.0;
   const int rc = c_rsGetBodyLinearVelocity(
-      static_cast<unsigned long long>(world_handle), body_index, &vx, &vy, &vz);
+      static_cast<uint64_t>(world_handle), body_index, &vx, &vy, &vz);
   if (rc != 0) {
     return rc;
   }

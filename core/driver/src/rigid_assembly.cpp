@@ -4,6 +4,8 @@
 
 #include "frcsim/rigidbody/rigid_assembly.hpp"
 
+#include <memory>
+
 #include "frcsim/joints/fixed_joint.hpp"
 #include "frcsim/joints/prismatic_joint.hpp"
 #include "frcsim/joints/revolute_joint.hpp"

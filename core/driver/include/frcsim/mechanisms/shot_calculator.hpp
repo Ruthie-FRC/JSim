@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <deque>
 #include <limits>
+#include <utility>
 #include <vector>
 
 #include "frcsim/gamepiece/ball_physics.hpp"

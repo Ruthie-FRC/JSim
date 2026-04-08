@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <algorithm>
+
 #include "frcsim/joints/joint_base.hpp"
 #include "frcsim/math/vector.hpp"
 

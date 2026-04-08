@@ -4,6 +4,8 @@
 
 #include "frcsim/physics_world.hpp"
 
+#include <memory>
+
 namespace frcsim {
 
 RigidBody& PhysicsWorld::createBody(double mass_kg) {
