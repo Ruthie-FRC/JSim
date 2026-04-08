@@ -95,6 +95,7 @@ doxygen {
         main {          
             // Name
             option "project_name", "RenSim"
+            option "project_number", "$pubVersion"
 
             // Native C++ headers + sources
             sources "src/main/native/include"
@@ -107,14 +108,20 @@ doxygen {
             // Java (for JNI + API docs)
             sources "src/main/java"
 
+            // Configure warnings
+            option "warnings", true
+            option "warn_if_undocumented", true
+            option "warn_if_undoc_enum_val", true
+            option "warn_layout_file", true
+            option "warn_line_format", true
+            option "warn_if_doc_error", true
+            option "warn_no_paramdoc", true
+            option "warn_as_error", "fail_on_warnings"
+
             // Core Doxygen options
             option "recursive", true
             option "generate_html", true
             option "generate_latex", false
-            option "warn_if_undocumented", true
-            option "warnings", true
-            option "warn_if_doc_error", true
-            option "warn_no_paramdoc", true
 
             // Useful for mixed-language projects
             option "file_patterns", "*.java *.cpp *.h *.hpp *.c"
