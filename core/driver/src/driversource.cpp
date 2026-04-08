@@ -44,7 +44,7 @@ frcsim::RigidBody* getBody(frcsim::PhysicsWorld* world, int body_index) {
 extern "C" {
 void c_doThing(void) {}
 
-unsigned long long c_rsCreateWorld(double fixed_dt_s, int enable_gravity) {
+uint64_t c_rsCreateWorld(double fixed_dt_s, int enable_gravity) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
   frcsim::PhysicsConfig config;
   config.fixed_dt_s = (fixed_dt_s > 0.0) ? fixed_dt_s : 0.01;
@@ -55,15 +55,14 @@ unsigned long long c_rsCreateWorld(double fixed_dt_s, int enable_gravity) {
   return handle;
 }
 
-void c_rsDestroyWorld(unsigned long long world_handle) {
+void c_rsDestroyWorld(uint64_t world_handle) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  g_worlds.erase(static_cast<std::uint64_t>(world_handle));
+  g_worlds.erase(world_handle);
 }
 
-int c_rsCreateBody(unsigned long long world_handle, double mass_kg) {
+int c_rsCreateBody(uint64_t world_handle, double mass_kg) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   if (!world) {
     return -1;
   }
@@ -72,11 +71,10 @@ int c_rsCreateBody(unsigned long long world_handle, double mass_kg) {
   return static_cast<int>(world->bodies().size() - 1);
 }
 
-int c_rsSetBodyPosition(unsigned long long world_handle, int body_index,
+int c_rsSetBodyPosition(uint64_t world_handle, int body_index,
                         double x_m, double y_m, double z_m) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   frcsim::RigidBody* body = getBody(world, body_index);
   if (!body) {
     return -1;
@@ -85,11 +83,10 @@ int c_rsSetBodyPosition(unsigned long long world_handle, int body_index,
   return 0;
 }
 
-int c_rsSetBodyLinearVelocity(unsigned long long world_handle, int body_index,
+int c_rsSetBodyLinearVelocity(uint64_t world_handle, int body_index,
                               double vx_mps, double vy_mps, double vz_mps) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   frcsim::RigidBody* body = getBody(world, body_index);
   if (!body) {
     return -1;
@@ -98,11 +95,10 @@ int c_rsSetBodyLinearVelocity(unsigned long long world_handle, int body_index,
   return 0;
 }
 
-int c_rsSetBodyGravityEnabled(unsigned long long world_handle, int body_index,
+int c_rsSetBodyGravityEnabled(uint64_t world_handle, int body_index,
                               int enabled) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   frcsim::RigidBody* body = getBody(world, body_index);
   if (!body) {
     return -1;
@@ -111,10 +107,9 @@ int c_rsSetBodyGravityEnabled(unsigned long long world_handle, int body_index,
   return 0;
 }
 
-int c_rsStepWorld(unsigned long long world_handle, int steps) {
+int c_rsStepWorld(uint64_t world_handle, int steps) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   if (!world) {
     return -1;
   }
@@ -126,11 +121,10 @@ int c_rsStepWorld(unsigned long long world_handle, int steps) {
   return 0;
 }
 
-int c_rsSetWorldGravity(unsigned long long world_handle, double gx_mps2,
+int c_rsSetWorldGravity(uint64_t world_handle, double gx_mps2,
                         double gy_mps2, double gz_mps2) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   if (!world) {
     return -1;
   }
@@ -140,15 +134,14 @@ int c_rsSetWorldGravity(unsigned long long world_handle, double gx_mps2,
   return 0;
 }
 
-int c_rsGetBodyPosition(unsigned long long world_handle, int body_index,
+int c_rsGetBodyPosition(uint64_t world_handle, int body_index,
                         double* x_m, double* y_m, double* z_m) {
   if (!x_m || !y_m || !z_m) {
     return -1;
   }
 
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   frcsim::RigidBody* body = getBody(world, body_index);
   if (!body) {
     return -1;
@@ -161,15 +154,14 @@ int c_rsGetBodyPosition(unsigned long long world_handle, int body_index,
   return 0;
 }
 
-int c_rsGetBodyLinearVelocity(unsigned long long world_handle, int body_index,
+int c_rsGetBodyLinearVelocity(uint64_t world_handle, int body_index,
                               double* vx_mps, double* vy_mps, double* vz_mps) {
   if (!vx_mps || !vy_mps || !vz_mps) {
     return -1;
   }
 
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world =
-      getWorld(static_cast<std::uint64_t>(world_handle));
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
   frcsim::RigidBody* body = getBody(world, body_index);
   if (!body) {
     return -1;
