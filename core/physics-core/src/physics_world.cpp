@@ -129,7 +129,7 @@ void PhysicsWorld::applyAeroForces() {
 forEachBody([this](RigidBody& body) {
 if (body.isStatic() || body.flags().is_kinematic) return;
 const auto drag = drag_model_.computeForceDetailed(body);
-body.applyForce(drag.force);
+body.applyForce(Vector3(drag.force.x, drag.force.y, drag.force.z));
 magnus_model_.apply(body);
 spin_decay_model_.apply(body);
 });
