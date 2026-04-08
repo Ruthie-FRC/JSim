@@ -59,6 +59,9 @@ jobs:
           mkdir -p mkdocs/site/maven
           mv vendordep/build/repos/RenSim.json mkdocs/site/
           rsync -a --delete vendordep/build/maven/ mkdocs/site/maven/
+      - name: Output tree
+        run: |
+          find mkdocs/site -type f
       - name: Configure git identity for deployment
         run: |
           git config --global user.name github-actions[bot]
