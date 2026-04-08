@@ -16,6 +16,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      releaseVersion: ${{ inputs.releaseVersion }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
