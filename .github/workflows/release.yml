@@ -30,6 +30,11 @@ jobs:
           java-version: 21
       - run: chmod +x gradlew
         working-directory: ${{ env.workingDirectory }}
+      - name: Ensure default branch metadata
+        run: |
+          default_branch="${{ github.event.repository.default_branch }}"
+          git fetch origin "${default_branch}:${default_branch}" --update-head-ok || git fetch origin "${default_branch}"
+          git remote set-head origin "${default_branch}" || true
       - name: Install roboRio toolchain
         run: ./gradlew installRoboRioToolchain
         working-directory: ${{ env.workingDirectory }}

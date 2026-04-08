@@ -78,6 +78,9 @@ jobs:
       - name: Fetch all history and metadata
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+          default_branch="${{ github.event.repository.default_branch }}"
+          git fetch origin "${default_branch}:${default_branch}" --update-head-ok || git fetch origin "${default_branch}"
+          git remote set-head origin "${default_branch}" || true
       - run: pip3 install wpiformat
       - name: Build with Gradle
         working-directory: vendordep
@@ -111,7 +114,11 @@ jobs:
         with:
           submodules: true
       - name: Fetch all history and metadata
-        run: git fetch --prune --unshallow
+        run: |
+          default_branch="${{ github.event.repository.default_branch }}"
+          git fetch --prune --unshallow
+          git fetch origin "${default_branch}:${default_branch}" --update-head-ok || git fetch origin "${default_branch}"
+          git remote set-head origin "${default_branch}" || true
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
