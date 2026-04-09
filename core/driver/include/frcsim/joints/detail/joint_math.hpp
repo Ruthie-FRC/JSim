@@ -1,0 +1,91 @@
+// Copyright (c) RenSim contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the LGPLv3 license file in the root directory of this project.
+
+#pragma once
+
+#include <algorithm>
+#include <cmath>
+
+#include "frcsim/rigidbody/rigid_body.hpp"
+
+namespace frcsim::detail {
+
+constexpr double kJointEpsilon = 1e-9;
+constexpr double kPi = 3.14159265358979323846;
+
+inline Vector3 worldAnchor(const RigidBody* body,
+                           const Vector3& local_anchor) {
+  return body->position() + body->orientation().rotate(local_anchor);
+}
+
+inline double clampValue(double value, double min_value, double max_value) {
+  return std::max(min_value, std::min(value, max_value));
+}
+
+inline void applyPositionCorrection(RigidBody* body_a, RigidBody* body_b,
+                                    const Vector3& error, double gain) {
+  const double inv_a =
+      body_a->flags().is_kinematic ? 0.0 : body_a->inverseMass();
+  const double inv_b =
+      body_b->flags().is_kinematic ? 0.0 : body_b->inverseMass();
+  const double total_inv = inv_a + inv_b;
+  if (total_inv <= kJointEpsilon)
+    return;
+
+  const Vector3 correction_a = error * (gain * (inv_a / total_inv));
+  const Vector3 correction_b = error * (gain * (inv_b / total_inv));
+
+  if (!body_a->flags().is_kinematic) {
+    body_a->setPosition(body_a->position() + correction_a);
+  }
+  if (!body_b->flags().is_kinematic) {
+    body_b->setPosition(body_b->position() - correction_b);
+  }
+}
+
+inline void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
+                                    const Vector3& relative_velocity,
+                                    double gain) {
+  const double inv_a =
+      body_a->flags().is_kinematic ? 0.0 : body_a->inverseMass();
+  const double inv_b =
+      body_b->flags().is_kinematic ? 0.0 : body_b->inverseMass();
+  const double total_inv = inv_a + inv_b;
+  if (total_inv <= kJointEpsilon)
+    return;
+
+  const Vector3 correction_a = relative_velocity * (gain * (inv_a / total_inv));
+  const Vector3 correction_b = relative_velocity * (gain * (inv_b / total_inv));
+
+  if (!body_a->flags().is_kinematic) {
+    body_a->setLinearVelocity(body_a->linearVelocity() + correction_a);
+  }
+  if (!body_b->flags().is_kinematic) {
+    body_b->setLinearVelocity(body_b->linearVelocity() - correction_b);
+  }
+}
+
+inline Vector3 worldAxisOrFallback(const RigidBody* body,
+                                   const Vector3& local_axis,
+                                   const Vector3& fallback_axis) {
+  Vector3 axis_world = body->orientation().rotate(local_axis).normalized();
+  return axis_world.isZero() ? fallback_axis : axis_world;
+}
+
+inline double signedTwistAngleRad(const Quaternion& qa, const Quaternion& qb,
+                                  const Vector3& axis_world) {
+  Quaternion q_rel = qb * qa.inverse();
+  q_rel.normalizeIfNeeded();
+
+  Vector3 axis_err;
+  double angle = 0.0;
+  q_rel.toAxisAngle(axis_err, angle);
+  if (angle > kPi) {
+    angle = 2.0 * kPi - angle;
+    axis_err = -axis_err;
+  }
+  return angle * axis_err.dot(axis_world.normalized());
+}
+
+}  // namespace frcsim::detail

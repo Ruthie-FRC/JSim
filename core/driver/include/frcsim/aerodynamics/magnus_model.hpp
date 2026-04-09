@@ -20,7 +20,8 @@ class MagnusModel {
 
   Vector3 computeForce(const Vector3& velocity_mps,
                        const Vector3& spin_radps) const {
-    return spin_radps.cross(velocity_mps) * magnus_coefficient_;
+    return Vector3::magnusForce(velocity_mps, spin_radps,
+                                magnus_coefficient_);
   }
 
  private:
