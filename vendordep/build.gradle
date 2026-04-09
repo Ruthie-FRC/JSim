@@ -99,11 +99,7 @@ doxygen {
             option "project_name", "RenSim"
             option "project_number", "$pubVersion"
 
-            // Native C++ headers + sources
-            sources "src/main/native/include"
-            sources "src/main/native/cpp"
-
-            // Driver C++ header and sources
+            // Driver C++ headers + sources
             sources "src/main/driver/cpp"
             sources "src/main/driver/include"
 
