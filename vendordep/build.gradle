@@ -275,7 +275,7 @@ model {
                 }
             }
 
-            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+            nativeUtils.useRequiredLibrary(it, "googletest_static")
         }
 
         RenSimDriverTest {
@@ -285,7 +285,7 @@ model {
                     include '**/*.cpp'
                 }
             }
-            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
+            nativeUtils.useRequiredLibrary(it, "googletest_static")
         }
     }
 }
