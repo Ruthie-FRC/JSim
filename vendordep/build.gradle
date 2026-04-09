@@ -183,6 +183,17 @@ def nativeFromDriverExcludes = [
     '**/physics_jni.cpp'
 ]
 
+// Keep the driver build independent from WPILibC-native compilation units.
+// Native code can still reference WPILibC elsewhere, but driver targets should
+// not compile WPILibC-labeled sources.
+def driverWpilibCExcludes = [
+    '**/wpilibc/**',
+    '**/wpilib/**',
+    '**/*wpilib*.cpp',
+    '**/*wpilib*.cc',
+    '**/*wpilib*.cxx'
+]
+
 
 sourceSets {
     main {
@@ -207,6 +218,7 @@ model {
                         srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
                         exclude nativeFromDriverExcludes
+                        exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
                         srcDirs 'src/main/driver/include'
@@ -216,7 +228,6 @@ model {
             binaries.all {
                 lib library: 'RenSimDriver', linkage: 'shared'
             }
-            nativeUtils.useRequiredLibrary(it, 'wpilib_shared', 'wpimath_shared')
         }
 
         RenSimDriver(JniNativeLibrarySpec) {
@@ -231,6 +242,7 @@ model {
                     source {
                         srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
+                        exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
                         srcDirs 'src/main/driver/include'
