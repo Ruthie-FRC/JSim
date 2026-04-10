@@ -1487,7 +1487,7 @@ class BallGamepieceSim {
     const double max_y = field_.max_corner_m.y - radius;
 
     if (state.position_m.x < min_x) {
-      state.position_m.x = min_x;
+      state.position_m.x = min_x + field_.baumgarte_slop_m;
       state.velocity_mps.x = std::abs(state.velocity_mps.x) *
                              scaledWallRestitution(
                                  field_.wall_restitution,
@@ -1495,7 +1495,7 @@ class BallGamepieceSim {
       state.velocity_mps.y *= (1.0 - field_.wall_friction);
     }
     if (state.position_m.x > max_x) {
-      state.position_m.x = max_x;
+      state.position_m.x = max_x - field_.baumgarte_slop_m;
       state.velocity_mps.x = -std::abs(state.velocity_mps.x) *
                              scaledWallRestitution(
                                  field_.wall_restitution,
@@ -1503,7 +1503,7 @@ class BallGamepieceSim {
       state.velocity_mps.y *= (1.0 - field_.wall_friction);
     }
     if (state.position_m.y < min_y) {
-      state.position_m.y = min_y;
+      state.position_m.y = min_y + field_.baumgarte_slop_m;
       state.velocity_mps.y = std::abs(state.velocity_mps.y) *
                              scaledWallRestitution(
                                  field_.wall_restitution,
@@ -1511,7 +1511,7 @@ class BallGamepieceSim {
       state.velocity_mps.x *= (1.0 - field_.wall_friction);
     }
     if (state.position_m.y > max_y) {
-      state.position_m.y = max_y;
+      state.position_m.y = max_y - field_.baumgarte_slop_m;
       state.velocity_mps.y = -std::abs(state.velocity_mps.y) *
                              scaledWallRestitution(
                                  field_.wall_restitution,
@@ -1523,47 +1523,52 @@ class BallGamepieceSim {
   }
 
   void resolveFieldElements(BallEntity& ball, double dt_s) {
-    auto state = ball.sim.state();
-    const double radius = ball.sim.ballProperties().radius_m;
+    const int solver_iterations = std::max(1, field_.solver_iterations);
+    for (int iteration = 0; iteration < solver_iterations; ++iteration) {
+      auto state = ball.sim.state();
+      const double radius = ball.sim.ballProperties().radius_m;
 
-    for (const auto& boundary : field_elements_) {
-      if (!boundary.is_active) {
-        continue;
-      }
-
-      if (field_.net_boundary_user_id >= 0 &&
-          boundary.user_id == field_.net_boundary_user_id &&
-          boundary.type == BoundaryType::kBox) {
-        if (isInsideBoxBoundary(state.position_m, boundary,
-                                radius * field_.net_entry_slack_scale)) {
-          ball.scored_in_net = true;
-          state.velocity_mps.x *= field_.net_velocity_decay;
-          state.velocity_mps.y *= field_.net_velocity_decay;
-          state.velocity_mps.z = std::min(state.velocity_mps.z, 0.0);
-          state.spin_radps *= field_.net_spin_decay;
-          state.velocity_mps +=
-              Vector3(0.0, 0.0, -field_.net_downward_bias_mps2 * dt_s);
+      for (const auto& boundary : field_elements_) {
+        if (!boundary.is_active) {
+          continue;
         }
-        continue;
+
+        if (field_.net_boundary_user_id >= 0 &&
+            boundary.user_id == field_.net_boundary_user_id &&
+            boundary.type == BoundaryType::kBox) {
+          if (isInsideBoxBoundary(state.position_m, boundary,
+                                  radius * field_.net_entry_slack_scale)) {
+            ball.scored_in_net = true;
+            state.velocity_mps.x *= field_.net_velocity_decay;
+            state.velocity_mps.y *= field_.net_velocity_decay;
+            state.velocity_mps.z = std::min(state.velocity_mps.z, 0.0);
+            state.spin_radps *= field_.net_spin_decay;
+            state.velocity_mps +=
+                Vector3(0.0, 0.0, -field_.net_downward_bias_mps2 * dt_s);
+          }
+          continue;
+        }
+
+        wakeBall(ball);
+
+        switch (boundary.type) {
+          case BoundaryType::kPlane:
+          case BoundaryType::kWall:
+            resolvePlaneBoundary(state, boundary, radius);
+            break;
+          case BoundaryType::kBox:
+            resolveBoxBoundary(state, boundary, radius);
+            break;
+          case BoundaryType::kCylinder:
+            resolveCylinderBoundary(state, boundary, radius);
+            break;
+          default:
+            break;
+        }
       }
 
-      switch (boundary.type) {
-        case BoundaryType::kPlane:
-        case BoundaryType::kWall:
-          resolvePlaneBoundary(state, boundary, radius);
-          break;
-        case BoundaryType::kBox:
-          resolveBoxBoundary(state, boundary, radius);
-          break;
-        case BoundaryType::kCylinder:
-          resolveCylinderBoundary(state, boundary, radius);
-          break;
-        default:
-          break;
-      }
+      ball.sim.setState(state);
     }
-
-    ball.sim.setState(state);
   }
 
   static bool isInsideBoxBoundary(const Vector3& world_point,
@@ -1590,7 +1595,8 @@ class BallGamepieceSim {
       return;
     }
 
-    state.position_m += normal * (ball_radius - signed_distance);
+    state.position_m += normal *
+              std::max(0.0, ball_radius - signed_distance - field_.baumgarte_slop_m);
     const double impact_speed = std::max(0.0, -state.velocity_mps.dot(normal));
     applyContactImpulse(state.velocity_mps, normal,
               scaledWallRestitution(boundary.restitution,
@@ -1640,7 +1646,8 @@ class BallGamepieceSim {
 
     const Vector3 world_normal =
         boundary.orientation.rotate(local_normal).normalized();
-    state.position_m += world_normal * (ball_radius - distance);
+    state.position_m += world_normal *
+              std::max(0.0, ball_radius - distance - field_.baumgarte_slop_m);
     const double impact_speed = std::max(0.0, -state.velocity_mps.dot(world_normal));
     applyContactImpulse(state.velocity_mps, world_normal,
               scaledWallRestitution(boundary.restitution,
@@ -1672,8 +1679,8 @@ class BallGamepieceSim {
         radial_distance > 1e-9 ? radial / radial_distance : Vector3::unitX();
     const Vector3 radial_normal_world =
         boundary.orientation.rotate(radial_normal_local).normalized();
-    state.position_m +=
-        radial_normal_world * (contact_distance - radial_distance);
+    state.position_m += radial_normal_world *
+              std::max(0.0, contact_distance - radial_distance - field_.baumgarte_slop_m);
     const double impact_speed =
       std::max(0.0, -state.velocity_mps.dot(radial_normal_world));
     applyContactImpulse(state.velocity_mps, radial_normal_world,
