@@ -8,19 +8,55 @@
 
 namespace frcsim {
 
+/**
+ * @brief Computes a Magnus lift force from linear velocity and spin.
+ *
+ * This model is intentionally small: it just wraps the shared
+ * Vector3::magnusForce helper behind a configurable scalar coefficient so the
+ * same lift formulation can be reused by game-piece, shot, and simulation code
+ * without duplicating the cross-product math.
+ *
+ * The input vectors use the world frame convention used throughout RenSim and
+ * WPILib: +X points away from the blue alliance wall downfield, +Y points to
+ * the left when looking from the blue alliance end, and +Z points upward.
+ */
 class MagnusModel {
  public:
+  /**
+   * @brief Creates a Magnus-force model with the given coefficient.
+   * @param magnus_coefficient Scalar applied to the omega x v lift term.
+   *        The default matches the rest of the physics code and is tuned for
+   *        SI inputs (meters per second and radians per second).
+   */
   explicit MagnusModel(double magnus_coefficient = 1.0e-4)
       : magnus_coefficient_(magnus_coefficient) {}
 
+  /** @brief Returns the current Magnus coefficient. */
   double magnusCoefficient() const { return magnus_coefficient_; }
+
+  /**
+   * @brief Updates the Magnus coefficient used by computeForce().
+   * @param coefficient New scalar multiplier for the lift term.
+   */
   void setMagnusCoefficient(double coefficient) {
     magnus_coefficient_ = coefficient;
   }
 
+  /**
+   * @brief Computes the lift force produced by the supplied velocity and spin.
+    * @param velocity_mps Linear velocity vector in meters per second, expressed
+    *        in the world frame.
+    * @param spin_radps Angular velocity vector in radians per second, expressed
+    *        in the same frame as velocity_mps.
+   *        Both vectors must be expressed in the same reference frame, because
+   *        the result is the cross product omega x v scaled by the model
+   *        coefficient.
+   * @return Magnus force vector in newtons.
+   */
   Vector3 computeForce(const Vector3& velocity_mps,
                        const Vector3& spin_radps) const {
-    return spin_radps.cross(velocity_mps) * magnus_coefficient_;
+    return Vector3::magnusForce(velocity_mps, spin_radps,
+                                magnus_coefficient_);
   }
 
  private:

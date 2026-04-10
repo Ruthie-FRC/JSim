@@ -99,11 +99,7 @@ doxygen {
             option "project_name", "RenSim"
             option "project_number", "$pubVersion"
 
-            // Native C++ headers + sources
-            sources "src/main/native/include"
-            sources "src/main/native/cpp"
-
-            // Driver C++ header and sources
+            // Driver C++ headers + sources
             sources "src/main/driver/cpp"
             sources "src/main/driver/include"
 
@@ -180,6 +176,20 @@ ext.getCurrentArch = {
 
 def systemArch = getCurrentArch()
 
+// Native C++ should track the driver implementation. Keep JNI glue out of the
+// pure native component and let the driver/JNI library own it.
+def nativeFromDriverExcludes = [
+    '**/RenSimJNI.cpp',
+    '**/physics_jni.cpp'
+]
+
+// Keep the driver build independent from WPILibC-native compilation units.
+// Native code can still reference WPILibC elsewhere, but driver targets should
+// not compile WPILibC-labeled sources.
+def driverWpilibCExcludes = [
+    'src/main/driver/cpp/**/wpilib/**'
+]
+
 
 sourceSets {
     main {
@@ -202,10 +212,13 @@ model {
                 cpp {
                     source {
                         srcDirs 'src/main/native/cpp'
+                        srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
+                        exclude nativeFromDriverExcludes
+                        exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
-                        srcDirs 'src/main/native/include'
+                        srcDirs 'src/main/driver/include'
                     }
                 }
             }
@@ -227,6 +240,7 @@ model {
                     source {
                         srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
+                        exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
                         srcDirs 'src/main/driver/include'

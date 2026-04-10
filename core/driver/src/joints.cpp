@@ -5,83 +5,24 @@
 #include "frcsim/joints/fixed_joint.hpp"
 #include "frcsim/joints/prismatic_joint.hpp"
 #include "frcsim/joints/revolute_joint.hpp"
+#include "frcsim/joints/detail/joint_math.hpp"
 #include "frcsim/rigidbody/rigid_body.hpp"
 
 #include <algorithm>
-#include <cmath>
 
 namespace {
 
 using frcsim::Quaternion;
 using frcsim::RigidBody;
 using frcsim::Vector3;
-
-constexpr double kEps = 1e-9;
-
-Vector3 worldAnchor(const RigidBody* body, const Vector3& local_anchor) {
-  return body->position() + body->orientation().rotate(local_anchor);
-}
-
-double clampValue(double value, double min_value, double max_value) {
-  return std::max(min_value, std::min(value, max_value));
-}
-
-void applyPositionCorrection(RigidBody* body_a, RigidBody* body_b,
-                             const Vector3& error, double gain) {
-  const double inv_a =
-      body_a->flags().is_kinematic ? 0.0 : body_a->inverseMass();
-  const double inv_b =
-      body_b->flags().is_kinematic ? 0.0 : body_b->inverseMass();
-  const double total_inv = inv_a + inv_b;
-  if (total_inv <= kEps)
-    return;
-
-  const Vector3 correction_a = error * (gain * (inv_a / total_inv));
-  const Vector3 correction_b = error * (gain * (inv_b / total_inv));
-
-  if (!body_a->flags().is_kinematic) {
-    body_a->setPosition(body_a->position() + correction_a);
-  }
-  if (!body_b->flags().is_kinematic) {
-    body_b->setPosition(body_b->position() - correction_b);
-  }
-}
-
-void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
-                             const Vector3& relative_velocity, double gain) {
-  const double inv_a =
-      body_a->flags().is_kinematic ? 0.0 : body_a->inverseMass();
-  const double inv_b =
-      body_b->flags().is_kinematic ? 0.0 : body_b->inverseMass();
-  const double total_inv = inv_a + inv_b;
-  if (total_inv <= kEps)
-    return;
-
-  const Vector3 correction_a = relative_velocity * (gain * (inv_a / total_inv));
-  const Vector3 correction_b = relative_velocity * (gain * (inv_b / total_inv));
-
-  if (!body_a->flags().is_kinematic) {
-    body_a->setLinearVelocity(body_a->linearVelocity() + correction_a);
-  }
-  if (!body_b->flags().is_kinematic) {
-    body_b->setLinearVelocity(body_b->linearVelocity() - correction_b);
-  }
-}
-
-double signedTwistAngleRad(const Quaternion& qa, const Quaternion& qb,
-                           const Vector3& axis_world) {
-  Quaternion q_rel = qb * qa.inverse();
-  q_rel.normalizeIfNeeded();
-
-  Vector3 axis_err;
-  double angle = 0.0;
-  q_rel.toAxisAngle(axis_err, angle);
-  if (angle > 3.14159265358979323846) {
-    angle = 2.0 * 3.14159265358979323846 - angle;
-    axis_err = -axis_err;
-  }
-  return angle * axis_err.dot(axis_world.normalized());
-}
+using frcsim::detail::applyPositionCorrection;
+using frcsim::detail::applyVelocityCorrection;
+using frcsim::detail::clampValue;
+using frcsim::detail::kJointEpsilon;
+using frcsim::detail::kPi;
+using frcsim::detail::signedTwistAngleRad;
+using frcsim::detail::worldAnchor;
+using frcsim::detail::worldAxisOrFallback;
 
 }  // namespace
 
@@ -106,7 +47,7 @@ void FixedJoint::solveConstraint(double /*dt_s*/, int /*iterations*/) {
   const double inv_b =
       body_b_->flags().is_kinematic ? 0.0 : body_b_->inverseMass();
   const double total_inv = inv_a + inv_b;
-  if (total_inv <= kEps)
+  if (total_inv <= kJointEpsilon)
     return;
 
   const Vector3 relative_angular_velocity =
@@ -131,8 +72,8 @@ void FixedJoint::solveConstraint(double /*dt_s*/, int /*iterations*/) {
   Vector3 axis;
   double angle = 0.0;
   q_rel.toAxisAngle(axis, angle);
-  if (angle > 3.14159265358979323846) {
-    angle = 2.0 * 3.14159265358979323846 - angle;
+  if (angle > kPi) {
+    angle = 2.0 * kPi - angle;
     axis = -axis;
   }
 
@@ -168,8 +109,8 @@ double FixedJoint::constraintError() const {
   Vector3 axis;
   double angle = 0.0;
   q_rel.toAxisAngle(axis, angle);
-  if (angle > 3.14159265358979323846) {
-    angle = 2.0 * 3.14159265358979323846 - angle;
+  if (angle > kPi) {
+    angle = 2.0 * kPi - angle;
   }
 
   return positional_error + angle;
@@ -182,9 +123,7 @@ void RevoluteJoint::solveConstraint(double dt_s, int iterations) {
     return;
 
   const Vector3 axis_world =
-      body_a_->orientation().rotate(axis_local_).normalized().isZero()
-          ? Vector3::unitZ()
-          : body_a_->orientation().rotate(axis_local_).normalized();
+      worldAxisOrFallback(body_a_, axis_local_, Vector3::unitZ());
 
   for (int i = 0; i < std::max(1, iterations); ++i) {
     const Vector3 world_a = worldAnchor(body_a_, anchor_a_);
@@ -202,7 +141,7 @@ void RevoluteJoint::solveConstraint(double dt_s, int iterations) {
     const double inv_b =
         body_b_->flags().is_kinematic ? 0.0 : body_b_->inverseMass();
     const double total_inv = inv_a + inv_b;
-    if (total_inv > kEps) {
+    if (total_inv > kJointEpsilon) {
       if (!body_a_->flags().is_kinematic) {
         body_a_->setAngularVelocity(body_a_->angularVelocity() +
                                     orthogonal_rel_ang *
@@ -266,9 +205,7 @@ double RevoluteJoint::constraintError() const {
     return 0.0;
 
   const Vector3 axis_world =
-      body_a_->orientation().rotate(axis_local_).normalized().isZero()
-          ? Vector3::unitZ()
-          : body_a_->orientation().rotate(axis_local_).normalized();
+      worldAxisOrFallback(body_a_, axis_local_, Vector3::unitZ());
   const Vector3 world_a = worldAnchor(body_a_, anchor_a_);
   const Vector3 world_b = worldAnchor(body_b_, anchor_b_);
   const double anchor_error = (world_b - world_a).norm();
@@ -299,9 +236,7 @@ void PrismaticJoint::solveConstraint(double dt_s, int iterations) {
     return;
 
   const Vector3 axis_world =
-      body_a_->orientation().rotate(axis_local_).normalized().isZero()
-          ? Vector3::unitX()
-          : body_a_->orientation().rotate(axis_local_).normalized();
+      worldAxisOrFallback(body_a_, axis_local_, Vector3::unitX());
 
   for (int i = 0; i < std::max(1, iterations); ++i) {
     const Vector3 world_a = worldAnchor(body_a_, anchor_a_);
@@ -318,7 +253,7 @@ void PrismaticJoint::solveConstraint(double dt_s, int iterations) {
     const double inv_b =
         body_b_->flags().is_kinematic ? 0.0 : body_b_->inverseMass();
     const double total_inv = inv_a + inv_b;
-    if (total_inv <= kEps)
+    if (total_inv <= kJointEpsilon)
       continue;
 
     if (has_limits_) {
@@ -364,9 +299,7 @@ double PrismaticJoint::constraintError() const {
     return 0.0;
 
   const Vector3 axis_world =
-      body_a_->orientation().rotate(axis_local_).normalized().isZero()
-          ? Vector3::unitX()
-          : body_a_->orientation().rotate(axis_local_).normalized();
+      worldAxisOrFallback(body_a_, axis_local_, Vector3::unitX());
 
   const Vector3 world_a = worldAnchor(body_a_, anchor_a_);
   const Vector3 world_b = worldAnchor(body_b_, anchor_b_);
