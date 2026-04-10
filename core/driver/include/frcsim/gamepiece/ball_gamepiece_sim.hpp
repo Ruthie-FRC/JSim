@@ -111,7 +111,8 @@ class BallGamepieceSim {
     double free_ball_spin_decay_per_s{0.35};
     /** Enables continuous collision checks for fast-moving balls. */
     bool ccd_enabled{true};
-    /** Speed threshold above which CCD checks are evaluated. */
+    /** Speed threshold above which CCD checks are evaluated, in meters per
+     * second. */
     double ccd_speed_threshold_mps{10.0};
     /** Enables sleeping/wake logic for nearly resting balls. */
     bool sleeping_enabled{true};
