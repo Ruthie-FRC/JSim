@@ -25,12 +25,14 @@ struct DragGravityComparison {
   double drag_to_gravity_ratio{0.0};
   /** @brief Body mass used for acceleration calculations in kg. */
   double body_mass_kg{0.0};
-  /** @brief True when the comparison computed without invalid inputs or mass=0. */
+  /** @brief True when the comparison computed without invalid inputs or mass=0.
+   */
   bool valid{false};
 };
 
 /**
- * @brief Evaluates drag force on a moving body using quadratic and linear drag models.
+ * @brief Evaluates drag force on a moving body using quadratic and linear drag
+ * models.
  *
  * The drag force is computed as quad + linear from Vector3::dragForce().
  * Useful for validating aerodynamic behavior and comparing against gravity.
@@ -41,8 +43,10 @@ class DragModel {
    * @brief Constructs a drag force model.
    * @param drag_coefficient Dimensionless drag coefficient (typically 0.1–2.0).
    * @param reference_area_m2 Reference area in square meters (cross-section).
-   * @param air_density_kgpm3 Air density in kg/m^3 (default: 1.225 at sea level).
-   * @param linear_drag_coefficient_n_per_mps Optional linear drag term in N/(m/s).
+   * @param air_density_kgpm3 Air density in kg/m^3 (default: 1.225 at sea
+   * level).
+   * @param linear_drag_coefficient_n_per_mps Optional linear drag term in
+   * N/(m/s).
    */
   DragModel(double drag_coefficient, double reference_area_m2,
             double air_density_kgpm3 = 1.225,
@@ -67,7 +71,8 @@ class DragModel {
 
   /**
    * @brief Computes detailed drag force using body geometry and motion.
-   * @param body Rigid body supplying world-space velocity and drag area geometry.
+   * @param body Rigid body supplying world-space velocity and drag area
+   * geometry.
    * @return DragForceDetails with force, direction, and diagnostics.
    */
   Vector3::DragForceDetails computeForceDetailed(const RigidBody& body) const {
@@ -104,9 +109,9 @@ class DragModel {
 
   /**
    * @brief Compares drag force magnitude against an effective gravity vector.
-    * @param body Rigid body to evaluate using world-space velocity.
-    * @param effective_gravity_mps2 World-space effective gravity vector in m/s^2
-    * (e.g., gravity + Magnus).
+   * @param body Rigid body to evaluate using world-space velocity.
+   * @param effective_gravity_mps2 World-space effective gravity vector in m/s^2
+   * (e.g., gravity + Magnus).
    * @return Diagnostic comparison showing drag-to-gravity ratio.
    */
   DragGravityComparison compareToEffectiveGravity(
@@ -135,7 +140,8 @@ class DragModel {
 
   /**
    * @brief Applies computed drag force to a rigid body.
-   * @param body Rigid body to apply drag force to; kinematic bodies are skipped.
+   * @param body Rigid body to apply drag force to; kinematic bodies are
+   * skipped.
    */
   void apply(RigidBody& body) const {
     if (body.flags().is_kinematic)

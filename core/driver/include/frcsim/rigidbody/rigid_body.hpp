@@ -28,7 +28,8 @@ enum class IntegrationMethod {
 };
 
 /**
- * @brief Simulated rigid body with linear/angular dynamics and optional drag geometry.
+ * @brief Simulated rigid body with linear/angular dynamics and optional drag
+ * geometry.
  */
 class RigidBody {
  public:
@@ -52,13 +53,15 @@ class RigidBody {
       kSphere,
       /** @brief Box model using `box_dimensions_m`. */
       kBox,
-      /** @brief Cylinder model using `radius_m`, `cylinder_length_m`, and axis. */
+      /** @brief Cylinder model using `radius_m`, `cylinder_length_m`, and axis.
+       */
       kCylinder,
     };
 
     /** @brief Shape used for drag-area estimation. */
     Shape shape{Shape::kCustom};
-    /** @brief Explicit reference area in square meters (overrides shape calc when > 0). */
+    /** @brief Explicit reference area in square meters (overrides shape calc
+     * when > 0). */
     double reference_area_m2{0.0};
     /** @brief Sphere/cylinder radius in meters. */
     double radius_m{0.0};
@@ -168,7 +171,7 @@ class RigidBody {
 
   /**
    * @brief Sets cylinder axis from world-space direction.
-    * @param axis_world World-space direction to convert into local body space.
+   * @param axis_world World-space direction to convert into local body space.
    *
    * The provided axis is transformed into local body space and normalized.
    * Zero-length input falls back to local +Z.
@@ -187,7 +190,8 @@ class RigidBody {
   }
 
   /**
-   * @brief Computes drag reference area for current geometry and motion direction.
+   * @brief Computes drag reference area for current geometry and motion
+   * direction.
    * @param velocity_world World-space velocity direction source.
    * @return Effective reference area in square meters.
    */
@@ -278,7 +282,7 @@ class RigidBody {
    * @brief Advances translational and rotational state by one timestep.
    * @param dt_s Step duration in seconds.
    * @param method Linear integration method.
-    * @param gravity_mps2 World-space gravity acceleration vector in m/s^2.
+   * @param gravity_mps2 World-space gravity acceleration vector in m/s^2.
    * @param linear_damping_per_s Linear damping coefficient in 1/s.
    * @param angular_damping_per_s Angular damping coefficient in 1/s.
    */
