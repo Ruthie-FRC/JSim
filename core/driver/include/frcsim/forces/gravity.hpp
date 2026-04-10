@@ -30,7 +30,7 @@ class GravityForce : public ForceGenerator {
    * @param body Rigid body to apply gravity to; kinematic bodies are skipped.
    * @param dt_s Timestep duration (unused).
    */
-  void apply(RigidBody& body, double /*dt_s*/) const override {
+  void apply(RigidBody& body, [[maybe_unused]] double dt_s) const override {
     if (body.flags().is_kinematic)
       return;
     body.applyForce(gravity_mps2_ * body.massKg());
