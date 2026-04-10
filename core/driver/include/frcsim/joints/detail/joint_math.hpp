@@ -12,7 +12,7 @@
 namespace frcsim::detail {
 
 constexpr double kJointEpsilon = 1e-9;
-constexpr double kPi = 3.14159265358979323846;
+inline const double kPi = std::acos(-1.0);
 
 /**
  * @brief Converts a body-local anchor point into world space.
