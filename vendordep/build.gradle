@@ -187,11 +187,7 @@ def nativeFromDriverExcludes = [
 // Native code can still reference WPILibC elsewhere, but driver targets should
 // not compile WPILibC-labeled sources.
 def driverWpilibCExcludes = [
-    'src/main/driver/cpp/**/wpilibc/**',
-    'src/main/driver/cpp/**/wpilib/**',
-    'src/main/driver/cpp/**/*wpilib*.cpp',
-    'src/main/driver/cpp/**/*wpilib*.cc',
-    'src/main/driver/cpp/**/*wpilib*.cxx'
+    'src/main/driver/cpp/**/wpilib/**'
 ]
 
 
@@ -277,7 +273,7 @@ model {
                 }
             }
 
-            nativeUtils.useRequiredLibrary(it, "googletest_static")
+            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
         }
 
         RenSimDriverTest {
@@ -287,7 +283,7 @@ model {
                     include '**/*.cpp'
                 }
             }
-            nativeUtils.useRequiredLibrary(it, "googletest_static")
+            nativeUtils.useRequiredLibrary(it, "wpilib_executable_shared", "googletest_static")
         }
     }
 }
