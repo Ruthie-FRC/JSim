@@ -116,17 +116,21 @@ inline Vector3 worldAxisOrFallback(const RigidBody* body,
 /**
  * @brief Computes the signed twist between two orientations about an axis.
  *
- * The function compares qb against qa, extracts the shortest relative
- * rotation, and projects that rotation onto axis_world using the right-hand
- * rule. The result is a signed angle in radians whose magnitude represents
- * the amount of twist and whose sign indicates rotation direction about the
- * supplied axis.
+ * The helper compares qb against qa, extracts the shortest relative rotation,
+ * and projects that rotation onto axis_world using the right-hand rule. The
+ * return value is a signed angle in radians: its magnitude is the amount of
+ * twist, and its sign indicates whether the target orientation rotates in the
+ * positive or negative direction about the supplied axis.
  *
- * This convention is intended to stay compatible with WPILib-style robotics
- * frame handling, where axis definitions and positive rotation direction are
- * derived from the same right-handed coordinate system. See the WPILib
- * coordinate-system documentation for the broader frame conventions:
+ * The intent is to match the coordinate conventions used throughout WPILib:
+ * a right-handed field frame with +X downfield, +Y left/right across the
+ * field depending on alliance perspective, and +Z upward. That convention is
+ * documented here:
  * https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
+ *
+ * Keep qa, qb, and axis_world in the same world frame when calling this
+ * helper. If axis_world is degenerate, the normalized axis collapses toward
+ * zero and the returned signed twist likewise tends toward zero.
  *
  * @param qa Reference orientation.
  * @param qb Target orientation to compare against qa.
