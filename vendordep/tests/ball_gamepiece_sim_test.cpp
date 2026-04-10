@@ -286,5 +286,77 @@ int main() {
         const double spin_norm_b = spin_sim.balls()[1].sim.state().spin_radps.norm();
         assert(spin_norm_a > 1e-3 || spin_norm_b > 1e-3);
 
+        // CCD regression: fast ball should not tunnel through a thin box boundary.
+        frcsim::BallGamepieceSim::FieldConfig ccd_field;
+        ccd_field.ccd_enabled = true;
+        ccd_field.ccd_speed_threshold_mps = 1.0;
+        ccd_field.wall_friction = 0.0;
+        frcsim::BallGamepieceSim ccd_sim(ccd_field);
+        ccd_sim.setSimulationSubsteps(1);
+
+        frcsim::EnvironmentalBoundary thin_box;
+        thin_box.type = frcsim::BoundaryType::kBox;
+        thin_box.position_m = frcsim::Vector3(2.0, 2.0, 0.2);
+        thin_box.half_extents_m = frcsim::Vector3(0.01, 0.8, 0.2);
+        thin_box.restitution = 0.8;
+        thin_box.friction_coefficient = 0.0;
+        thin_box.is_active = true;
+        ccd_sim.addFieldElement(thin_box);
+
+        frcsim::BallPhysicsSim3D::Config ccd_cfg =
+                frcsim::BallGamepiecePresets::season2026BallConfig();
+        ccd_cfg.drag_scale = 0.0;
+        ccd_cfg.magnus_scale = 0.0;
+        ccd_cfg.rolling_friction_per_s = 0.0;
+        const auto ccd_props = frcsim::BallGamepiecePresets::season2026BallProperties();
+
+        frcsim::BallPhysicsSim3D::BallState ccd_ball;
+        ccd_ball.position_m = frcsim::Vector3(1.0, 2.0, ccd_props.radius_m);
+        ccd_ball.velocity_mps = frcsim::Vector3(45.0, 0.0, 0.0);
+        ccd_sim.addBall(ccd_ball, ccd_cfg, ccd_props);
+        ccd_sim.step(0.05);
+
+        const auto ccd_after = ccd_sim.balls()[0].sim.state();
+        assert(ccd_after.position_m.x < 2.0 + ccd_props.radius_m + 0.03);
+        assert(ccd_after.velocity_mps.x < 0.0);
+
+        // Sleeping/wake regression: resting balls should sleep and wake on impact.
+        frcsim::BallGamepieceSim::FieldConfig sleep_field;
+        sleep_field.sleeping_enabled = true;
+        sleep_field.sleep_velocity_threshold_mps = 0.05;
+        sleep_field.sleep_spin_threshold_radps = 0.2;
+        sleep_field.sleep_frame_threshold = 4;
+        sleep_field.ccd_enabled = false;
+        frcsim::BallGamepieceSim sleep_sim(sleep_field);
+        sleep_sim.setSimulationSubsteps(4);
+
+        frcsim::BallPhysicsSim3D::Config sleep_cfg =
+                frcsim::BallGamepiecePresets::season2026BallConfig();
+        sleep_cfg.drag_scale = 0.0;
+        sleep_cfg.magnus_scale = 0.0;
+        const auto sleep_props = frcsim::BallGamepiecePresets::season2026BallProperties();
+
+        frcsim::BallPhysicsSim3D::BallState sleeper;
+        sleeper.position_m = frcsim::Vector3(7.0, 2.0, sleep_props.radius_m);
+        sleeper.velocity_mps = frcsim::Vector3(0.0, 0.0, 0.0);
+        sleep_sim.addBall(sleeper, sleep_cfg, sleep_props);
+
+        for (int i = 0; i < 10; ++i) {
+            sleep_sim.step(0.02);
+        }
+        assert(sleep_sim.balls()[0].sleeping);
+
+        frcsim::BallPhysicsSim3D::BallState hitter;
+        hitter.position_m =
+                frcsim::Vector3(7.0 - 2.0 * sleep_props.radius_m - 0.05, 2.0,
+                                                sleep_props.radius_m);
+        hitter.velocity_mps = frcsim::Vector3(3.0, 0.0, 0.0);
+        sleep_sim.addBall(hitter, sleep_cfg, sleep_props);
+
+        for (int i = 0; i < 20; ++i) {
+            sleep_sim.step(0.01);
+        }
+        assert(!sleep_sim.balls()[0].sleeping);
+
     return 0;
 }
