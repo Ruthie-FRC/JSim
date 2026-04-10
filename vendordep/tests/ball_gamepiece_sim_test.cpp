@@ -130,5 +130,39 @@ int main() {
     }
     assert(some_ball_moved);
 
+    // Ball-ball collision regression: two free balls moving head-on should
+    // exchange momentum direction after contact.
+    frcsim::BallGamepieceSim collision_sim;
+    collision_sim.setSimulationSubsteps(6);
+    frcsim::BallPhysicsSim3D::Config collision_cfg =
+        frcsim::BallGamepiecePresets::season2026BallConfig();
+    collision_cfg.drag_scale = 0.0;
+    collision_cfg.magnus_scale = 0.0;
+    collision_cfg.rolling_friction_per_s = 0.0;
+
+    const auto collision_props =
+        frcsim::BallGamepiecePresets::season2026BallProperties();
+
+    frcsim::BallPhysicsSim3D::BallState left;
+    left.position_m = frcsim::Vector3(4.0, 3.0, collision_props.radius_m);
+    left.velocity_mps = frcsim::Vector3(1.5, 0.0, 0.0);
+    collision_sim.addBall(left, collision_cfg, collision_props);
+
+    frcsim::BallPhysicsSim3D::BallState right;
+    right.position_m =
+        frcsim::Vector3(4.0 + 2.0 * collision_props.radius_m + 0.02, 3.0,
+                        collision_props.radius_m);
+    right.velocity_mps = frcsim::Vector3(-1.5, 0.0, 0.0);
+    collision_sim.addBall(right, collision_cfg, collision_props);
+
+    for (int i = 0; i < 20; ++i) {
+      collision_sim.step(0.01);
+    }
+
+    const auto& left_after = collision_sim.balls()[0].sim.state();
+    const auto& right_after = collision_sim.balls()[1].sim.state();
+    assert(left_after.velocity_mps.x < 0.0);
+    assert(right_after.velocity_mps.x > 0.0);
+
     return 0;
 }

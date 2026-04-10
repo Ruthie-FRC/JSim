@@ -82,6 +82,10 @@ class BallGamepieceSim {
     double plow_ball_velocity_retention{0.7};
     /** Gain from robot planar velocity into plowed ball velocity. */
     double plow_robot_velocity_gain{0.6};
+    /** Restitution used for grounded ball-ball collision impulse. */
+    double ball_ball_contact_restitution{0.45};
+    /** Friction used for grounded ball-ball collision impulse. */
+    double ball_ball_contact_friction{0.2};
   };
 
   /** @brief Per-robot state used by game piece interaction and collision
@@ -617,6 +621,8 @@ class BallGamepieceSim {
         resolveFieldBounds(ball);
       }
     }
+
+    resolveBallBallContacts();
   }
 
   void updateProjectiles(double dt_s) {
@@ -957,6 +963,91 @@ class BallGamepieceSim {
     }
 
     ball.sim.setState(state);
+  }
+
+  void resolveBallBallContacts() {
+    for (std::size_t i = 0; i < balls_.size(); ++i) {
+      auto state_a = balls_[i].sim.state();
+      if (state_a.held || balls_[i].scored_in_net) {
+        continue;
+      }
+
+      const double radius_a = balls_[i].sim.ballProperties().radius_m;
+      const double mass_a =
+          std::max(1e-9, balls_[i].sim.ballProperties().mass_kg);
+
+      for (std::size_t j = i + 1; j < balls_.size(); ++j) {
+        auto state_b = balls_[j].sim.state();
+        if (state_b.held || balls_[j].scored_in_net) {
+          continue;
+        }
+
+        const double radius_b = balls_[j].sim.ballProperties().radius_m;
+        const double mass_b =
+            std::max(1e-9, balls_[j].sim.ballProperties().mass_kg);
+
+        Vector3 delta = state_b.position_m - state_a.position_m;
+        const double distance = delta.norm();
+        const double target_distance = radius_a + radius_b;
+        if (distance >= target_distance) {
+          continue;
+        }
+
+        const Vector3 normal =
+            distance > 1e-9 ? delta / distance : Vector3::unitX();
+        const double penetration = target_distance - distance;
+
+        // Split positional correction by inverse mass so heavy balls move less.
+        const double inv_mass_a = 1.0 / mass_a;
+        const double inv_mass_b = 1.0 / mass_b;
+        const double inv_mass_sum = inv_mass_a + inv_mass_b;
+        if (inv_mass_sum <= 1e-9) {
+          continue;
+        }
+
+        state_a.position_m -=
+            normal * (penetration * (inv_mass_a / inv_mass_sum));
+        state_b.position_m +=
+            normal * (penetration * (inv_mass_b / inv_mass_sum));
+
+        Vector3 relative_velocity = state_b.velocity_mps - state_a.velocity_mps;
+        const double normal_speed = relative_velocity.dot(normal);
+        if (normal_speed >= 0.0) {
+          balls_[j].sim.setState(state_b);
+          continue;
+        }
+
+        const double restitution =
+            std::clamp(field_.ball_ball_contact_restitution, 0.0, 1.0);
+        const double normal_impulse_magnitude =
+            -(1.0 + restitution) * normal_speed / inv_mass_sum;
+        const Vector3 normal_impulse = normal * normal_impulse_magnitude;
+
+        state_a.velocity_mps -= normal_impulse * inv_mass_a;
+        state_b.velocity_mps += normal_impulse * inv_mass_b;
+
+        relative_velocity = state_b.velocity_mps - state_a.velocity_mps;
+        const Vector3 tangential_velocity =
+            relative_velocity - normal * relative_velocity.dot(normal);
+        const double tangential_speed = tangential_velocity.norm();
+        if (tangential_speed > 1e-9) {
+          const Vector3 tangent = tangential_velocity / tangential_speed;
+          const double friction =
+              std::clamp(field_.ball_ball_contact_friction, 0.0, 1.0);
+          const double desired_friction_impulse = tangential_speed / inv_mass_sum;
+          const double max_friction_impulse = friction * normal_impulse_magnitude;
+          const double friction_impulse_magnitude =
+              std::min(desired_friction_impulse, max_friction_impulse);
+          const Vector3 friction_impulse = tangent * friction_impulse_magnitude;
+          state_a.velocity_mps += friction_impulse * inv_mass_a;
+          state_b.velocity_mps -= friction_impulse * inv_mass_b;
+        }
+
+        balls_[j].sim.setState(state_b);
+      }
+
+      balls_[i].sim.setState(state_a);
+    }
   }
 
   void resolveFieldBounds(BallEntity& ball) const {
