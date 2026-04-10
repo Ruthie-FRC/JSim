@@ -15,6 +15,10 @@ namespace frcsim {
  * Vector3::magnusForce helper behind a configurable scalar coefficient so the
  * same lift formulation can be reused by game-piece, shot, and simulation code
  * without duplicating the cross-product math.
+ *
+ * The input vectors use the world frame convention used throughout RenSim and
+ * WPILib: +X points away from the blue alliance wall downfield, +Y points to
+ * the left when looking from the blue alliance end, and +Z points upward.
  */
 class MagnusModel {
  public:
@@ -40,8 +44,10 @@ class MagnusModel {
 
   /**
    * @brief Computes the lift force produced by the supplied velocity and spin.
-   * @param velocity_mps Linear velocity vector in meters per second.
-   * @param spin_radps Angular velocity vector in radians per second.
+    * @param velocity_mps Linear velocity vector in meters per second, expressed
+    *        in the world frame.
+    * @param spin_radps Angular velocity vector in radians per second, expressed
+    *        in the same frame as velocity_mps.
    *        Both vectors must be expressed in the same reference frame, because
    *        the result is the cross product omega x v scaled by the model
    *        coefficient.

@@ -17,7 +17,8 @@ constexpr double kPi = 3.14159265358979323846;
 /**
  * @brief Converts a body-local anchor point into world space.
  * @param body Rigid body that owns the anchor.
- * @param local_anchor Anchor position expressed in the body's local frame.
+ * @param local_anchor Anchor position expressed in the body's local coordinate
+ *        frame, in meters.
  * @return World-space anchor point obtained by rotating the local offset by
  *         the body orientation and adding the body position.
  */
@@ -26,6 +27,13 @@ inline Vector3 worldAnchor(const RigidBody* body,
   return body->position() + body->orientation().rotate(local_anchor);
 }
 
+/**
+ * @brief Clamps a scalar into a closed range.
+ * @param value Input value.
+ * @param min_value Lower bound.
+ * @param max_value Upper bound.
+ * @return value constrained to [min_value, max_value].
+ */
 inline double clampValue(double value, double min_value, double max_value) {
   return std::max(min_value, std::min(value, max_value));
 }
@@ -39,7 +47,8 @@ inline double clampValue(double value, double min_value, double max_value) {
  *
  * @param body_a First rigid body to correct.
  * @param body_b Second rigid body to correct.
- * @param error World-space position error that should be removed.
+ * @param error World-space position error vector in meters that should be
+ *        removed.
  * @param gain Fraction of the error to resolve this step, typically in the
  *        range [0, 1].
  */
@@ -73,7 +82,8 @@ inline void applyPositionCorrection(RigidBody* body_a, RigidBody* body_b,
  *
  * @param body_a First rigid body to correct.
  * @param body_b Second rigid body to correct.
- * @param relative_velocity World-space relative velocity to reduce.
+ * @param relative_velocity World-space relative velocity vector in meters per
+ *        second to reduce.
  * @param gain Fraction of the velocity error to resolve this step.
  */
 inline void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
@@ -101,8 +111,9 @@ inline void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
 /**
  * @brief Rotates a local axis into world space and falls back if needed.
  * @param body Body whose orientation defines the local axis transform.
- * @param local_axis Axis in the body's local coordinate frame.
- * @param fallback_axis Axis to return when the rotated axis is degenerate.
+ * @param local_axis Axis in the body's local coordinate frame, treated as a
+ *        direction vector rather than a position and therefore unitless.
+ * @param fallback_axis World-space fallback direction, also unitless.
  * @return Normalized world-space axis, or fallback_axis if the rotated axis
  *         collapses to zero length.
  */
@@ -134,7 +145,8 @@ inline Vector3 worldAxisOrFallback(const RigidBody* body,
  *
  * @param qa Reference orientation.
  * @param qb Target orientation to compare against qa.
- * @param axis_world Axis in world coordinates used to define positive twist.
+ * @param axis_world World-space rotation axis, expressed as a unit direction
+ *        vector when possible.
  * @return Signed twist angle in radians about axis_world.
  */
 inline double signedTwistAngleRad(const Quaternion& qa, const Quaternion& qb,
