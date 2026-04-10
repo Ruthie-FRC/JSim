@@ -156,6 +156,8 @@ struct alignas(16) Vector3 {
   }
   /**
    * @brief Linearly interpolates from `a` to `b`.
+   * @param a Start vector.
+   * @param b End vector.
    * @param t Interpolation ratio where 0 is `a` and 1 is `b`.
    */
   static Vector3 lerp(const Vector3& a, const Vector3& b, double t) noexcept {
