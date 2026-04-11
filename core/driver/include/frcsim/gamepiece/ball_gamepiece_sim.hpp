@@ -1335,7 +1335,13 @@ class BallGamepieceSim {
     }
   }
 
-  /** @brief Resolves robot-ball contact response including plow coupling. */
+  /**
+   * @brief Resolves robot-ball contact response including plow coupling.
+   * @param ball Ball entity updated in place when contact occurs.
+   * @note Not thread-safe. This mutates ball state and reads shared simulator
+   *       state (e.g., robot list and field parameters) without synchronization;
+   *       call from the single-threaded simulation update path only.
+   */
   void resolveRobotBallContacts(BallEntity& ball) {
     auto state = ball.sim.state();
 
