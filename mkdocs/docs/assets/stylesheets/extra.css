@@ -1,16 +1,16 @@
 :root {
-  --rensim-brand: #005a8d;
-  --rensim-brand-dark: #0b3559;
-  --rensim-accent: #e17b2d;
-  --rensim-surface: #f4f8fc;
-  --rensim-border: rgba(11, 53, 89, 0.16);
-  --rensim-heading-color: var(--rensim-brand-dark);
-  --rensim-text-primary: rgba(11, 53, 89, 0.94);
-  --rensim-text-secondary: rgba(11, 53, 89, 0.74);
-  --rensim-shadow: 0 10px 30px rgba(11, 53, 89, 0.08);
-  --rensim-shadow-hover: 0 14px 36px rgba(11, 53, 89, 0.14);
-  --rensim-font-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", sans-serif;
-  --rensim-font-code: "IBM Plex Mono", "SFMono-Regular", "Consolas", monospace;
+  --jsim-brand: #005a8d;
+  --jsim-brand-dark: #0b3559;
+  --jsim-accent: #e17b2d;
+  --jsim-surface: #f4f8fc;
+  --jsim-border: rgba(11, 53, 89, 0.16);
+  --jsim-heading-color: var(--jsim-brand-dark);
+  --jsim-text-primary: rgba(11, 53, 89, 0.94);
+  --jsim-text-secondary: rgba(11, 53, 89, 0.74);
+  --jsim-shadow: 0 10px 30px rgba(11, 53, 89, 0.08);
+  --jsim-shadow-hover: 0 14px 36px rgba(11, 53, 89, 0.14);
+  --jsim-font-body: "Source Sans 3", "Segoe UI", "Helvetica Neue", sans-serif;
+  --jsim-font-code: "IBM Plex Mono", "SFMono-Regular", "Consolas", monospace;
   --md-primary-fg-color: #005a8d;
   --md-primary-fg-color--light: #2a7aa8;
   --md-primary-fg-color--dark: #0b3559;
@@ -23,7 +23,7 @@ html {
 
 body,
 .md-typeset {
-  font-family: var(--rensim-font-body);
+  font-family: var(--jsim-font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,7 +34,7 @@ body,
 .md-typeset pre,
 code,
 pre {
-  font-family: var(--rensim-font-code);
+  font-family: var(--jsim-font-code);
 }
 
 /* Improve readability for technical prose */
@@ -54,7 +54,7 @@ pre {
 .md-typeset h3 {
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: var(--rensim-heading-color);
+  color: var(--jsim-heading-color);
 }
 
 .md-typeset h1 {
@@ -73,11 +73,11 @@ pre {
 .md-typeset table,
 .md-typeset blockquote,
 .md-typeset figcaption {
-  color: var(--rensim-text-primary);
+  color: var(--jsim-text-primary);
 }
 
 .md-typeset h2 {
-  border-bottom: 1px solid var(--rensim-border);
+  border-bottom: 1px solid var(--jsim-border);
   padding-bottom: 0.25rem;
   margin-top: 1.8rem;
 }
@@ -102,7 +102,7 @@ pre {
 .md-typeset .admonition,
 .md-typeset details {
   border-radius: 0.45rem;
-  box-shadow: var(--rensim-shadow);
+  box-shadow: var(--jsim-shadow);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
@@ -114,7 +114,7 @@ pre {
 .md-typeset .admonition:hover,
 .md-typeset details[open]:hover {
   transform: translateY(-1px);
-  box-shadow: var(--rensim-shadow-hover);
+  box-shadow: var(--jsim-shadow-hover);
 }
 
 .md-nav__link,
@@ -146,18 +146,18 @@ pre {
 }
 
 .md-content__inner {
-  animation: rensim-fade-up 220ms ease-out both;
+  animation: jsim-fade-up 220ms ease-out both;
 }
 
 .md-header,
 .md-tabs,
 .md-sidebar,
 .md-content__inner > * {
-  animation: rensim-fade-in 220ms ease-out both;
+  animation: jsim-fade-in 220ms ease-out both;
 }
 
 [data-md-color-scheme="default"] .md-typeset table:not([class]) {
-  background: var(--rensim-surface);
+  background: var(--jsim-surface);
 }
 
 [data-md-color-scheme="slate"] {
@@ -165,11 +165,11 @@ pre {
   --md-default-fg-color--light: rgba(255, 255, 255, 0.78);
   --md-default-bg-color: #0f1a24;
   --md-default-bg-color--light: #132230;
-  --rensim-heading-color: #cde7f6;
-  --rensim-text-primary: rgba(240, 247, 252, 0.94);
-  --rensim-text-secondary: rgba(240, 247, 252, 0.76);
-  --rensim-border: rgba(135, 182, 212, 0.2);
-  --rensim-surface: #132230;
+  --jsim-heading-color: #cde7f6;
+  --jsim-text-primary: rgba(240, 247, 252, 0.94);
+  --jsim-text-secondary: rgba(240, 247, 252, 0.76);
+  --jsim-border: rgba(135, 182, 212, 0.2);
+  --jsim-surface: #132230;
 }
 
 [data-md-color-scheme="slate"] .md-content__inner.md-typeset,
@@ -180,11 +180,11 @@ pre {
 [data-md-color-scheme="slate"] .md-content__inner.md-typeset h2,
 [data-md-color-scheme="slate"] .md-content__inner.md-typeset h3,
 [data-md-color-scheme="slate"] .md-content__inner.md-typeset > h1 + p {
-  color: var(--rensim-text-primary) !important;
+  color: var(--jsim-text-primary) !important;
 }
 
 [data-md-color-scheme="slate"] .md-content__inner.md-typeset > h1 + p {
-  color: var(--rensim-text-secondary) !important;
+  color: var(--jsim-text-secondary) !important;
 }
 
 [data-md-color-scheme="default"] .md-content__inner.md-typeset > h1 + p {
@@ -210,7 +210,7 @@ pre {
   background: rgba(135, 182, 212, 0.12);
 }
 
-@keyframes rensim-fade-up {
+@keyframes jsim-fade-up {
   from {
     opacity: 0;
     transform: translateY(8px);
@@ -222,7 +222,7 @@ pre {
   }
 }
 
-@keyframes rensim-fade-in {
+@keyframes jsim-fade-in {
   from {
     opacity: 0;
   }

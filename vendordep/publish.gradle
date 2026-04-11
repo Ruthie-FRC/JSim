@@ -5,10 +5,10 @@ apply plugin: 'maven-publish'
 
 ext.licenseFile = files("$rootDir/../LICENSE.txt")
 
-def templateVendorFile = "RenSim.json"
+def templateVendorFile = "JSim.json"
 
-def artifactGroupId = 'rensim'
-def baseArtifactId = 'RenSim'
+def artifactGroupId = 'jsim'
+def baseArtifactId = 'JSim'
 
 def outputsFolder = file("$buildDir/outputs")
 
@@ -48,9 +48,9 @@ ext.addTaskToCopyAllOutputs = { task ->
     copyAllOutputs.from(task.archiveFile)
 }
 
-def driverZipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-driver_CLS"
-def zipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-cpp_CLS"
-def javaBaseName = "_GROUP_rensim_ID_${baseArtifactId}-java_CLS"
+def driverZipBaseName = "_GROUP_jsim_ID_${baseArtifactId}-driver_CLS"
+def zipBaseName = "_GROUP_jsim_ID_${baseArtifactId}-cpp_CLS"
+def javaBaseName = "_GROUP_jsim_ID_${baseArtifactId}-java_CLS"
 
 task cppHeadersZip(type: Zip) {
     destinationDirectory = outputsFolder
@@ -199,9 +199,9 @@ tasks.matching {it != cleanReleaseRepo}.all {it.dependsOn cleanReleaseRepo}
 
 model {
     publishing {
-        def taskList = createComponentZipTasks($.components, ['RenSim'], zipBaseName, Zip, project, includeStandardZipFormat)
+        def taskList = createComponentZipTasks($.components, ['JSim'], zipBaseName, Zip, project, includeStandardZipFormat)
 
-        def driverTaskList = createComponentZipTasks($.components, ['RenSimDriver'], driverZipBaseName, Zip, project, includeStandardZipFormat)
+        def driverTaskList = createComponentZipTasks($.components, ['JSimDriver'], driverZipBaseName, Zip, project, includeStandardZipFormat)
 
         publications {
             cpp(MavenPublication) {
