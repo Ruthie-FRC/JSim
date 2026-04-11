@@ -6,12 +6,12 @@ This package exposes JSim physics as a WPILib vendordep with both Java and C++ e
 
 ### Java
 
-Use `rensim.PhysicsWorld` and `rensim.PhysicsBody` for rigid-body simulation:
+Use `jsim.PhysicsWorld` and `jsim.PhysicsBody` for rigid-body simulation:
 
 ```java
-import rensim.PhysicsBody;
-import rensim.PhysicsWorld;
-import rensim.Vec3;
+import jsim.PhysicsBody;
+import jsim.PhysicsWorld;
+import jsim.Vec3;
 
 try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
   PhysicsBody body = world.createBody(1.0);
@@ -37,7 +37,7 @@ Current Java API includes:
 
 ### C++
 
-Use `rensim::PhysicsWorld` from `src/main/driver/include/driverheader.h`.
+Use `jsim::PhysicsWorld` from `src/main/driver/include/driverheader.h`.
 
 ## Build Notes
 

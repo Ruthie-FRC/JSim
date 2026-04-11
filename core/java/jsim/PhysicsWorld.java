@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the LGPLv3 license file in the root directory of this project.
 
-package rensim;
+package jsim;
 
-import rensim.jni.JSimJNI;
+import jsim.jni.JSimJNI;
 
 /**
  * Thin Java wrapper around the native physics world implementation.

@@ -1,6 +1,6 @@
-# Jsim 2026.04.03.0-prerelease Quick Start
+# JSim 2026.04.03.0-prerelease Quick Start
 
-Jsim is a physics simulation framework for FRC-style robotics. This prerelease (2026.04.03.0) includes a fully functional rigid-body dynamics engine with joint constraints, aerodynamic forces, and a complete Java API for FRC teams.
+JSim is a physics simulation framework for FRC-style robotics. This prerelease (2026.04.03.0) includes a fully functional rigid-body dynamics engine with joint constraints, aerodynamic forces, and a complete Java API for FRC teams.
 
 ## What's Included
 
@@ -44,9 +44,9 @@ cd vendordep
 ## Java Usage Example
 
 ```java
-import rensim.PhysicsWorld;
-import rensim.PhysicsBody;
-import rensim.Vec3;
+import jsim.PhysicsWorld;
+import jsim.PhysicsBody;
+import jsim.Vec3;
 
 try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
     // Create a 1 kg body at (0, 0, 1) m

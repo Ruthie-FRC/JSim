@@ -1,11 +1,11 @@
-# Jsim Physics Library
+# JSim Physics Library
 
 [![CI](https://github.com/Ruthie-FRC/JSim/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/ci.yml)
-[![Deploy to rensim.dev](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy-mkdocs.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy-mkdocs.yml)
+[![Deploy to jsim.dev](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy-mkdocs.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy-mkdocs.yml)
 [![License](https://img.shields.io/github/license/Ruthie-FRC/JSim)](LICENSE.txt)
 [![Open Issues](https://img.shields.io/github/issues/Ruthie-FRC/JSim)](https://github.com/Ruthie-FRC/JSim/issues)
 
-Jsim is an open source, modular FRC physics library for simulation, analysis, and robotics workflow integration.
+JSim is an open source, modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
 ## Overview
 
@@ -15,7 +15,7 @@ This repository is organized as a monorepo containing the core simulation engine
 
 ## Vendordep URL
 ```
-https://rensim.dev/JSim.json
+https://jsim.dev/JSim.json
 ```
 
 ### Build and Test (Gradle)
@@ -77,9 +77,9 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 
 - Docs source: `mkdocs/docs/`
 - MkDocs config: `mkdocs/mkdocs.yml`
-- Deployed docs: https://rensim.dev
-- Java API (Javadocs): https://rensim.dev/api/javadoc/
-- Native API (Doxygen): https://rensim.dev/api/doxygen/html/
+- Deployed docs: https://jsim.dev
+- Java API (Javadocs): https://jsim.dev/api/javadoc/
+- Native API (Doxygen): https://jsim.dev/api/doxygen/html/
 
 ## Contributing
 

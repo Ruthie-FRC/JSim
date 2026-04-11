@@ -7,7 +7,7 @@ ext.licenseFile = files("$rootDir/../LICENSE.txt")
 
 def templateVendorFile = "JSim.json"
 
-def artifactGroupId = 'rensim'
+def artifactGroupId = 'jsim'
 def baseArtifactId = 'JSim'
 
 def outputsFolder = file("$buildDir/outputs")
@@ -48,9 +48,9 @@ ext.addTaskToCopyAllOutputs = { task ->
     copyAllOutputs.from(task.archiveFile)
 }
 
-def driverZipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-driver_CLS"
-def zipBaseName = "_GROUP_rensim_ID_${baseArtifactId}-cpp_CLS"
-def javaBaseName = "_GROUP_rensim_ID_${baseArtifactId}-java_CLS"
+def driverZipBaseName = "_GROUP_jsim_ID_${baseArtifactId}-driver_CLS"
+def zipBaseName = "_GROUP_jsim_ID_${baseArtifactId}-cpp_CLS"
+def javaBaseName = "_GROUP_jsim_ID_${baseArtifactId}-java_CLS"
 
 task cppHeadersZip(type: Zip) {
     destinationDirectory = outputsFolder

@@ -1,6 +1,6 @@
-# Deploy Vendordep and MkDocs docs to rensim.dev
+# Deploy Vendordep and MkDocs docs to jsim.dev
 
-name: Deploy vendordep and docs to rensim.dev
+name: Deploy vendordep and docs to jsim.dev
 
 on:
   workflow_dispatch:
