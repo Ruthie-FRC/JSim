@@ -12,17 +12,46 @@
 namespace frcsim::detail {
 
 constexpr double kJointEpsilon = 1e-9;
-constexpr double kPi = 3.14159265358979323846;
+inline const double kPi = std::acos(-1.0);
 
+/**
+ * @brief Converts a body-local anchor point into world space.
+ * @param body Rigid body that owns the anchor.
+ * @param local_anchor Anchor position expressed in the body's local coordinate
+ *        frame, in meters.
+ * @return World-space anchor point obtained by rotating the local offset by
+ *         the body orientation and adding the body position.
+ */
 inline Vector3 worldAnchor(const RigidBody* body,
                            const Vector3& local_anchor) {
   return body->position() + body->orientation().rotate(local_anchor);
 }
 
+/**
+ * @brief Clamps a scalar into a closed range.
+ * @param value Input value.
+ * @param min_value Lower bound.
+ * @param max_value Upper bound.
+ * @return value constrained to [min_value, max_value].
+ */
 inline double clampValue(double value, double min_value, double max_value) {
   return std::max(min_value, std::min(value, max_value));
 }
 
+/**
+ * @brief Applies a positional correction split across two bodies by mass.
+ *
+ * The correction is distributed using inverse mass so lighter bodies move
+ * more than heavier bodies. Kinematic bodies are treated as immovable and
+ * therefore receive no positional update.
+ *
+ * @param body_a First rigid body to correct.
+ * @param body_b Second rigid body to correct.
+ * @param error World-space position error vector in meters that should be
+ *        removed.
+ * @param gain Fraction of the error to resolve this step, typically in the
+ *        range [0, 1].
+ */
 inline void applyPositionCorrection(RigidBody* body_a, RigidBody* body_b,
                                     const Vector3& error, double gain) {
   const double inv_a =
@@ -44,6 +73,19 @@ inline void applyPositionCorrection(RigidBody* body_a, RigidBody* body_b,
   }
 }
 
+/**
+ * @brief Applies a velocity-space correction split across two bodies by mass.
+ *
+ * This is the velocity analogue of applyPositionCorrection(): the supplied
+ * relative velocity impulse is divided by inverse mass so the lighter body
+ * receives the larger change. Kinematic bodies are left unchanged.
+ *
+ * @param body_a First rigid body to correct.
+ * @param body_b Second rigid body to correct.
+ * @param relative_velocity World-space relative velocity vector in meters per
+ *        second to reduce.
+ * @param gain Fraction of the velocity error to resolve this step.
+ */
 inline void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
                                     const Vector3& relative_velocity,
                                     double gain) {
@@ -66,6 +108,15 @@ inline void applyVelocityCorrection(RigidBody* body_a, RigidBody* body_b,
   }
 }
 
+/**
+ * @brief Rotates a local axis into world space and falls back if needed.
+ * @param body Body whose orientation defines the local axis transform.
+ * @param local_axis Axis in the body's local coordinate frame, treated as a
+ *        direction vector rather than a position and therefore unitless.
+ * @param fallback_axis World-space fallback direction, also unitless.
+ * @return Normalized world-space axis, or fallback_axis if the rotated axis
+ *         collapses to zero length.
+ */
 inline Vector3 worldAxisOrFallback(const RigidBody* body,
                                    const Vector3& local_axis,
                                    const Vector3& fallback_axis) {
@@ -73,6 +124,31 @@ inline Vector3 worldAxisOrFallback(const RigidBody* body,
   return axis_world.isZero() ? fallback_axis : axis_world;
 }
 
+/**
+ * @brief Computes the signed twist between two orientations about an axis.
+ *
+ * The helper compares qb against qa, extracts the shortest relative rotation,
+ * and projects that rotation onto axis_world using the right-hand rule. The
+ * return value is a signed angle in radians: its magnitude is the amount of
+ * twist, and its sign indicates whether the target orientation rotates in the
+ * positive or negative direction about the supplied axis.
+ *
+ * The intent is to match the coordinate conventions used throughout WPILib:
+ * a right-handed field frame with +X downfield, +Y left/right across the
+ * field depending on alliance perspective, and +Z upward. That convention is
+ * documented here:
+ * https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
+ *
+ * Keep qa, qb, and axis_world in the same world frame when calling this
+ * helper. If axis_world is degenerate, the normalized axis collapses toward
+ * zero and the returned signed twist likewise tends toward zero.
+ *
+ * @param qa Reference orientation.
+ * @param qb Target orientation to compare against qa.
+ * @param axis_world World-space rotation axis, expressed as a unit direction
+ *        vector when possible.
+ * @return Signed twist angle in radians about axis_world.
+ */
 inline double signedTwistAngleRad(const Quaternion& qa, const Quaternion& qb,
                                   const Vector3& axis_world) {
   Quaternion q_rel = qb * qa.inverse();
