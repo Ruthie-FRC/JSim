@@ -280,12 +280,10 @@ class Field2025Definition:
 
 
 class Field2026Definition:
-    """2026 FRC Field Definition - Rebuilt Game.
-    
-    2026 FRC has a rebuilt field with unique layout and game elements.
-    Update this definition with specific field dimensions and elements
-    when the final game specifications are released.
-    
+    """2026 FRC Field Definition - REBUILT
+
+    I'm using placeholder values here for now because I'm lazy.
+        
     Default dimensions: 16.54m x 8.21m (54 x 27 feet)
     """
     
@@ -300,7 +298,7 @@ class Field2026Definition:
         """
         return {
             "year": 2026,
-            "game": "2026 Game (TBD)",
+            "game": "2026 Game REBUILT",
             "status": "template",
             "note": "Update with official 2026 field specification",
             "field_dimensions": {
