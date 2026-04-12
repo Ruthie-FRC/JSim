@@ -25,6 +25,11 @@ int c_rsSetBodyGravityEnabled(uint64_t world_handle, int body_index,
 int c_rsSetBodyMaterial(uint64_t world_handle, int body_index,
                         double restitution, double friction_kinetic,
                         double friction_static, double collision_damping);
+int c_rsSetBodyMaterialId(uint64_t world_handle, int body_index,
+                          int32_t material_id);
+int c_rsSetBodyCollisionFilter(uint64_t world_handle, int body_index,
+                               uint32_t collision_layer_bits,
+                               uint32_t collision_mask_bits);
 int c_rsSetBodyAerodynamicSphere(uint64_t world_handle, int body_index,
                                  double radius_m, double drag_coefficient);
 int c_rsSetBodyAerodynamicBox(uint64_t world_handle, int body_index,
@@ -36,6 +41,9 @@ int c_rsSetWorldAerodynamics(uint64_t world_handle, int enabled,
                              double magnus_coefficient,
                              double default_drag_coefficient,
                              double default_drag_reference_area_m2);
+int c_rsSetMaterialInteraction(uint64_t world_handle, int32_t material_a_id,
+                               int32_t material_b_id, double restitution,
+                               double friction, int enabled);
 
 int c_rsStepWorld(uint64_t world_handle, int steps);
 int c_rsSetWorldGravity(uint64_t world_handle, double gx_mps2,

@@ -44,6 +44,54 @@ void PhysicsWorld::addGlobalForceGenerator(
   }
 }
 
+void PhysicsWorld::setMaterialInteraction(
+    const MaterialInteraction& interaction) {
+  const std::int32_t a = std::min(interaction.material_a_id,
+                                  interaction.material_b_id);
+  const std::int32_t b = std::max(interaction.material_a_id,
+                                  interaction.material_b_id);
+  for (auto& existing : material_interactions_) {
+    const std::int32_t ea = std::min(existing.material_a_id,
+                                     existing.material_b_id);
+    const std::int32_t eb = std::max(existing.material_a_id,
+                                     existing.material_b_id);
+    if (ea == a && eb == b) {
+      existing = interaction;
+      return;
+    }
+  }
+  material_interactions_.push_back(interaction);
+}
+
+void PhysicsWorld::clearMaterialInteractions() {
+  material_interactions_.clear();
+}
+
+bool PhysicsWorld::shouldInteract(std::uint32_t layer_a, std::uint32_t mask_a,
+                                  std::uint32_t layer_b,
+                                  std::uint32_t mask_b) const {
+  return ((layer_a & mask_b) != 0u) && ((layer_b & mask_a) != 0u);
+}
+
+const PhysicsWorld::MaterialInteraction* PhysicsWorld::findMaterialInteraction(
+    std::int32_t material_a_id, std::int32_t material_b_id) const {
+  const std::int32_t a = std::min(material_a_id, material_b_id);
+  const std::int32_t b = std::max(material_a_id, material_b_id);
+  for (const auto& interaction : material_interactions_) {
+    if (!interaction.enabled) {
+      continue;
+    }
+    const std::int32_t ia =
+        std::min(interaction.material_a_id, interaction.material_b_id);
+    const std::int32_t ib =
+        std::max(interaction.material_a_id, interaction.material_b_id);
+    if (ia == a && ib == b) {
+      return &interaction;
+    }
+  }
+  return nullptr;
+}
+
 void PhysicsWorld::step() {
   const double dt_s = config_.fixed_dt_s;
 
@@ -60,6 +108,12 @@ void PhysicsWorld::step() {
 
     for (const auto& boundary : boundaries_) {
       if (!boundary.is_active) {
+        continue;
+      }
+
+      if (!shouldInteract(body.collisionLayer(), body.collisionMask(),
+                          boundary.collision_layer_bits,
+                          boundary.collision_mask_bits)) {
         continue;
       }
 
@@ -120,10 +174,16 @@ void PhysicsWorld::step() {
         continue;
       }
 
-      const double restitution = std::clamp(
+        double restitution = std::clamp(
           0.5 * (boundary.restitution + body_restitution), 0.0, 1.0);
-      const double friction =
+        double friction =
           std::max(0.0, 0.5 * (boundary.friction_coefficient + body_mu_kinetic));
+
+        if (const auto* pair =
+            findMaterialInteraction(body.materialId(), boundary.material_id)) {
+        restitution = std::clamp(pair->restitution, 0.0, 1.0);
+        friction = std::max(0.0, pair->friction);
+        }
 
       const Vector3 v_normal = contact_normal_world * vn;
       const Vector3 v_tangent = velocity - v_normal;
