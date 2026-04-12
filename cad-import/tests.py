@@ -32,7 +32,7 @@ def test_accuracy_levels():
     """Test accuracy level configurations."""
     print("\nTesting accuracy levels...")
     try:
-        from cad_import import AccuracyLevel, ACCURACY_CONFIGS
+        from config import AccuracyLevel, ACCURACY_CONFIGS
         
         assert AccuracyLevel.HIGH.value == "high"
         assert AccuracyLevel.MEDIUM.value == "medium"
@@ -55,7 +55,8 @@ def test_materials():
     """Test material system."""
     print("\nTesting material system...")
     try:
-        from cad_import import MaterialSystem, DEFAULT_MATERIAL, MATERIALS
+        from materials import MaterialSystem
+        from config import DEFAULT_MATERIAL, MATERIALS
         
         # Test built-in materials
         assert "aluminum" in MATERIALS
@@ -100,7 +101,7 @@ def test_components_and_joints():
     """Test component and joint classes."""
     print("\nTesting components and joints...")
     try:
-        from cad_import import Component, Joint, MechanismType
+        from mechanisms import Component, Joint, MechanismType
         
         # Test component
         comp = Component(
@@ -137,7 +138,7 @@ def test_grouped_mechanism():
     """Test grouped mechanism class."""
     print("\nTesting grouped mechanisms...")
     try:
-        from cad_import import (
+        from mechanisms import (
             Component,
             Joint,
             GroupedMechanism,
@@ -198,7 +199,8 @@ def test_mechanism_extractor():
     """Test mechanism extractor."""
     print("\nTesting mechanism extractor...")
     try:
-        from cad_import import MechanismExtractor, AccuracyLevel
+        from mechanisms import MechanismExtractor
+        from config import AccuracyLevel
         
         extractor = MechanismExtractor()
         
@@ -248,7 +250,8 @@ def test_importer():
     """Test CAD importer."""
     print("\nTesting CAD importer...")
     try:
-        from cad_import import OnShapeCADImporter, AccuracyLevel
+        from importer import OnShapeCADImporter
+        from config import AccuracyLevel
         
         # Create importer
         importer = OnShapeCADImporter(AccuracyLevel.MEDIUM)
@@ -296,8 +299,8 @@ def test_exporter():
     """Test CAD exporter."""
     print("\nTesting CAD exporter...")
     try:
-        from cad_import import (
-            CADExporter,
+        from exporter import CADExporter
+        from mechanisms import (
             Component,
             Joint,
             GroupedMechanism,
