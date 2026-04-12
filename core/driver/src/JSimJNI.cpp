@@ -138,6 +138,37 @@ Java_jsim_jni_JSimJNI_setBodyMaterial
 
 /*
  * Class:     jsim_jni_JSimJNI
+ * Method:    setBodyMaterialId
+ * Signature: (JII)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBodyMaterialId
+  (JNIEnv*, jclass, jlong world_handle, jint body_index, jint material_id)
+{
+  return static_cast<jint>(
+      c_rsSetBodyMaterialId(static_cast<uint64_t>(world_handle), body_index,
+                            static_cast<int32_t>(material_id)));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setBodyCollisionFilter
+ * Signature: (JIII)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBodyCollisionFilter
+  (JNIEnv*, jclass, jlong world_handle, jint body_index,
+   jint collision_layer_bits, jint collision_mask_bits)
+{
+  return static_cast<jint>(
+      c_rsSetBodyCollisionFilter(static_cast<uint64_t>(world_handle),
+                                 body_index,
+                                 static_cast<uint32_t>(collision_layer_bits),
+                                 static_cast<uint32_t>(collision_mask_bits)));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
  * Method:    setBodyAerodynamicSphere
  * Signature: (JIDD)I
  */
@@ -199,6 +230,24 @@ Java_jsim_jni_JSimJNI_setWorldAerodynamics
                                linear_drag_n_per_mps, magnus_coefficient,
                                default_drag_coefficient,
                                default_drag_reference_area_m2));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setMaterialInteraction
+ * Signature: (JIIDDZ)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setMaterialInteraction
+  (JNIEnv*, jclass, jlong world_handle, jint material_a_id,
+   jint material_b_id, jdouble restitution, jdouble friction,
+   jboolean enabled)
+{
+  return static_cast<jint>(
+      c_rsSetMaterialInteraction(static_cast<uint64_t>(world_handle),
+                                 static_cast<int32_t>(material_a_id),
+                                 static_cast<int32_t>(material_b_id),
+                                 restitution, friction, enabled ? 1 : 0));
 }
 
 /*

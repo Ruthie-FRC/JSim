@@ -336,7 +336,6 @@ class FieldDefinitionManager:
     SEASONS = {
         2024: Field2024Definition,
         2025: Field2025Definition,
-        2026: Field2026Definition,
     }
     
     @staticmethod

@@ -131,6 +131,34 @@ int c_rsSetBodyMaterial(uint64_t world_handle, int body_index,
   return 0;
 }
 
+int c_rsSetBodyMaterialId(uint64_t world_handle, int body_index,
+                          int32_t material_id) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  frcsim::RigidBody* body = getBody(world, body_index);
+  if (!body) {
+    return -1;
+  }
+
+  body->setMaterialId(material_id);
+  return 0;
+}
+
+int c_rsSetBodyCollisionFilter(uint64_t world_handle, int body_index,
+                               uint32_t collision_layer_bits,
+                               uint32_t collision_mask_bits) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  frcsim::RigidBody* body = getBody(world, body_index);
+  if (!body) {
+    return -1;
+  }
+
+  body->setCollisionLayer(collision_layer_bits);
+  body->setCollisionMask(collision_mask_bits);
+  return 0;
+}
+
 int c_rsSetBodyAerodynamicSphere(uint64_t world_handle, int body_index,
                                  double radius_m, double drag_coefficient) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
@@ -193,6 +221,25 @@ int c_rsSetWorldAerodynamics(uint64_t world_handle, int enabled,
   cfg.default_drag_reference_area_m2 =
       std::max(0.0, default_drag_reference_area_m2);
 
+  return 0;
+}
+
+int c_rsSetMaterialInteraction(uint64_t world_handle, int32_t material_a_id,
+                               int32_t material_b_id, double restitution,
+                               double friction, int enabled) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world) {
+    return -1;
+  }
+
+  frcsim::PhysicsWorld::MaterialInteraction interaction;
+  interaction.material_a_id = material_a_id;
+  interaction.material_b_id = material_b_id;
+  interaction.restitution = std::clamp(restitution, 0.0, 1.0);
+  interaction.friction = std::max(0.0, friction);
+  interaction.enabled = (enabled != 0);
+  world->setMaterialInteraction(interaction);
   return 0;
 }
 
