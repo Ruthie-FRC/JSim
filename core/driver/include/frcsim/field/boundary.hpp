@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "frcsim/math/quaternion.hpp"
 #include "frcsim/math/vector.hpp"
 
@@ -56,6 +58,12 @@ struct EnvironmentalBoundary {
 
   /** @brief User-defined tag for scenario-specific interaction logic. */
   int user_id{0};
+  /** @brief Numeric material identifier used by world interaction tables. */
+  std::int32_t material_id{0};
+  /** @brief Boundary collision layer bitset for broad-phase filtering. */
+  std::uint32_t collision_layer_bits{0xFFFFFFFFu};
+  /** @brief Boundary collision mask bitset for broad-phase filtering. */
+  std::uint32_t collision_mask_bits{0xFFFFFFFFu};
   /** @brief Enables or disables collisions without removing the boundary. */
   bool is_active{true};
 

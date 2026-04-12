@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <optional>
 
 #include "frcsim/math/integrators.hpp"
@@ -228,6 +229,21 @@ class RigidBody {
   const Material* material() const {
     return material_ ? &(*material_) : nullptr;
   }
+
+  /** @brief Sets numeric material identifier used by world interaction tables. */
+  void setMaterialId(std::int32_t material_id) { material_id_ = material_id; }
+  /** @brief Gets numeric material identifier used by world interaction tables. */
+  std::int32_t materialId() const { return material_id_; }
+
+  /** @brief Sets collision layer bitset used for broad interaction filtering. */
+  void setCollisionLayer(std::uint32_t layer_bits) { collision_layer_bits_ = layer_bits; }
+  /** @brief Gets collision layer bitset. */
+  std::uint32_t collisionLayer() const { return collision_layer_bits_; }
+
+  /** @brief Sets collision mask bitset used for broad interaction filtering. */
+  void setCollisionMask(std::uint32_t mask_bits) { collision_mask_bits_ = mask_bits; }
+  /** @brief Gets collision mask bitset. */
+  std::uint32_t collisionMask() const { return collision_mask_bits_; }
 
   /** @brief Sets optional aerodynamic geometry metadata. */
   void setAerodynamicGeometry(const AerodynamicGeometry& geometry) {
@@ -473,6 +489,9 @@ class RigidBody {
 
   BodyFlags flags_{};
   std::optional<Material> material_{};
+  std::int32_t material_id_{0};
+  std::uint32_t collision_layer_bits_{0xFFFFFFFFu};
+  std::uint32_t collision_mask_bits_{0xFFFFFFFFu};
   std::optional<AerodynamicGeometry> aerodynamic_geometry_{};
 };
 
