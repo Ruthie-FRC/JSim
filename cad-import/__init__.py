@@ -81,7 +81,27 @@ from .advantagescope_integration import (
     AdvantageKitVisualizer,
 )
 
-__version__ = "0.2.0"
+from .physics_engine import (
+    DragCalculator,
+    FrictionCalculator,
+    CollisionPhysics,
+    PhysicsIntegrator,
+    AerodynamicProperties,
+    FrictionProperties,
+    DragModel,
+    GRAVITY,
+    AIR_DENSITY,
+)
+
+from .robot_physics import (
+    PhysicsBody,
+    MomentOfInertia,
+    BoundingBox,
+    CADToPhysicsConverter,
+    RobotPhysicsModel,
+)
+
+__version__ = "0.3.0"
 __author__ = "Ruthie-FRC"
 
 __all__ = [

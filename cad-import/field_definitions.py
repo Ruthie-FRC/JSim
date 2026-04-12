@@ -280,12 +280,13 @@ class Field2025Definition:
 
 
 class Field2026Definition:
-    """EVERGREEN 2026 field definition.
+    """2026 FRC Field Definition - Rebuilt Game.
     
-    2026 FRC Game: EVERGREEN
-    Field dimensions: 16.54m x 8.21m (54 x 27 feet)
+    2026 FRC has a rebuilt field with unique layout and game elements.
+    Update this definition with specific field dimensions and elements
+    when the final game specifications are released.
     
-    Key elements: Determined for 2026
+    Default dimensions: 16.54m x 8.21m (54 x 27 feet)
     """
     
     FIELD_LENGTH = 16.54
@@ -293,31 +294,33 @@ class Field2026Definition:
     
     @staticmethod
     def get_field_definition() -> Dict[str, Any]:
-        """Get complete field definition."""
+        """Get complete field definition for 2026.
+        
+        Note: This is a template. Update with actual 2026 field specs.
+        """
         return {
             "year": 2026,
-            "game": "EVERGREEN",
+            "game": "2026 Game (TBD)",
+            "status": "template",
+            "note": "Update with official 2026 field specification",
             "field_dimensions": {
                 "length": Field2026Definition.FIELD_LENGTH,
                 "width": Field2026Definition.FIELD_WIDTH,
             },
             "elements": [
-                # Placeholder - update when 2026 game announced
-                {
-                    "name": "placeholder_element",
-                    "type": "unknown",
-                    "pose": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "info": "2026 game not yet announced, update when available",
-                }
+                # TODO: Add 2026 field elements
+                # Examples:
+                # - Scoring zones
+                # - Platforms
+                # - Goals
+                # - Perimeter walls
             ],
-            "game_pieces": [],
+            "game_pieces": [
+                # TODO: Add 2026 game pieces
+                # Examples:
+                # - Primary game piece
+                # - Secondary game piece (if applicable)
+            ],
             "constraints": {
                 "min_robot_size": 0.15,
                 "max_robot_size": 1.20,
