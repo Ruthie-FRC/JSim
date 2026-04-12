@@ -59,7 +59,29 @@ from .exporter import (
     UniversalCADExporter,
 )
 
-__version__ = "0.1.0"
+from .arena_state import (
+    Pose3d,
+    GamePieceType,
+    GamePiece,
+    Robot,
+    FieldElement,
+    ArenaState,
+)
+
+from .field_definitions import (
+    FieldDefinitionManager,
+    Field2024Definition,
+    Field2025Definition,
+    Field2026Definition,
+)
+
+from .advantagescope_integration import (
+    AdvantageeScopeExporter,
+    NetworkTablesKeyFormat,
+    AdvantageKitVisualizer,
+)
+
+__version__ = "0.2.0"
 __author__ = "Ruthie-FRC"
 
 __all__ = [
