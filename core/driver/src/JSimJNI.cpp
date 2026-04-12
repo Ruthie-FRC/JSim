@@ -121,6 +121,53 @@ Java_jsim_jni_JSimJNI_setBodyGravityEnabled
 
 /*
  * Class:     jsim_jni_JSimJNI
+ * Method:    setBodyMaterial
+ * Signature: (JIDDDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBodyMaterial
+  (JNIEnv*, jclass, jlong world_handle, jint body_index,
+   jdouble restitution, jdouble friction_kinetic, jdouble friction_static,
+   jdouble collision_damping)
+{
+  return static_cast<jint>(
+      c_rsSetBodyMaterial(static_cast<uint64_t>(world_handle), body_index,
+                          restitution, friction_kinetic, friction_static,
+                          collision_damping));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setBodyAerodynamicSphere
+ * Signature: (JIDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBodyAerodynamicSphere
+  (JNIEnv*, jclass, jlong world_handle, jint body_index, jdouble radius_m,
+   jdouble drag_coefficient)
+{
+  return static_cast<jint>(
+      c_rsSetBodyAerodynamicSphere(static_cast<uint64_t>(world_handle),
+                                   body_index, radius_m, drag_coefficient));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setBodyAerodynamicBox
+ * Signature: (JIDDDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBodyAerodynamicBox
+  (JNIEnv*, jclass, jlong world_handle, jint body_index, jdouble x_m,
+   jdouble y_m, jdouble z_m, jdouble drag_coefficient)
+{
+  return static_cast<jint>(
+      c_rsSetBodyAerodynamicBox(static_cast<uint64_t>(world_handle),
+                                body_index, x_m, y_m, z_m, drag_coefficient));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
  * Method:    setWorldGravity
  * Signature: (JDDD)I
  */
@@ -132,6 +179,26 @@ Java_jsim_jni_JSimJNI_setWorldGravity
   return static_cast<jint>(
       c_rsSetWorldGravity(static_cast<uint64_t>(world_handle),
                           gx_mps2, gy_mps2, gz_mps2));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setWorldAerodynamics
+ * Signature: (JZDDDDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setWorldAerodynamics
+  (JNIEnv*, jclass, jlong world_handle, jboolean enabled,
+   jdouble air_density_kgpm3, jdouble linear_drag_n_per_mps,
+   jdouble magnus_coefficient, jdouble default_drag_coefficient,
+   jdouble default_drag_reference_area_m2)
+{
+  return static_cast<jint>(
+      c_rsSetWorldAerodynamics(static_cast<uint64_t>(world_handle),
+                               enabled ? 1 : 0, air_density_kgpm3,
+                               linear_drag_n_per_mps, magnus_coefficient,
+                               default_drag_coefficient,
+                               default_drag_reference_area_m2));
 }
 
 /*
@@ -201,4 +268,64 @@ Java_jsim_jni_JSimJNI_getBodyLinearVelocity
   jdouble values[3] = {vx, vy, vz};
   env->SetDoubleArrayRegion(out_vxyz, 0, 3, values);
   return 0;
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    getBodyPose7Array
+ * Signature: (J[D)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_getBodyPose7Array
+  (JNIEnv* env, jclass, jlong world_handle, jdoubleArray out_pose7)
+{
+  if (out_pose7 == nullptr) {
+    return -1;
+  }
+
+  const jsize len = env->GetArrayLength(out_pose7);
+  if (len < 7) {
+    return -1;
+  }
+
+  const int max_bodies = static_cast<int>(len / 7);
+  jdouble* data = env->GetDoubleArrayElements(out_pose7, nullptr);
+  if (data == nullptr) {
+    return -1;
+  }
+
+  const int rc = c_rsGetBodyPose7Array(static_cast<uint64_t>(world_handle),
+                                       data, max_bodies);
+  env->ReleaseDoubleArrayElements(out_pose7, data, 0);
+  return static_cast<jint>(rc);
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    getBodyVelocity6Array
+ * Signature: (J[D)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_getBodyVelocity6Array
+  (JNIEnv* env, jclass, jlong world_handle, jdoubleArray out_velocity6)
+{
+  if (out_velocity6 == nullptr) {
+    return -1;
+  }
+
+  const jsize len = env->GetArrayLength(out_velocity6);
+  if (len < 6) {
+    return -1;
+  }
+
+  const int max_bodies = static_cast<int>(len / 6);
+  jdouble* data = env->GetDoubleArrayElements(out_velocity6, nullptr);
+  if (data == nullptr) {
+    return -1;
+  }
+
+  const int rc = c_rsGetBodyVelocity6Array(static_cast<uint64_t>(world_handle),
+                                           data, max_bodies);
+  env->ReleaseDoubleArrayElements(out_velocity6, data, 0);
+  return static_cast<jint>(rc);
 }
