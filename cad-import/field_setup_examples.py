@@ -217,14 +217,14 @@ def example_5_export_to_advantagescope():
     # Get arena state
     state_snapshot = arena.get_state_snapshot()
     
-    # Export to NT format
-    nt_dict = AdvantageeScopeExporter.arena_to_networktables_dict(state_snapshot)
+    # Export to a plain snapshot format
+    snapshot_dict = AdvantageeScopeExporter.arena_to_snapshot_dict(state_snapshot)
     
-    print(f"✓ Generated {len(nt_dict)} NetworkTables entries")
+    print(f"✓ Generated {len(snapshot_dict)} snapshot entries")
     
     # Show sample entries
-    print("\nSample NT Entries:")
-    for i, (key, value) in enumerate(list(nt_dict.items())[:5]):
+    print("\nSample Snapshot Entries:")
+    for i, (key, value) in enumerate(list(snapshot_dict.items())[:5]):
         print(f"  {key}: {value}")
 
 
@@ -320,7 +320,7 @@ Guidelines for high-frequency updates (20ms+):
    ✓ Store field_length, field_width at init
    ✓ Avoid dictionary lookups in tight loops
    
-6. BATCH NETWORKTABLES UPDATES
+6. BATCH VISUALIZATION UPDATES
    ✓ Collect pose updates, publish once per cycle
    ✗ Publish each robot pose separately
     """
@@ -358,7 +358,7 @@ with arena._lock:
 
 # Export once per cycle
 state = arena.get_state_snapshot()
-AdvantageeScopeExporter.export_to_nt_json(state, output_path)
+AdvantageeScopeExporter.export_snapshot_json(state, output_path)
     '''
     
     print("Efficient Update Loop Example:")

@@ -72,84 +72,19 @@ class AdvantageeScopeExporter:
     
     @staticmethod
     def arena_to_networktables_dict(arena_state: Dict[str, Any]) -> Dict[str, Any]:
-        """Convert arena state to NetworkTables-compatible dictionary.
+        """Backward-compatible alias for the plain arena snapshot.
         
         Args:
             arena_state: Arena state snapshot
         
         Returns:
-            Dictionary with NT key-value pairs
+            Tool-agnostic arena snapshot dictionary
         """
-        nt_dict = {}
-        
-        # Arena state
-        nt_dict[NetworkTablesKeyFormat.ARENA_TIME] = arena_state.get("time", 0.0)
-        nt_dict[NetworkTablesKeyFormat.ARENA_PAUSED] = arena_state.get("paused", False)
-        
-        field = arena_state.get("field", {})
-        nt_dict[NetworkTablesKeyFormat.ARENA_FIELD_LENGTH] = field.get("length", 0.0)
-        nt_dict[NetworkTablesKeyFormat.ARENA_FIELD_WIDTH] = field.get("width", 0.0)
-        
-        # Robots
-        for robot in arena_state.get("robots", []):
-            team = robot.get("team_number")
-            
-            # Pose as array [x, y, z, roll, pitch, yaw]
-            pose = robot.get("pose", {})
-            pose_array = [
-                pose.get("x", 0), pose.get("y", 0), pose.get("z", 0),
-                pose.get("roll", 0), pose.get("pitch", 0), pose.get("yaw", 0)
-            ]
-            nt_dict[NetworkTablesKeyFormat.ROBOT_POSE.format(team=team)] = pose_array
-            
-            # Velocity as dict
-            vel = robot.get("velocity", {})
-            nt_dict[NetworkTablesKeyFormat.ROBOT_VELOCITY.format(team=team)] = {
-                "x": vel.get("x", 0),
-                "y": vel.get("y", 0),
-                "z": vel.get("z", 0),
-            }
-            
-            nt_dict[NetworkTablesKeyFormat.ROBOT_ACTIVE.format(team=team)] = robot.get("active", True)
-        
-        # Game pieces
-        for piece in arena_state.get("game_pieces", []):
-            piece_id = piece.get("id")
-            
-            pose = piece.get("pose", {})
-            pose_array = [
-                pose.get("x", 0), pose.get("y", 0), pose.get("z", 0),
-                pose.get("roll", 0), pose.get("pitch", 0), pose.get("yaw", 0)
-            ]
-            nt_dict[NetworkTablesKeyFormat.GAMEPIECE_POSE.format(id=piece_id)] = pose_array
-            
-            vel = piece.get("velocity", {})
-            nt_dict[NetworkTablesKeyFormat.GAMEPIECE_VELOCITY.format(id=piece_id)] = {
-                "x": vel.get("x", 0),
-                "y": vel.get("y", 0),
-                "z": vel.get("z", 0),
-            }
-            
-            nt_dict[NetworkTablesKeyFormat.GAMEPIECE_TYPE.format(id=piece_id)] = piece.get("type", "unknown")
-            nt_dict[NetworkTablesKeyFormat.GAMEPIECE_ACTIVE.format(id=piece_id)] = piece.get("active", True)
-        
-        # Field elements
-        for element in arena_state.get("field_elements", []):
-            name = element.get("name")
-            
-            pose = element.get("pose", {})
-            pose_array = [
-                pose.get("x", 0), pose.get("y", 0), pose.get("z", 0),
-                pose.get("roll", 0), pose.get("pitch", 0), pose.get("yaw", 0)
-            ]
-            nt_dict[NetworkTablesKeyFormat.ELEMENT_POSE.format(name=name)] = pose_array
-            nt_dict[NetworkTablesKeyFormat.ELEMENT_TYPE.format(name=name)] = element.get("type", "unknown")
-        
-        return nt_dict
+        return AdvantageeScopeExporter.arena_to_snapshot_dict(arena_state)
     
     @staticmethod
     def export_to_nt_json(arena_state: Dict[str, Any], output_path: str) -> bool:
-        """Export arena state to JSON suitable for NetworkTables.
+        """Legacy alias for exporting the plain arena snapshot JSON.
         
         Args:
             arena_state: Arena state snapshot
@@ -159,15 +94,15 @@ class AdvantageeScopeExporter:
             True if successful
         """
         try:
-            nt_dict = AdvantageeScopeExporter.arena_to_networktables_dict(arena_state)
+            snapshot = AdvantageeScopeExporter.arena_to_snapshot_dict(arena_state)
             
             with open(output_path, 'w') as f:
-                json.dump(nt_dict, f, indent=2)
+                json.dump(snapshot, f, indent=2)
             
-            logger.info(f"Exported {len(nt_dict)} NT entries to {output_path}")
+            logger.info(f"Exported JSim snapshot to {output_path}")
             return True
         except Exception as e:
-            logger.error(f"Failed to export to NT JSON: {e}")
+            logger.error(f"Failed to export snapshot JSON: {e}")
             return False
 
     @staticmethod
