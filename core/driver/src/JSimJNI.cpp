@@ -350,7 +350,6 @@ Java_jsim_jni_JSimJNI_getBodyPose7Array
   env->ReleaseDoubleArrayElements(out_pose7, data, 0);
   return static_cast<jint>(rc);
 }
-}  // extern "C"
 /*
  * Class:     jsim_jni_JSimJNI
  * Method:    getBodyVelocity6Array
