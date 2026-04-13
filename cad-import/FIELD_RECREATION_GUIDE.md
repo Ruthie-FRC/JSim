@@ -2,8 +2,6 @@
 
 Complete guide for recreating FRC field definitions and game elements for JSim each season.
 
-From [Issue #45](https://github.com/Ruthie-FRC/JSim/issues/45): Every season you will need to recreate a season arena and game elements. This guide provides extensive examples of how to do this.
-
 ## Quick Start
 
 ### 1. Load Existing Field Definition
@@ -62,13 +60,19 @@ note = GamePiece(
 arena.add_game_piece(note)
 ```
 
-### 4. Export to AdvantageScope
+### 4. Export JSim Snapshot (Default)
 
 ```python
 from advantagescope_integration import AdvantageeScopeExporter
 
 state = arena.get_state_snapshot()
-AdvantageeScopeExporter.export_to_nt_json(state, "arena.json")
+AdvantageeScopeExporter.export_snapshot_json(state, "arena_snapshot.json")
+```
+
+Optional adapter export for NetworkTables-oriented viewers:
+
+```python
+AdvantageeScopeExporter.export_to_nt_json(state, "arena_nt.json")
 ```
 
 ## Seasonal Workflow
@@ -223,21 +227,24 @@ arena.step(dt=0.02)
 state = arena.get_state_snapshot()
 ```
 
-### AdvantageScope Integration
+### Visualization Integration
 
-Modern visualization via NetworkTables with **Pose3d** updates:
+JSim should own arena state tracking. Visualization tools consume the JSim snapshot:
 
 ```python
-# Java robot code
-Logger.recordOutput("/jsim/robot/pose", currentPose3d);
-Logger.recordOutput("/jsim/game_pieces/poses", gamePiecePoses);
+# Default: tool-agnostic snapshot
+state = arena.get_state_snapshot()
+AdvantageeScopeExporter.export_snapshot_json(state, "arena_snapshot.json")
+
+# Optional: NetworkTables-style adapter
+AdvantageeScopeExporter.export_to_nt_json(state, "arena_nt.json")
 ```
 
 **Key advantages:**
 - Updates at 20ms intervals for smooth visualization
-- Thread-safe via locks
+- JSim is the single source of truth for state
 - Minimal performance impact
-- Compatible with AdvantageKit logging
+- Optional adapters for NetworkTables or logging stacks
 
 ### Game Piece Types
 
@@ -412,13 +419,13 @@ for update in updates:
     arena.update_robot_pose(team, pose, velocity)
 ```
 
-### Slow NetworkTables Updates
+### Slow Visualization Updates
 
-**Issue:** Visualizer lag in AdvantageScope
+**Issue:** Visualizer lag in your chosen viewer
 
 **Solution:** 
 1. Reduce update frequency (20ms minimum)
-2. Batch NT updates
+2. Batch adapter exports
 3. Reduce number of game pieces being tracked
 
 ```python
@@ -433,7 +440,6 @@ if frame_count % (50 / 20) == 0:
 - [Field Definitions](field_definitions.py)
 - [AdvantageScope Integration](advantagescope_integration.py)
 - [Field Setup Examples](field_setup_examples.py)
-- [AdvantageKit Example](https://github.com/Mechanical-Advantage/AdvantageKit/)
 
 ## Example Timeline: 2026 Season
 
@@ -448,7 +454,7 @@ if frame_count % (50 / 20) == 0:
 ### May 2026 (Pre-Season)
 
 ✓ Test field setup with example teams  
-✓ Generate AdvantageKit integration code  
+✓ Generate optional visualization adapters as needed  
 ✓ Create season-specific documentation  
 
 ### June 2026 (Build Season)

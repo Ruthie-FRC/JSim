@@ -4,8 +4,6 @@ JSim CAD Import System
 Comprehensive CAD import framework for FRC robot and field simulations.
 Supports OnShape exports (glTF), multiple accuracy levels, and grouped mechanisms.
 
-From Discussion #36: Focus on grouped mechanisms, not individual components.
-
 Example Usage:
 
     from cad_import import OnShapeCADImporter, AccuracyLevel, ExportFormat
@@ -82,7 +80,7 @@ from .advantagescope_integration import (
 )
 
 __version__ = "0.2.0"
-__author__ = "Ruthie-FRC"
+__author__ = "JSim"
 
 __all__ = [
     # Configuration

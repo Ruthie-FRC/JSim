@@ -3,8 +3,6 @@ Season-specific field definitions for JSim.
 
 Contains comprehensive examples of how to define and recreate each FRC season's
 field elements, constraints, and interactions.
-
-From Issue #45: Each season you need to recreate the arena and game elements.
 This module provides templates and examples for quick season setup.
 """
 

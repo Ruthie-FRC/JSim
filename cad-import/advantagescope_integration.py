@@ -1,14 +1,15 @@
 """
-AdvantageScope integration for JSim arena visualization.
+Optional visualization adapters for JSim arena snapshots.
 
-Provides utilities to export arena state to NetworkTables format compatible
-with AdvantageScope for real-time visualization of:
+JSim's arena state should be the source of truth. This module provides
+adapter utilities to export a state snapshot into formats that external
+visualization tools can consume, including NetworkTables-style keys.
+
+Supports:
 - Robot poses
 - Game piece positions
 - Field elements
-- Material interactions
-
-From Issue #45: Integration with AdvantageScope using Pose3d structs at 20ms+ refresh rate.
+- Generic JSON snapshot export
 """
 
 import json
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class NetworkTablesKeyFormat:
-    """Standard NetworkTables key formats for ASC ope integration."""
+    """Standard NetworkTables key formats for adapter-based integration."""
     
     # Root path for JSim simulation
     ROOT = "/jsim"
@@ -48,7 +49,26 @@ class NetworkTablesKeyFormat:
 
 
 class AdvantageeScopeExporter:
-    """Exports arena state to AdvantageScope-compatible formats."""
+    """Exports arena state to optional visualization formats."""
+
+    @staticmethod
+    def arena_to_snapshot_dict(arena_state: Dict[str, Any]) -> Dict[str, Any]:
+        """Return a minimal tool-agnostic snapshot dictionary.
+
+        Args:
+            arena_state: Arena state snapshot
+
+        Returns:
+            Dictionary preserving JSim-oriented state structure
+        """
+        return {
+            "time": arena_state.get("time", 0.0),
+            "paused": arena_state.get("paused", False),
+            "field": arena_state.get("field", {}),
+            "robots": arena_state.get("robots", []),
+            "game_pieces": arena_state.get("game_pieces", []),
+            "field_elements": arena_state.get("field_elements", []),
+        }
     
     @staticmethod
     def arena_to_networktables_dict(arena_state: Dict[str, Any]) -> Dict[str, Any]:
@@ -150,9 +170,34 @@ class AdvantageeScopeExporter:
             logger.error(f"Failed to export to NT JSON: {e}")
             return False
 
+    @staticmethod
+    def export_snapshot_json(arena_state: Dict[str, Any], output_path: str) -> bool:
+        """Export a tool-agnostic snapshot JSON.
+
+        This is the recommended default export for integrations.
+
+        Args:
+            arena_state: Arena state snapshot
+            output_path: Path to output JSON
+
+        Returns:
+            True if successful
+        """
+        try:
+            snapshot = AdvantageeScopeExporter.arena_to_snapshot_dict(arena_state)
+
+            with open(output_path, 'w') as f:
+                json.dump(snapshot, f, indent=2)
+
+            logger.info(f"Exported JSim snapshot to {output_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to export snapshot JSON: {e}")
+            return False
+
 
 class AdvantageKitVisualizer:
-    """Generates code for AdvantageKit integration with JSim.
+    """Generates optional code for AdvantageKit integration with JSim.
     
     Produces Java code that can be used in robot code to visualize
     JSim simulation data in AdvantageScope.
@@ -188,7 +233,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Auto-generated visualizer for JSim game pieces in {game_year}.
+    * OPTIONAL: Auto-generated visualizer for JSim game pieces in {game_year}.
  * Publishes game piece poses to AdvantageScope via NetworkTables.
  */
 public class GamePieceVisualizer {{
@@ -206,13 +251,12 @@ public class GamePieceVisualizer {{
         // Create array of poses for AdvantageScope
         Pose3d[] poses = gamePieces.toArray(new Pose3d[0]);
         
-        // Logger automatically publishes to NetworkTables
+        // Optional AdvantageKit logger integration.
         Logger.recordOutput(NT_ROOT + "/poses", poses);
     }}
     
     /**
-     * Update robot poses for visualization.
-     * Automatically handled by WPILib odometry, but can be custom.
+     * Optional robot pose output for visualization.
      */
     public static void updateRobotPose(Pose3d robotPose) {{
         Logger.recordOutput("/jsim/robot/pose", robotPose);
@@ -262,10 +306,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
- * Utility for updating Pose3d via NetworkTables from JSim.
+ * Optional utility for updating Pose3d via NetworkTables from JSim.
  * 
  * Subscribes to JSim-published poses and updates robot state.
- * Thread-safe for high-frequency updates (20ms+).
  */
 public class JSImPose3dUpdater implements Runnable {{
     
