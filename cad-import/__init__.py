@@ -2,7 +2,7 @@
 JSim CAD Import System
 
 Comprehensive CAD import framework for FRC robot and field simulations.
-Supports OnShape exports (glTF), multiple accuracy levels, and grouped mechanisms.
+Supports OnShape STEP-based workflows (converted to glTF), multiple accuracy levels, and grouped mechanisms.
 
 Example Usage:
 
@@ -11,7 +11,7 @@ Example Usage:
     # Create importer with medium accuracy
     importer = OnShapeCADImporter(AccuracyLevel.MEDIUM)
     
-    # Import CAD from OnShape glTF export
+    # Import CAD from converted glTF (.gltf/.glb)
     importer.import_gltf("robot.gltf")
     
     # Import mechanism metadata
@@ -60,9 +60,16 @@ from .exporter import (
 from .field_definitions import (
     FieldDefinitionManager,
     Field2024Definition,
-    Field2025Definition,
-    Field2026Definition,
+    Field2025WeldedDefinition,
+    Field2025AndyMarkDefinition,
+    Field2026WeldedDefinition,
+    Field2026AndyMarkDefinition,
 )
+
+
+def get_apriltag_layout(year: int, variant: str = None):
+    """Convenience helper to fetch normalized AprilTag layout by year."""
+    return FieldDefinitionManager.get_apriltag_layout(year, variant=variant)
 
 __version__ = "0.2.0"
 __author__ = "JSim"
@@ -93,6 +100,9 @@ __all__ = [
     # Field definitions
     "FieldDefinitionManager",
     "Field2024Definition",
-    "Field2025Definition",
-    "Field2026Definition",
+    "Field2025WeldedDefinition",
+    "Field2025AndyMarkDefinition",
+    "Field2026WeldedDefinition",
+    "Field2026AndyMarkDefinition",
+    "get_apriltag_layout",
 ]

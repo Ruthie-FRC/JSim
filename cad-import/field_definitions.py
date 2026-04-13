@@ -7,323 +7,14 @@ This module provides templates and examples for quick season setup.
 """
 
 import json
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from pathlib import Path
 
-
-class Field2024Definition:
-    """CRESCENDO 2024 field definition.
-    
-    2024 FRC Game: CRESCENDO
-    Field dimensions: 16.54m x 8.21m (54 x 27 feet)
-    
-    Key elements:
-    - Stage (centerfield)
-    - Speaker amp zone (wings)
-    - Note drop zones
-    - Wings for robot positioning
-    """
-    
-    FIELD_LENGTH = 16.54  # meters
-    FIELD_WIDTH = 8.21    # meters
-    
-    @staticmethod
-    def get_field_definition() -> Dict[str, Any]:
-        """Get complete field definition as JSON-serializable dict."""
-        return {
-            "year": 2024,
-            "game": "CRESCENDO",
-            "field_dimensions": {
-                "length": Field2024Definition.FIELD_LENGTH,
-                "width": Field2024Definition.FIELD_WIDTH,
-            },
-            "elements": [
-                # Stage (center)
-                {
-                    "name": "stage_platform",
-                    "type": "platform",
-                    "pose": {
-                        "x": 8.27,
-                        "y": 4.105,
-                        "z": 0.108,  # 4.25 inches high
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 2.286,  # 7 feet 6 inches
-                        "width": 2.286,
-                        "height": 0.108,
-                    },
-                    "material": "wood",
-                    "mass": 50.0,
-                },
-                # Blue Speaker
-                {
-                    "name": "speaker_blue",
-                    "type": "goal",
-                    "pose": {
-                        "x": 0.0,
-                        "y": 4.105,
-                        "z": 2.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "opening_width": 1.05,
-                        "opening_height": 0.87,
-                    },
-                    "material": "aluminum",
-                    "mass": 100.0,
-                    "alliance": "blue",
-                },
-                # Red Speaker
-                {
-                    "name": "speaker_red",
-                    "type": "goal",
-                    "pose": {
-                        "x": 16.54,
-                        "y": 4.105,
-                        "z": 2.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 3.14159,
-                    },
-                    "dimensions": {
-                        "opening_width": 1.05,
-                        "opening_height": 0.87,
-                    },
-                    "material": "aluminum",
-                    "mass": 100.0,
-                    "alliance": "red",
-                },
-                # Amp zones
-                {
-                    "name": "amp_zone_blue",
-                    "type": "zone",
-                    "pose": {
-                        "x": 1.9,
-                        "y": 7.7,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 0.8,
-                        "width": 0.8,
-                    },
-                    "material": "painted_metal",
-                    "mass": 0.0,  # Not physical
-                },
-                {
-                    "name": "amp_zone_red",
-                    "type": "zone",
-                    "pose": {
-                        "x": 14.64,
-                        "y": 7.7,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 0.8,
-                        "width": 0.8,
-                    },
-                    "material": "painted_metal",
-                    "mass": 0.0,
-                },
-            ],
-            "game_pieces": [
-                {
-                    "type": "note",
-                    "initial_count": 5,  # Notes available on field
-                    "mass": 0.235,  # kg
-                    "material": "rubber_composite",
-                    "diameter": 0.375,  # meters
-                }
-            ],
-            "constraints": {
-                "min_robot_size": 0.15,
-                "max_robot_size": 1.20,
-                "max_robot_height": 1.90,
-                "max_robot_mass": 70.0,  # kg
-            }
-        }
-
-
-class Field2025Definition:
-    """REEFSCAPE 2025 field definition.
-    
-    2025 FRC Game: REEFSCAPE
-    Field dimensions: 16.54m x 8.21m (54 x 27 feet)
-    
-    Key elements:
-    - Coral reef structures
-    - Algae removal zones
-    - Barge zones
-    """
-    
-    FIELD_LENGTH = 16.54
-    FIELD_WIDTH = 8.21
-    
-    @staticmethod
-    def get_field_definition() -> Dict[str, Any]:
-        """Get complete field definition."""
-        return {
-            "year": 2025,
-            "game": "REEFSCAPE",
-            "field_dimensions": {
-                "length": Field2025Definition.FIELD_LENGTH,
-                "width": Field2025Definition.FIELD_WIDTH,
-            },
-            "elements": [
-                # Reefs (left)
-                {
-                    "name": "reef_left",
-                    "type": "reef",
-                    "pose": {
-                        "x": 2.5,
-                        "y": 4.105,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 2.0,
-                        "width": 2.0,
-                    },
-                    "material": "plastic",
-                    "mass": 50.0,
-                },
-                # Reefs (right)
-                {
-                    "name": "reef_right",
-                    "type": "reef",
-                    "pose": {
-                        "x": 14.04,
-                        "y": 4.105,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 2.0,
-                        "width": 2.0,
-                    },
-                    "material": "plastic",
-                    "mass": 50.0,
-                },
-                # Barge (blue)
-                {
-                    "name": "barge_blue",
-                    "type": "platform",
-                    "pose": {
-                        "x": 1.0,
-                        "y": 0.5,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 0.0,
-                    },
-                    "dimensions": {
-                        "length": 3.66,
-                        "width": 2.74,
-                    },
-                    "material": "aluminum",
-                    "mass": 100.0,
-                    "alliance": "blue",
-                },
-                # Barge (red)
-                {
-                    "name": "barge_red",
-                    "type": "platform",
-                    "pose": {
-                        "x": 15.54,
-                        "y": 7.71,
-                        "z": 0.0,
-                        "roll": 0.0,
-                        "pitch": 0.0,
-                        "yaw": 3.14159,
-                    },
-                    "dimensions": {
-                        "length": 3.66,
-                        "width": 2.74,
-                    },
-                    "material": "aluminum",
-                    "mass": 100.0,
-                    "alliance": "red",
-                },
-            ],
-            "game_pieces": [
-                {
-                    "type": "coral",
-                    "initial_count": 12,
-                    "mass": 0.567,  # kg
-                    "material": "plastic",
-                    "diameter": 0.178,
-                }
-            ],
-            "constraints": {
-                "min_robot_size": 0.15,
-                "max_robot_size": 1.20,
-                "max_robot_height": 1.90,
-                "max_robot_mass": 70.0,
-            }
-        }
-
-
-class Field2026Definition:
-    """2026 FRC Field Definition - REBUILT
-
-    I'm using placeholder values here for now because I'm lazy.
-        
-    Default dimensions: 16.54m x 8.21m (54 x 27 feet)
-    """
-    
-    FIELD_LENGTH = 16.54
-    FIELD_WIDTH = 8.21
-    
-    @staticmethod
-    def get_field_definition() -> Dict[str, Any]:
-        """Get complete field definition for 2026.
-        
-        Note: This is a template. Update with actual 2026 field specs.
-        """
-        return {
-            "year": 2026,
-            "game": "2026 Game REBUILT",
-            "status": "template",
-            "note": "Update with official 2026 field specification",
-            "field_dimensions": {
-                "length": Field2026Definition.FIELD_LENGTH,
-                "width": Field2026Definition.FIELD_WIDTH,
-            },
-            "elements": [
-                # TODO: Add 2026 field elements
-                # Examples:
-                # - Scoring zones
-                # - Platforms
-                # - Goals
-                # - Perimeter walls
-            ],
-            "game_pieces": [
-                # TODO: Add 2026 game pieces
-                # Examples:
-                # - Primary game piece
-                # - Secondary game piece (if applicable)
-            ],
-            "constraints": {
-                "min_robot_size": 0.15,
-                "max_robot_size": 1.20,
-                "max_robot_height": 1.90,
-                "max_robot_mass": 70.0,
-            }
-        }
+from .field_2024_definition import Field2024Definition
+from .field_2025_definition import Field2025WeldedDefinition
+from .field_2025_andymark_definition import Field2025AndyMarkDefinition
+from .field_2026_definition import Field2026WeldedDefinition
+from .field_2026_andymark_definition import Field2026AndyMarkDefinition
 
 
 class FieldDefinitionManager:
@@ -331,7 +22,19 @@ class FieldDefinitionManager:
     
     SEASONS = {
         2024: Field2024Definition,
-        2025: Field2025Definition,
+        2025: Field2025WeldedDefinition,
+        2026: Field2026WeldedDefinition,
+    }
+
+    FIELD_VARIANTS = {
+        2025: {
+            "welded": Field2025WeldedDefinition,
+            "andymark": Field2025AndyMarkDefinition,
+        },
+        2026: {
+            "welded": Field2026WeldedDefinition,
+            "andymark": Field2026AndyMarkDefinition,
+        }
     }
 
     @staticmethod
@@ -384,23 +87,112 @@ class FieldDefinitionManager:
                 raise ValueError(f"field_boundary vertex {i} must use numeric x/y")
 
         return normalized
+
+    @staticmethod
+    def _normalize_apriltags(field_def: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Normalize tag data into a dedicated apriltags schema.
+
+        Supports either:
+        - field_def["apriltags"] entries with `id` and `pose`
+        - field_def["tags"] entries with `ID` and `pose`
+        """
+        raw_apriltags = field_def.get("apriltags", [])
+        raw_tags = field_def.get("tags", [])
+
+        source = raw_apriltags if isinstance(raw_apriltags, list) and raw_apriltags else raw_tags
+        normalized: List[Dict[str, Any]] = []
+
+        for tag in source:
+            if not isinstance(tag, dict):
+                continue
+
+            tag_id = tag.get("id", tag.get("ID"))
+            pose = tag.get("pose", {})
+
+            if tag_id is None or not isinstance(pose, dict):
+                continue
+
+            translation = pose.get("translation", {})
+            rotation = pose.get("rotation", {})
+            quaternion = rotation.get("quaternion", {}) if isinstance(rotation, dict) else {}
+
+            try:
+                normalized.append(
+                    {
+                        "id": int(tag_id),
+                        "pose": {
+                            "translation": {
+                                "x": float(translation.get("x", 0.0)),
+                                "y": float(translation.get("y", 0.0)),
+                                "z": float(translation.get("z", 0.0)),
+                            },
+                            "rotation": {
+                                "quaternion": {
+                                    "W": float(quaternion.get("W", 1.0)),
+                                    "X": float(quaternion.get("X", 0.0)),
+                                    "Y": float(quaternion.get("Y", 0.0)),
+                                    "Z": float(quaternion.get("Z", 0.0)),
+                                }
+                            },
+                        },
+                    }
+                )
+            except (TypeError, ValueError):
+                continue
+
+        return sorted(normalized, key=lambda t: t["id"])
     
     @staticmethod
-    def get_field_definition(year: int) -> Dict[str, Any]:
+    def get_field_definition(year: int, variant: Optional[str] = None) -> Dict[str, Any]:
         """Get field definition for a given year.
         
         Args:
             year: Competition year (e.g., 2024)
+            variant: Optional field variant (e.g., "welded", "andymark")
         
         Returns:
             Field definition dictionary
         """
         if year not in FieldDefinitionManager.SEASONS:
             raise ValueError(f"No field definition for year {year}")
-        
+
         season_class = FieldDefinitionManager.SEASONS[year]
+        variants = FieldDefinitionManager.FIELD_VARIANTS.get(year, {})
+        requested_variant = (variant or "welded").lower() if variants else None
+
+        if requested_variant:
+            season_class = variants.get(requested_variant)
+            if season_class is None:
+                available = ", ".join(sorted(variants.keys())) if variants else "none"
+                raise ValueError(
+                    f"No field variant '{requested_variant}' for year {year}. Available variants: {available}"
+                )
+
         field_def = season_class.get_field_definition()
-        return FieldDefinitionManager.ensure_field_boundary(field_def)
+        normalized_field = FieldDefinitionManager.ensure_field_boundary(field_def)
+        normalized_field["apriltags"] = FieldDefinitionManager._normalize_apriltags(normalized_field)
+        return normalized_field
+
+    @staticmethod
+    def get_apriltag_layout(year: int, variant: Optional[str] = None) -> Dict[str, Any]:
+        """Get a normalized AprilTag layout for a given season.
+
+        Returns:
+            Dictionary with year, field_dimensions, and apriltags.
+        """
+        field_def = FieldDefinitionManager.get_field_definition(year, variant=variant)
+        return {
+            "year": field_def.get("year", year),
+            "field_variant": field_def.get("field_variant"),
+            "field_dimensions": field_def.get("field_dimensions", {}),
+            "apriltags": field_def.get("apriltags", []),
+        }
+
+    @staticmethod
+    def list_variants(year: int) -> List[str]:
+        """Get available field variants for a season year."""
+        variants = FieldDefinitionManager.FIELD_VARIANTS.get(year, {})
+        return sorted(variants.keys())
     
     @staticmethod
     def save_field_definition(year: int, output_path: str) -> bool:

@@ -134,7 +134,7 @@ and angled-edge polygons.
 Add seasonal field class to `field_definitions.py`:
 
 ```python
-class Field2026Definition:
+class Field2026WeldedDefinition:
     """EVERGREEN 2026 field definition."""
     
     # Keep length/width as a bounding box for quick checks.
@@ -154,7 +154,7 @@ class Field2026Definition:
 Then register in manager:
 
 ```python
-FieldDefinitionManager.SEASONS[2026] = Field2026Definition
+FieldDefinitionManager.SEASONS[2026] = Field2026WeldedDefinition
 ```
 
 ### Step 4: Define Material Properties
@@ -375,7 +375,7 @@ if frame_count % (50 / 20) == 0:
 ✓ Get official 2026 field dimensions and CAD  
 ✓ Review rebuilt field layout and unique elements  
 ✓ Create JSON field definition  
-✓ Add Field2026Definition class with actual specs  
+✓ Add Field2026WeldedDefinition class with actual specs  
 ✓ Define material properties for new field elements  
 
 ### May 2026 (Pre-Season)
