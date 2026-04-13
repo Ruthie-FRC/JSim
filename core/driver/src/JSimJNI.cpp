@@ -9,6 +9,8 @@
 
 #include "driverheader.h"
 
+extern "C" {
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
   // Check to ensure the JNI version is valid
 
@@ -348,7 +350,7 @@ Java_jsim_jni_JSimJNI_getBodyPose7Array
   env->ReleaseDoubleArrayElements(out_pose7, data, 0);
   return static_cast<jint>(rc);
 }
-
+}  // extern "C"
 /*
  * Class:     jsim_jni_JSimJNI
  * Method:    getBodyVelocity6Array
@@ -408,3 +410,5 @@ Java_jsim_jni_JSimJNI_getBodyState13Array
   env->ReleaseDoubleArrayElements(out_state13, data, 0);
   return static_cast<jint>(rc);
 }
+
+}  // extern "C"
