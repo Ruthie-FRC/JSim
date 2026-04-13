@@ -113,6 +113,8 @@ Add seasonal field class to `field_definitions.py`:
 class Field2026Definition:
     """EVERGREEN 2026 field definition."""
     
+    # Keep length/width as a bounding box for quick checks.
+    # Use field_boundary vertices for angled or non-rectangular edges.
     FIELD_LENGTH = 16.54
     FIELD_WIDTH = 8.21
     
@@ -143,7 +145,7 @@ MATERIALS = {
 }
 ```
 
-### Step 5: Create Season Setup Script
+### Step 5: Generate Season JSON (Maintainer/CI Step)
 
 ```python
 from field_definitions import FieldDefinitionManager
@@ -163,6 +165,10 @@ def setup_2026_field():
 # In vdep runtime init
 field = setup_2026_field()
 ```
+
+Teams should consume the generated JSON through vendordep/runtime APIs; this
+Python step is for maintainers/CI to produce season files, not for per-team
+runtime state tracking.
 
 ## Key Components
 
