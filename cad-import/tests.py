@@ -348,6 +348,49 @@ def test_exporter():
         return False
 
 
+def test_field_boundary_support():
+    """Test rectangle fallback and polygon boundary support."""
+    print("\nTesting field boundary support...")
+    try:
+        from field_definitions import FieldDefinitionManager
+
+        # Existing seasonal definitions should always produce a boundary.
+        field_2024 = FieldDefinitionManager.get_field_definition(2024)
+        assert "field_boundary" in field_2024
+        assert len(field_2024["field_boundary"]["vertices"]) >= 4
+
+        # Angled polygon boundaries should validate.
+        angled = {
+            "year": 2099,
+            "game": "TEST",
+            "field_dimensions": {"length": 16.54, "width": 8.21},
+            "field_boundary": {
+                "shape": "polygon",
+                "vertices": [
+                    {"x": 0.0, "y": 0.0},
+                    {"x": 16.54, "y": 0.0},
+                    {"x": 16.54, "y": 7.8},
+                    {"x": 15.9, "y": 8.21},
+                    {"x": 0.64, "y": 8.21},
+                    {"x": 0.0, "y": 7.8},
+                ],
+            },
+            "elements": [],
+            "game_pieces": [],
+        }
+        normalized = FieldDefinitionManager.ensure_field_boundary(angled)
+        assert normalized["field_boundary"]["shape"] == "polygon"
+        assert len(normalized["field_boundary"]["vertices"]) == 6
+
+        print("✓ Field boundary rectangle/polygon support works")
+        return True
+    except Exception as e:
+        print(f"✗ Field boundary support test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 def run_all_tests():
     """Run all tests."""
     print("=" * 60)
@@ -363,6 +406,7 @@ def run_all_tests():
         test_mechanism_extractor,
         test_importer,
         test_exporter,
+        test_field_boundary_support,
     ]
     
     results = []

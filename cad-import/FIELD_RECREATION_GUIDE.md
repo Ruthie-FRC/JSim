@@ -8,7 +8,22 @@ inside the vendordep/runtime layer.
 
 ## Quick Start
 
-### 1. Load Existing Field Definition
+For students/teams using JSim vendordep in robot code:
+- No separate Python script is required at runtime.
+- No separate field JSON file is required for built-in seasons.
+- Select a season year from vendordep and run.
+
+### 1. Student Runtime Path (Vendordep Built-In)
+
+```java
+import com.fasterxml.jackson.databind.JsonNode;
+import jsim.field.FieldDefinitionCatalog;
+
+JsonNode field = FieldDefinitionCatalog.loadFieldNode(2024);
+// Use field in runtime setup
+```
+
+### 2. Maintainer Path: Load Existing Field Definition
 
 ```python
 from field_definitions import FieldDefinitionManager
@@ -19,7 +34,7 @@ print(f"Game: {field_def['game']}")
 print(f"Elements: {len(field_def['elements'])}")
 ```
 
-### 2. Validate Field JSON
+### 3. Maintainer Path: Validate Field JSON
 
 ```python
 dims = field_def["field_dimensions"]
@@ -28,7 +43,7 @@ assert "elements" in field_def
 assert "game_pieces" in field_def
 ```
 
-### 3. Export JSON for Runtime Consumption
+### 4. Maintainer Path: Export JSON for Runtime Consumption
 
 ```python
 import json
@@ -37,10 +52,13 @@ with open("field_2026.json", "w") as f:
     json.dump(field_def, f, indent=2)
 ```
 
-### 4. Load in vdep/runtime
+### 5. Runtime Consumption
 
-Use the exported JSON from your vendordep runtime setup (Java/native side) so
-teams do not need to run a separate Python state-tracker process.
+Built-in seasons should be loaded by year from vendordep runtime (no extra
+field file handling by students).
+
+Generated JSON is mainly for maintainer workflows, custom events, or pre-release
+validation.
 
 ## Seasonal Workflow
 
@@ -55,6 +73,10 @@ When a new season is announced:
 
 Define the new season's field with all elements:
 
+`field_dimensions` should be treated as a bounding box. The actual playable
+shape is defined by `field_boundary.vertices`, which supports both rectangles
+and angled-edge polygons.
+
 ```json
 {
   "year": 2026,
@@ -64,14 +86,16 @@ Define the new season's field with all elements:
     "width": 8.21
     },
     "field_boundary": {
-        "shape": "rectangle",
+        "shape": "polygon",
         "vertices": [
             {"x": 0.0, "y": 0.0},
             {"x": 16.54, "y": 0.0},
-            {"x": 16.54, "y": 8.21},
-            {"x": 0.0, "y": 8.21}
+            {"x": 16.54, "y": 7.20},
+            {"x": 15.80, "y": 8.21},
+            {"x": 0.74, "y": 8.21},
+            {"x": 0.0, "y": 7.20}
         ],
-        "notes": "Use polygon vertices for seasons with angled edges or cut corners."
+        "notes": "Use 4 vertices for rectangles, or 5+ vertices for angled/cut corners."
   },
   "elements": [
     {
@@ -151,7 +175,7 @@ MATERIALS = {
 from field_definitions import FieldDefinitionManager
 import json
 
-def setup_2026_field():
+def generate_2026_field_json():
     """Create a runtime-consumable field JSON for 2026 season."""
     
     # Load field definition
@@ -162,8 +186,7 @@ def setup_2026_field():
 
     return field_def
 
-# In vdep runtime init
-field = setup_2026_field()
+generate_2026_field_json()
 ```
 
 Teams should consume the generated JSON through vendordep/runtime APIs; this
@@ -226,52 +249,37 @@ note = GamePiece(
 )
 ```
 
-## Performance Optimization (High-Frequency Updates)
+## Runtime Performance Notes
 
-For smooth 20ms+ updates, follow these guidelines:
+For smooth 20ms+ updates in vendordep/runtime, follow these guidelines:
 
 ### ✓ DO
 
-**Preallocate arrays:**
+**Preallocate runtime buffers:**
 ```python
-# Good: Create lists once
-robot_poses = [None] * 12
-for i, robot in enumerate(active_robots):
-    robot_poses[i] = robot.pose
+pose7 = [0.0] * (max_bodies * 7)
+vel6 = [0.0] * (max_bodies * 6)
 ```
 
-**Batch updates:**
+**Batch publish from runtime snapshot:**
 ```python
-# Good: Update with single lock
-with arena._lock:
-    for team, pose in batch_updates:
-        arena.update_robot_pose(team, pose, velocity)
+count = runtime.get_body_state13_array(state13)
+nt.publish(state13[:count * 13])
 ```
 
-**Reuse objects:**
+**Reuse allocations:**
 ```python
-# Good: Reuse allocation
-pose = Pose3d(0, 0, 0, 0, 0, 0)
-for step in range(1000):
-    pose.x = calculate_x()
-    # ... reuse same object
+state13 = [0.0] * (max_bodies * 13)
+# Reuse `state13` every frame instead of allocating each loop.
 ```
 
 ### ✗ DON'T
 
-**Linked lists:**
-```python
-# Bad: LinkedList is slow
-from collections import deque
-pieces = deque()  # Don't use for HF updates
-```
-
 **Allocate in loops:**
 ```python
-# Bad: Creates new list each iteration
+# Bad: Creates new array every frame
 for step in range(1000):
-    poses = []  # Allocate every iteration
-    poses.append(robot.pose)
+    state13 = [0.0] * (max_bodies * 13)
 ```
 
 **Excessive dictionary lookups:**
@@ -291,20 +299,14 @@ for _ in range(1000):
 ### Unit Tests
 
 ```python
-def test_arena_creation():
-    arena = ArenaState(16.54, 8.21)
-    assert arena.field_length == 16.54
+def test_field_boundary_schema():
+    field_def = FieldDefinitionManager.get_field_definition(2024)
+    assert "field_boundary" in field_def
+    assert len(field_def["field_boundary"]["vertices"]) >= 4
 
-def test_add_robot():
-    arena = ArenaState()
-    robot = Robot(team_number=1690, alliance="blue", pose=...)
-    assert arena.add_robot(robot)
-    assert robot.team_number in arena.robots
-
-def test_thread_safety():
-    arena = ArenaState()
-    # Concurrent updates should not crash
-    # (verified by threading tests)
+def test_polygon_boundary_supported():
+    custom = FieldDefinitionManager.ensure_field_boundary({...})
+    assert custom["field_boundary"]["shape"] in ["rectangle", "polygon"]
 ```
 
 ### Validation
@@ -316,11 +318,9 @@ assert "year" in field_def
 assert "elements" in field_def
 assert "game_pieces" in field_def
 
-# Verify arena state
-state = arena.get_state_snapshot()
-assert "robots" in state
-assert "game_pieces" in state
-assert "field_elements" in state
+# Verify boundary data exists for runtime consumption
+assert "field_boundary" in field_def
+assert "vertices" in field_def["field_boundary"]
 ```
 
 ## Troubleshooting
@@ -334,21 +334,18 @@ WARNING: Runtime capacity reached for game pieces
 **Solution:** Increase game-piece capacity in the vendordep runtime config.
 
 ```python
-self._max_game_pieces = 512  # Increase limit
+runtime.max_game_pieces = 512
 ```
 
 ### High Memory Usage
 
-**Issue:** Each update creates new objects
+**Issue:** Runtime allocates new arrays each frame
 
-**Solution:** Reuse Pose3d objects, batch updates
+**Solution:** Reuse preallocated state arrays/buffers
 
 ```python
-# Good: Reuse
-pose = Pose3d(0, 0, 0, 0, 0, 0)
-for update in updates:
-    pose.x = update.x
-    arena.update_robot_pose(team, pose, velocity)
+state13 = [0.0] * (max_bodies * 13)
+# Reuse state13 every loop iteration
 ```
 
 ### Slow Viewer Updates

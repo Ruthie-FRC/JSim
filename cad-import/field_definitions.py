@@ -333,6 +333,57 @@ class FieldDefinitionManager:
         2024: Field2024Definition,
         2025: Field2025Definition,
     }
+
+    @staticmethod
+    def _default_rect_boundary(length: float, width: float) -> Dict[str, Any]:
+        """Create a rectangular boundary polygon from dimensions."""
+        return {
+            "shape": "rectangle",
+            "vertices": [
+                {"x": 0.0, "y": 0.0},
+                {"x": float(length), "y": 0.0},
+                {"x": float(length), "y": float(width)},
+                {"x": 0.0, "y": float(width)},
+            ],
+        }
+
+    @staticmethod
+    def ensure_field_boundary(field_def: Dict[str, Any]) -> Dict[str, Any]:
+        """Ensure field_boundary exists and supports polygon/angled edges.
+
+        Rules:
+        - If field_boundary is missing, generate a rectangular polygon from
+          field_dimensions.
+        - If field_boundary is present, it must contain at least 4 vertices.
+        - Every vertex must include numeric x/y coordinates.
+        """
+        normalized = dict(field_def)
+        dims = normalized.get("field_dimensions", {})
+        length = dims.get("length")
+        width = dims.get("width")
+
+        if "field_boundary" not in normalized:
+            if length is None or width is None:
+                raise ValueError("field_dimensions must include length/width when field_boundary is omitted")
+            normalized["field_boundary"] = FieldDefinitionManager._default_rect_boundary(length, width)
+
+        boundary = normalized.get("field_boundary", {})
+        vertices = boundary.get("vertices", [])
+        if not isinstance(vertices, list) or len(vertices) < 4:
+            raise ValueError("field_boundary.vertices must contain at least 4 points")
+
+        for i, vertex in enumerate(vertices):
+            if not isinstance(vertex, dict):
+                raise ValueError(f"field_boundary vertex {i} must be an object")
+            if "x" not in vertex or "y" not in vertex:
+                raise ValueError(f"field_boundary vertex {i} must include x and y")
+            try:
+                float(vertex["x"])
+                float(vertex["y"])
+            except (TypeError, ValueError):
+                raise ValueError(f"field_boundary vertex {i} must use numeric x/y")
+
+        return normalized
     
     @staticmethod
     def get_field_definition(year: int) -> Dict[str, Any]:
@@ -348,7 +399,8 @@ class FieldDefinitionManager:
             raise ValueError(f"No field definition for year {year}")
         
         season_class = FieldDefinitionManager.SEASONS[year]
-        return season_class.get_field_definition()
+        field_def = season_class.get_field_definition()
+        return FieldDefinitionManager.ensure_field_boundary(field_def)
     
     @staticmethod
     def save_field_definition(year: int, output_path: str) -> bool:

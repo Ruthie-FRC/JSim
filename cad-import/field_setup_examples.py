@@ -15,9 +15,12 @@ from field_definitions import FieldDefinitionManager
 def print_field_summary(field_def: Dict[str, Any]) -> None:
     """Print a compact summary for a field definition."""
     dims = field_def.get("field_dimensions", {})
+    boundary = field_def.get("field_boundary", {})
+    vertices = boundary.get("vertices", [])
     print(f"Game: {field_def.get('game', 'unknown')}")
     print(f"Year: {field_def.get('year', 'unknown')}")
     print(f"Dimensions: {dims.get('length')}m x {dims.get('width')}m")
+    print(f"Boundary: {boundary.get('shape', 'unknown')} ({len(vertices)} vertices)")
     print(f"Elements: {len(field_def.get('elements', []))}")
     print(f"Game pieces: {len(field_def.get('game_pieces', []))}")
 
@@ -32,6 +35,18 @@ def validate_field_definition(field_def: Dict[str, Any]) -> None:
     dims = field_def["field_dimensions"]
     if "length" not in dims or "width" not in dims:
         raise ValueError("field_dimensions must include length and width")
+
+    boundary = field_def.get("field_boundary")
+    if boundary is None:
+        raise ValueError("field_boundary is required (rectangle or polygon vertices)")
+
+    vertices = boundary.get("vertices", [])
+    if not isinstance(vertices, list) or len(vertices) < 4:
+        raise ValueError("field_boundary.vertices must include at least 4 points")
+
+    for i, vertex in enumerate(vertices):
+        if "x" not in vertex or "y" not in vertex:
+            raise ValueError(f"field_boundary vertex {i} must include x/y")
 
 
 def example_export_all_seasons(output_dir: Path) -> None:
@@ -56,14 +71,16 @@ def example_generate_template_2026(output_file: Path) -> None:
             "width": 8.21,
         },
         "field_boundary": {
-            "shape": "rectangle",
+            "shape": "polygon",
             "vertices": [
                 {"x": 0.0, "y": 0.0},
                 {"x": 16.54, "y": 0.0},
-                {"x": 16.54, "y": 8.21},
-                {"x": 0.0, "y": 8.21},
+                {"x": 16.54, "y": 7.6},
+                {"x": 15.9, "y": 8.21},
+                {"x": 0.64, "y": 8.21},
+                {"x": 0.0, "y": 7.6},
             ],
-            "notes": "Use polygon vertices for seasons with angled or irregular edges.",
+            "notes": "Use 4 points for rectangles, or 5+ points for angled/cut edges.",
         },
         "elements": [],
         "game_pieces": [],
