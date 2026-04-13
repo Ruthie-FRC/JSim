@@ -40,9 +40,10 @@ def test_accuracy_levels():
         
         for level in AccuracyLevel:
             config = ACCURACY_CONFIGS[level]
-            assert hasattr(config, 'include_collision_detail')
-            assert hasattr(config, 'simulate_fasteners')
-            assert hasattr(config, 'min_mass_threshold')
+            assert isinstance(config, dict)
+            assert 'include_collision_detail' in config
+            assert 'simulate_fasteners' in config
+            assert 'min_mass_threshold' in config
         
         print(f"✓ All {len(AccuracyLevel)} accuracy levels configured")
         return True

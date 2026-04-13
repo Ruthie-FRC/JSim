@@ -29,7 +29,7 @@ Example Usage:
 
 from .config import (
     AccuracyLevel,
-    AccuracyConfig,
+    IMPORT_ACCURACY_PROFILES,
     ACCURACY_CONFIGS,
     MATERIALS,
     DEFAULT_MATERIAL,
@@ -70,7 +70,7 @@ __author__ = "JSim"
 __all__ = [
     # Configuration
     "AccuracyLevel",
-    "AccuracyConfig",
+    "IMPORT_ACCURACY_PROFILES",
     "ACCURACY_CONFIGS",
     "MATERIALS",
     "DEFAULT_MATERIAL",
