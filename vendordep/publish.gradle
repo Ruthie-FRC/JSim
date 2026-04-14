@@ -185,3 +185,53 @@ publishing {
         }
     }
 }
+
+model {
+    publishing {
+        def taskList = createComponentZipTasks($.components, ['JSim'], zipBaseName, Zip, project, includeStandardZipFormat)
+
+        def driverTaskList = createComponentZipTasks($.components, ['JSimDriver'], driverZipBaseName, Zip, project, includeStandardZipFormat)
+
+        publications {
+            cpp(MavenPublication) {
+                taskList.each {
+                    artifact it
+                }
+                artifact cppHeadersZip
+                artifact cppSourceZip
+
+                artifactId = "${baseArtifactId}-cpp"
+                groupId = artifactGroupId
+                version = pubVersion
+            }
+            driver(MavenPublication) {
+                driverTaskList.each {
+                    artifact it
+                }
+                artifact cppDriverHeadersZip
+
+                artifactId = "${baseArtifactId}-driver"
+                groupId = artifactGroupId
+                version = pubVersion
+            }
+
+            java(MavenPublication) {
+                artifact jar
+                artifact sourcesJar
+                artifact javadocJar
+
+                artifactId = "${baseArtifactId}-java"
+                groupId = artifactGroupId
+                version = pubVersion
+            }
+
+            vendordep(MavenPublication) {
+                artifact vendordepJsonZip
+
+                artifactId = "${baseArtifactId}-vendordep"
+                groupId = artifactGroupId
+                version = pubVersion
+            }
+        }
+    }
+}
