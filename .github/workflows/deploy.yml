@@ -217,16 +217,28 @@ jobs:
       - name: Output artifact list
         run: |
           find deploy/artifacts -type f 
-
-      - name: Prepare JSim.dev
+      - name: Add mkdocs to JSim.dev
+        run: |
+          mkdir -p deploy/artifacts/jsim.dev/mkdocs/
+          rsync -a --delete deploy/artifacts/mkdocs/*/* deploy/artifacts/jsim.dev/mkdocs/
+          find deploy/artifacts/jsim.dev/mkdocs -type f
+      - name: Add Maven to JSim.dev
         run: |
           mkdir -p deploy/artifacts/jsim.dev/maven/
-          mkdir -p deploy/artifacts/jsim.dev/api/javadocs/
-          mkdir -p deploy/artifacts/jsim.dev/doxygen/
-          rsync -a --delete deploy/artifacts/javadocs/*/* deploy/artifacts/jsim.dev/api/javadocs/
-          rsync -a --delete deploy/artifacts/doxygen/*/* deploy/artifacts/jsim.dev/api/doxygen/
           rsync -a --delete deploy/artifacts/Maven/*/* deploy/artifacts/jsim.dev/maven/
-          rsync -a --delete deploy/artifacts/mkdocs/*/* deploy/artifacts/jsim.dev/
+          find deploy/artifacts/jsim.dev/maven -type f
+      - name: Add Javadocs to JSim.dev
+        run: |
+          mkdir -p deploy/artifacts/jsim.dev/api/javadocs/
+          rsync -a --delete deploy/artifacts/javadocs/*/* deploy/artifacts/jsim.dev/api/javadocs/
+          find deploy/artifacts/jsim.dev/api/javadocs -type f
+      - name: Add Doxygen to JSim.dev
+        run: |
+          mkdir -p deploy/artifacts/jsim.dev/api/doxygen/
+          rsync -a --delete deploy/artifacts/doxygen/*/* deploy/artifacts/jsim.dev/api/doxygen/
+          find deploy/artifacts/jsim.dev/api/doxygen -type f
+      - name: Output JSim.dev tree
+        run: |
           find deploy/artifacts/jsim.dev -type f
       - name: Upload JSim artifact
         uses: actions/upload-artifact@v4
