@@ -177,7 +177,9 @@ jobs:
         with:
           path: combiner/products/build/allOutputs
       - name: Flatten Artifacts
-        run: rsync -a --delete combiner/products/build/allOutputs/*/* combiner/products/build/allOutputs/
+        run:  |
+          rsync -a --delete combiner/products/build/allOutputs/*/* combiner/products/build/allOutputs/
+          find combiner/products/build/allOutputs/ -type f -name '*-unspecified*' -exec rename 's/-unspecified//g' {} +
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -185,9 +187,8 @@ jobs:
       - name: Combine
         run: ./gradlew publish -Pthirdparty
         working-directory: combiner
-      - name: Rename Unspecified Artifacts
+      - name: Output Artifacts
         run: |
-          find ~/releases -type f -name '*-unspecified*' -exec rename 's/-unspecified//g' {} +
           find ~/releases -type f
       - uses: actions/upload-artifact@v4
         with:
