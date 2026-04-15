@@ -166,6 +166,10 @@ jobs:
     env:
       releaseVersion: ${{ inputs.releaseVersion }}
     steps:
+      - name: Install rename
+        run: |
+          sudo apt update
+          sudo apt install -y rename
       - uses: actions/checkout@v4
         with:
           repository: wpilibsuite/build-tools
@@ -183,10 +187,11 @@ jobs:
         working-directory: combiner
       - name: Rename Unspecified Artifacts
         run: |
-          sudo apt update
-          sudo apt install -y rename
           find ~/releases -type f -name '*-unspecified-*' -exec rename 's/-unspecified-/-/g' {} +
           find ~/releases -type f
+      - name: Move development artifacts to release
+        run: |
+          mv ~/releases/development ~/releases/release
       - uses: actions/upload-artifact@v4
         with:
           name: Maven
