@@ -239,4 +239,4 @@ jobs:
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
       - name: Deploy to GitHub Pages
         run: |
-          ghp-import -n -p -f deploy/artifacts
+          ghp-import -n -p -f deploy/artifacts/jsim.dev/
