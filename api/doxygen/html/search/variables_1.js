@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['ball_5fball_5fcontact_5ffriction_0',['ball_ball_contact_friction',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#a729daef359931d598a778ec87bd038dd',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fball_5fcontact_5frestitution_1',['ball_ball_contact_restitution',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#aaf4fb4f682c2bcd62f9bcc78dc023719',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fball_5frestitution_5fmin_5fscale_2',['ball_ball_restitution_min_scale',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#a7c34da38e161b1baee3d381f642f8cbd',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fball_5frestitution_5freference_5fspeed_5fmps_3',['ball_ball_restitution_reference_speed_mps',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#ad8a3e752d0c7c29675822866efbf7908',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fball_5frestitution_5fspeed_5fexponent_4',['ball_ball_restitution_speed_exponent',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#a47cc6d52b0b204de3311a96131704b4f',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fball_5fspin_5ftransfer_5fgain_5',['ball_ball_spin_transfer_gain',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#ade49af1b45795b4b9c3198e134f757ee',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['ball_5fconfig_6',['ball_config',['../structfrcsim_1_1TurretShooterSim_1_1Config.html#acb87c2b3765b945e78ceb84331e63bf3',1,'frcsim::TurretShooterSim::Config']]],
+  ['ball_5fcoupling_7',['ball_coupling',['../structfrcsim_1_1ShooterWheelSim_1_1WheelConfig.html#af18d6fba3e9f94d16825bfbf43883416',1,'frcsim::ShooterWheelSim::WheelConfig']]],
+  ['ball_5findex_8',['ball_index',['../structfrcsim_1_1IntakeSimulation_1_1ContactEvent.html#aded750cce8b27cc4de4294fec763aace',1,'frcsim::IntakeSimulation::ContactEvent']]],
+  ['ball_5fproperties_9',['ball_properties',['../structfrcsim_1_1BallGamepieceSim_1_1GamePieceInfo.html#ae2966fe1b14ce6d9ca310da6fcfc2e70',1,'frcsim::BallGamepieceSim::GamePieceInfo::ball_properties'],['../structfrcsim_1_1TurretShooterSim_1_1Config.html#ab7b94c51b0a5b0d92e1d1463c8f69479',1,'frcsim::TurretShooterSim::Config::ball_properties']]],
+  ['ballistic_5fmax_5ftime_5fs_10',['ballistic_max_time_s',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#ab68e45810dfcabeb69f9245a1f6d4d87',1,'frcsim::ShotCalculator3D::Config']]],
+  ['ballistic_5fpitch_5fgain_5fradpm_11',['ballistic_pitch_gain_radpm',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#ab6861721bafa12e9ba764842cb5a66a3',1,'frcsim::ShotCalculator3D::Config']]],
+  ['ballistic_5frefinement_5fenabled_12',['ballistic_refinement_enabled',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#aa13aca0b952ca52717f4a9cc479ee14d',1,'frcsim::ShotCalculator3D::Config']]],
+  ['ballistic_5frefinement_5fiterations_13',['ballistic_refinement_iterations',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#ad58176ff25c8b6f4728964b053ab32e6',1,'frcsim::ShotCalculator3D::Config']]],
+  ['ballistic_5fspeed_5fgain_5fmpspm_14',['ballistic_speed_gain_mpspm',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#accd39c8e289653dcd32097d145f92785',1,'frcsim::ShotCalculator3D::Config']]],
+  ['ballistic_5ftime_5fstep_5fs_15',['ballistic_time_step_s',['../structfrcsim_1_1ShotCalculator3D_1_1Config.html#a8795cea5aff67b19c0add768caf1acf2',1,'frcsim::ShotCalculator3D::Config']]],
+  ['baumgarte_5fbeta_16',['baumgarte_beta',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#aee7dca2c03b202629404fa63427d06b0',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['baumgarte_5fslop_5fm_17',['baumgarte_slop_m',['../structfrcsim_1_1BallGamepieceSim_1_1FieldConfig.html#a235718f14f228c13f97732f7e5c1b853',1,'frcsim::BallGamepieceSim::FieldConfig']]],
+  ['behavior_18',['behavior',['../structfrcsim_1_1EnvironmentalBoundary.html#ab98d49af622e105a83973e5247d12c4b',1,'frcsim::EnvironmentalBoundary']]],
+  ['body_5fa_5f_19',['body_a_',['../classfrcsim_1_1JointBase.html#ab3a82a0b206001c8c1121e4052be62ce',1,'frcsim::JointBase']]],
+  ['body_5fb_5f_20',['body_b_',['../classfrcsim_1_1JointBase.html#a3ba4ccca98e0cef55589a12bf7298006',1,'frcsim::JointBase']]],
+  ['body_5fmass_5fkg_21',['body_mass_kg',['../structfrcsim_1_1DragGravityComparison.html#a4ee40c13cdb18a964bacdce8608fa2a7',1,'frcsim::DragGravityComparison']]],
+  ['boundary_22',['boundary',['../structfrcsim_1_1FieldObstacle.html#a4ff8d627bbebb163be462a2125ef3186',1,'frcsim::FieldObstacle']]],
+  ['box_5fdimensions_5fm_23',['box_dimensions_m',['../structfrcsim_1_1RigidBody_1_1AerodynamicGeometry.html#a2c9f9d8b1c0046962d19ee1bd264020f',1,'frcsim::RigidBody::AerodynamicGeometry']]],
+  ['break_5fforce_5fthreshold_5f_24',['break_force_threshold_',['../classfrcsim_1_1JointBase.html#afc858e265482ca2c14c6f98a6bc061ad',1,'frcsim::JointBase']]]
+];
