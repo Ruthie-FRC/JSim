@@ -121,7 +121,7 @@ class CADExporter:
             mech_json["joints"].append(joint_json)
         
         return mech_json
-    
+    // TODO: document function
     def export_to_java_codegen(
         self,
         mechanisms: List[GroupedMechanism],
@@ -162,7 +162,7 @@ class CADExporter:
         except Exception as e:
             logger.error(f"Failed to export Java codegen: {e}")
             return False
-    
+    // TODO: document function
     def _generate_java_world_setup(
         self,
         mechanisms: List[GroupedMechanism],
@@ -237,7 +237,7 @@ public class {class_name} {{
         rootBody = world.addBody(MECHANISM_NAME, {mechanism.components[0].mass});
         
 """
-        
+        // TODO: document why this is commented out  
         # Generate component setup
         for component in mechanism.components[1:]:
             var_name = component.name.replace("-", "_").lower()
@@ -247,7 +247,7 @@ public class {class_name} {{
 }
 """
         return code
-    
+    // TODO: document function
     def export_to_python_dict(
         self,
         mechanisms: List[GroupedMechanism]
@@ -271,7 +271,7 @@ public class {class_name} {{
             export_dict["mechanisms"].append(mech_dict)
         
         return export_dict
-    
+    // TODO: document function    
     def export_summary_report(
         self,
         mechanisms: List[GroupedMechanism],
@@ -332,11 +332,11 @@ public class {class_name} {{
 
 class UniversalCADExporter:
     """High-level exporter supporting multiple formats."""
-    
+    // TODO: document function    
     def __init__(self, material_system: Optional[MaterialSystem] = None):
         """Initialize universal exporter."""
         self.exporter = CADExporter(material_system)
-    
+    // TODO: document function
     def export(
         self,
         mechanisms: List[GroupedMechanism],
