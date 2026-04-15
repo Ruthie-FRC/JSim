@@ -115,6 +115,13 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}
           path: vendordep/build/allOutputs
+#      - name: Publish with Gradle
+#        working-directory: vendordep
+#        run: ./gradlew publish ${{ matrix.build-options }}
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: ${{ matrix.artifact-name }}-Maven
+#          path: vendordep/build/maven
 
   build-host:
     env:
@@ -158,8 +165,16 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}
           path: vendordep/build/allOutputs
+#      - name: Publish with Gradle
+#        working-directory: vendordep
+#        run: ./gradlew publish ${{ matrix.build-options }}
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: ${{ matrix.artifact-name }}-Publish
+#          path: vendordep/build/maven/
 
   build-maven:
+    needs: [ build-docker, build-host ]
     name: "Build - Maven"
     runs-on: ubuntu-latest
     env:
@@ -175,15 +190,19 @@ jobs:
       - name: Install roboRio toolchain
         run: ./gradlew installRoboRioToolchain
         working-directory: vendordep
-      - name: Build vendordep
-        run: ./gradlew build
-        working-directory: vendordep
+      - uses: actions/download-artifact@v4
+        with:
+          path: build/allOutputs
       - name: Publish vendordep
         run: ./gradlew publish
         working-directory: vendordep
       - name: Output build dir
         run: |
-          find vendordep/build -type f
+          find vendordep/build/maven -type f
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Maven-vdep
+          path: vendordep/build/maven
 
   combine:
     name: Combine
@@ -223,7 +242,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [ combine, build-docs, build-site ]
+    needs: [ combine, build-docs, build-site, build-maven ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
