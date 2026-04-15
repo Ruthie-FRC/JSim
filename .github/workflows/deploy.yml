@@ -181,8 +181,10 @@ jobs:
       - name: Combine
         run: ./gradlew publish -Pthirdparty
         working-directory: combiner
-      - name: Output Combined Artifacts
+      - name: Rename Unspecified Artifacts
         run: |
+          sudo apt update
+          sudo apt install -y rename
           find ~/releases -type f -name '*-unspecified-*' -exec rename 's/-unspecified-/-/g' {} +
           find ~/releases -type f
       - uses: actions/upload-artifact@v4
