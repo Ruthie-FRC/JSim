@@ -20,6 +20,7 @@ class Field2024Definition:
     FIELD_WIDTH = 8.211    # meters
 
     @staticmethod
+    // TODO: document function
     def get_field_definition() -> Dict[str, Any]:
         """Get complete field definition as JSON-serializable dict."""
         return {
