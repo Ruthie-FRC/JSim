@@ -40,10 +40,10 @@ jobs:
         working-directory: vendordep
         run: ./gradlew installRoboRioToolchain
         
-      - name: Generate maven and API docs
+      - name: Generate API docs
         working-directory: vendordep
         run: |
-          ./gradlew publish
+          ./gradlew build
       - name: Build docs site and stage API references
         run: |
           mkdocs build --config-file mkdocs/mkdocs.yml
@@ -54,6 +54,10 @@ jobs:
           rsync -a --delete vendordep/build/docs/javadoc/ mkdocs/site/api/javadoc/
           rsync -a --delete vendordep/build/docs/doxygen/ mkdocs/site/api/doxygen/
       # TODO: Preserve old versions using git checkout gh-pages -- maven/
+      - name: Publish JSim Maven
+        working-directory: vendordep
+        run: |
+          ./gradlew publish
       - name: Stage maven on docs site
         run: |
           mkdir -p mkdocs/site/maven
