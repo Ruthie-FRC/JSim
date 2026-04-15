@@ -203,6 +203,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: deploy/artifacts/
+      - name: Output artifact list
+        run: |
+          find deploy/artifacts -type f 
+          
       - name: Prepare JSim.dev
         run: |
           mkdir -p deploy/artifacts/jsim.dev/maven/
