@@ -12,6 +12,7 @@ class Field2025AndyMarkDefinition(Field2025WeldedDefinition):
     FIELD_WIDTH = 8.042
 
     @staticmethod
+    // TODO: document function
     def get_field_definition() -> Dict[str, Any]:
         """Get complete AndyMark field definition."""
         field_def = Field2025WeldedDefinition.get_field_definition()
