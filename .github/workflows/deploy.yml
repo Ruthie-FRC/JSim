@@ -1,6 +1,6 @@
 # Deploy Vendordep and MkDocs docs to jsim.dev
 
-name: Release JSim to JSim.dev
+name: Release JSim
 
 on:
   workflow_dispatch:
