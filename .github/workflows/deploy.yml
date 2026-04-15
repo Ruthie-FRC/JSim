@@ -14,6 +14,65 @@ permissions:
   contents: write
 
 jobs:
+  build-site:
+    name: "Build Site"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install docs toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
+          pip install mkdocs mkdocs-material ghp-import
+      - name: Build docs site and stage API references
+        run: |
+          mkdocs build --config-file mkdocs/mkdocs.yml
+      - name: Upload mkdocs site
+        uses: actions/upload-artifact@v4
+        with:
+          name: mkdocs
+          path: mkdocs/site/
+
+  build-docs:
+    name: "API Docs"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
+      - name: Build Javadoc and Doxygen
+        working-directory: vendordep
+        run: ./gradlew javadoc doxygenDox
+      - name: Upload Javadocs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadocs
+          path: vendordep/build/docs/javadoc
+      - name: Upload Doxygen artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen
+          path: vendordep/build/docs/doxygen
+
   build-docker:
     env:
       releaseVersion: ${{ inputs.releaseVersion }}
@@ -109,8 +168,6 @@ jobs:
     env:
       releaseVersion: ${{ inputs.releaseVersion }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
           repository: wpilibsuite/build-tools
@@ -123,6 +180,20 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+      - name: Combine
+        run: ./gradlew publish -Pthirdparty
+        working-directory: combiner
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Maven
+          path: ~/releases
+
+  deploy:
+    name: Deploy
+    needs: [ combine, build-docs, build-site ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -132,17 +203,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen
           pip install mkdocs mkdocs-material ghp-import
-      - name: Combine
-        run: ./gradlew publish -Pthirdparty
-        working-directory: combiner
-      - name: Build docs site and stage API references
-        run: |
-          mkdocs build --config-file mkdocs/mkdocs.yml
-
-          find ~/releases -type f
-          rsync -a ~/releases/ mkdocs/site/api/
-      - uses: actions/upload-artifact@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: Maven
-          path: ~/releases
-
+          path: deploy/artifacts/
+      - name: Flatten Artifacts
+        run: rsync -a --delete deploy/artifacts/*/* deploy/artifacts/
+      - name: Output tree
+        run: |
+          find deploy/artifacts -type f
+      - name: Configure git identity for deployment
+        run: |
+          git config --global user.name github-actions[bot]
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Deploy to GitHub Pages
+        run: |
+          ghp-import -n -p -f deploy/artifacts
