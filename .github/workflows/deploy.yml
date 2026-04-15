@@ -183,7 +183,7 @@ jobs:
         working-directory: combiner
       - name: Output Combined Artifacts
         run: |
-          find combiner/products/build/allOutputs -type f
+          find ~/releases -type f -name '*-unspecified-*' -exec rename 's/-unspecified-/-/g' {} +
           find ~/releases -type f
       - uses: actions/upload-artifact@v4
         with:
