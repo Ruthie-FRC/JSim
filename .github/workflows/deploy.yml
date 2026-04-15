@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build-site:
-    name: "Build MkDocs"
+    name: "Build - MkDocs"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
           path: mkdocs/site/
 
   build-docs:
-    name: "API Docs"
+    name: "Build - Javadocs/Doxygen"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
