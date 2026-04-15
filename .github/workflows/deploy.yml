@@ -189,13 +189,10 @@ jobs:
         run: |
           find ~/releases -type f -name '*-unspecified-*' -exec rename 's/-unspecified-/-/g' {} +
           find ~/releases -type f
-      - name: Move development artifacts to release
-        run: |
-          mv ~/releases/development ~/releases/release
       - uses: actions/upload-artifact@v4
         with:
           name: Maven
-          path: ~/releases
+          path: ~/releases/maven/development
 
   deploy:
     name: Deploy
@@ -223,8 +220,8 @@ jobs:
           rsync -a --delete deploy/artifacts/mkdocs/*/* deploy/artifacts/jsim.dev/mkdocs/
       - name: Add Maven to JSim.dev
         run: |
-          mkdir -p deploy/artifacts/jsim.dev/maven/
-          rsync -a --delete deploy/artifacts/Maven/*/* deploy/artifacts/jsim.dev/maven/
+          mkdir -p deploy/artifacts/jsim.dev/maven/releases/
+          rsync -a --delete deploy/artifacts/Maven/*/* deploy/artifacts/jsim.dev/maven/releases/
       - name: Add Javadocs to JSim.dev
         run: |
           mkdir -p deploy/artifacts/jsim.dev/api/javadocs/
