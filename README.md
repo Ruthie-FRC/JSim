@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/Ruthie-FRC/JSim)](LICENSE.txt)
 [![Open Issues](https://img.shields.io/github/issues/Ruthie-FRC/JSim)](https://github.com/Ruthie-FRC/JSim/issues)
 
-JSim is an open source, modular FRC physics library for simulation, analysis, and robotics workflow integration.
+JSim is an open source, FRC physics library for simulation, analysis, and robotics workflow integration.
 
 ## Overview
 
