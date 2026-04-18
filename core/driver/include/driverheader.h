@@ -15,6 +15,7 @@
  * requiring C++ name mangling support.
  *
  * General conventions:
+ * - All units are metric (SI) unless otherwise specified.
  * - All distances are meters.
  * - All velocities are meters per second.
  * - All angular quantities are radians or radians/second.
