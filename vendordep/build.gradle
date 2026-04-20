@@ -12,6 +12,13 @@ plugins {
     id 'com.diffplug.spotless' version '8.0.0'
 }
 
+// Ensure native cpp directory exists to avoid Gradle errors
+def nativeCppDir = file('src/main/native/cpp')
+if (!nativeCppDir.exists() || !nativeCppDir.isDirectory()) {
+    if (nativeCppDir.exists()) nativeCppDir.delete()
+    nativeCppDir.mkdirs()
+}
+
 // WPILib Version
 ext.wpilibVersion = "2026.2.1"
 ext.releasePath = "$buildDir/maven"
