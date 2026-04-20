@@ -4,11 +4,6 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.numbers.N5;
-import edu.wpi.first.math.numbers.N7;
-import edu.wpi.first.math.VecBuilder;
 
 /**
  * Advanced pose estimator for a differential drive robot using encoders, gyro, and vision measurements.
@@ -36,10 +31,7 @@ public class AdvancedRobotPoseEstimator {
             new Rotation2d(initialGyroRadians),
             0.0, // initial left encoder
             0.0, // initial right encoder
-            initialPose,
-            VecBuilder.fill(stateStdDevs[0], stateStdDevs[1], stateStdDevs[2]),
-            VecBuilder.fill(localMeasurementStdDevs[0], localMeasurementStdDevs[1], localMeasurementStdDevs[2]),
-            VecBuilder.fill(visionMeasurementStdDevs[0], visionMeasurementStdDevs[1], visionMeasurementStdDevs[2])
+            initialPose
         );
     }
 
