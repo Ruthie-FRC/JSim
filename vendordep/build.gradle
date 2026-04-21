@@ -211,7 +211,6 @@ model {
             sources {
                 cpp {
                     source {
-                        srcDirs 'src/main/native/cpp'
                         srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
                         exclude nativeFromDriverExcludes
