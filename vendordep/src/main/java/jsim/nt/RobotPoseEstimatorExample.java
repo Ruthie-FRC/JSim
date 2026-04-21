@@ -23,21 +23,21 @@ public class RobotPoseEstimatorExample {
         // Initial pose and gyro
         Pose2d initialPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
         double initialGyro = 0.0;
-        RobotPoseEstimator estimator = new RobotPoseEstimator(initialPose, initialGyro);
+    PoseEstimator estimator = new PoseEstimator(initialPose, initialGyro);
 
-        // Simulated encoder and gyro values
-        double leftEncoder = 0.0;
-        double rightEncoder = 0.0;
-        double gyro = 0.0;
-        double wheelBase = 0.6; // meters
-        double wheelDelta = 0.05; // meters per step
+    // Simulated encoder and gyro values
+    double leftEncoder = 0.0;
+    double rightEncoder = 0.0;
+    double gyro = 0.0;
+    // double wheelBase = 0.6; // meters (not used)
+    double wheelDelta = 0.05; // meters per step
 
-        // Simulate 100 steps of forward motion
-        for (int i = 0; i < 100; i++) {
-            // Simulate encoders (both wheels move forward)
-            leftEncoder += wheelDelta;
-            rightEncoder += wheelDelta;
-            // Simulate gyro (no rotation)
+    // Simulate 100 steps of forward motion
+    for (int i = 0; i < 100; i++) {
+        // Simulate encoders (both wheels move forward)
+        leftEncoder += wheelDelta;
+        rightEncoder += wheelDelta;
+        // Simulate gyro (no rotation)
             gyro = 0.0;
 
             // Update estimator
