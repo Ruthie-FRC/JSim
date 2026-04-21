@@ -47,16 +47,19 @@ class BallPhysicsSim3D {
 
   /** @brief Physical parameters for the ball body. */
   struct BallProperties {
-    /** Ball mass in kilograms. */
-    double mass_kg{0.27};
-    /** Ball radius in meters. */
-    double radius_m{0.12};
-    /** Dimensionless drag coefficient. */
-    double drag_coefficient{0.47};
-    /** Reference frontal area used for drag in square meters. */
-    double reference_area_m2{0.045};
-    /** Coefficient of restitution for ground impacts in [0, 1]. */
-    double restitution{0.45};
+  /** Ball mass in kilograms. */
+  double mass_kg{0.27};
+  /** Ball radius in meters. */
+  double radius_m{0.12};
+  /** Dimensionless drag coefficient. */
+  double drag_coefficient{0.47};
+  /** Reference frontal area used for drag in square meters. */
+  double reference_area_m2{0.045};
+  /** Coefficient of restitution for ground impacts in [0, 1]. */
+  double restitution{0.45};
+
+  /** Foam compression stiffness (N/m), for high-density foam gamepieces. */
+  double foam_compression_stiffness{0.0};
   };
 
   /** @brief Dynamic state advanced by step(). */
