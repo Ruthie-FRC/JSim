@@ -40,11 +40,12 @@ class BallGamepieceSim {
   /** Built-in gamepiece type identifiers used by launch/projectile/registration
    * APIs. */
   enum class GamePieceType {
-    kBall,
-    kCustom1,
-    kCustom2,
-    kCustom3,
-    kCustom4,
+  kBall,
+  kFuel, // Fuel gamepiece type
+  kCustom1,
+  kCustom2,
+  kCustom3,
+  kCustom4,
   };
 
   /** Sentinel index representing no carried ball. */

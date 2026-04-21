@@ -9,6 +9,31 @@
 namespace frcsim::BallGamepiecePresets {
 
 /**
+ * @brief Fuel gamepiece properties (example values, tune as needed).
+ * @return Ball physical constants for fuel.
+ */
+inline BallPhysicsSim3D::BallProperties fuelProperties() {
+  BallPhysicsSim3D::BallProperties properties{};
+  properties.mass_kg = 0.216; // fuel mass (216g)
+  properties.radius_m = 0.075; // fuel diameter (15cm) -> radius = 7.5cm = 0.075m 
+  properties.drag_coefficient = 0.35;
+  properties.reference_area_m2 = 3.14159265358979323846 * properties.radius_m * properties.radius_m;
+  properties.restitution = 0.30;
+  return properties;
+}
+
+/**
+ * @brief Fuel gamepiece physics config (example values, tune as needed).
+ * @return BallPhysicsSim3D::Config for fuel.
+ */
+inline BallPhysicsSim3D::Config fuelConfig() {
+  BallPhysicsSim3D::Config config = evergreenBallConfig();
+  config.rolling_friction_per_s = 2.0;
+  config.min_bounce_speed_mps = 0.03;
+  return config;
+}
+
+/**
  * @brief Baseline evergreen ball properties for open-ended sandbox use.
  * @return Ball physical constants tuned for evergreen defaults.
  */
