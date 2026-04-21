@@ -9,7 +9,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 /**
  * Unified pose estimator for a differential drive robot supporting both simple odometry and advanced estimation with vision.
  */
-public class PoseEstimator {
+public class RobotPoseEstimator {
     private DifferentialDriveOdometry odometry = null;
     private DifferentialDrivePoseEstimator estimator = null;
     private boolean advanced = false;
@@ -17,7 +17,7 @@ public class PoseEstimator {
     /**
      * Simple odometry constructor.
      */
-    public PoseEstimator(Pose2d initialPose, double initialGyroRadians) {
+    public RobotPoseEstimator(Pose2d initialPose, double initialGyroRadians) {
         this.odometry = new DifferentialDriveOdometry(
             new Rotation2d(initialGyroRadians),
             0.0, 0.0, initialPose
@@ -28,7 +28,7 @@ public class PoseEstimator {
     /**
      * Advanced estimator constructor.
      */
-    public PoseEstimator(
+    public RobotPoseEstimator(
             DifferentialDriveKinematics kinematics,
             Pose2d initialPose,
             double initialGyroRadians,

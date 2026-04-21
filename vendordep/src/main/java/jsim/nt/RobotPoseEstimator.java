@@ -1,3 +1,4 @@
+// This file has been replaced by PoseEstimator.java
 package jsim.nt;
 
 import edu.wpi.first.math.geometry.Pose2d;
