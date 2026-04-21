@@ -154,8 +154,14 @@ class BallGamepieceSim {
     /** Held-ball anchor offset in robot frame. */
     Vector3 carry_offset_m{0.25, 0.0, 0.25};
 
-    /** Index of carried ball or kNoBall when not carrying. */
-    std::size_t carried_ball_index{kNoBall};
+  /** Index of carried ball or kNoBall when not carrying. */
+  std::size_t carried_ball_index{kNoBall};
+
+  /** Fuel level (0.0 = empty, 1.0 = full tank). */
+  double fuel_level{1.0};
+
+  /** Fuel consumption rate (units per second). */
+  double fuel_consumption_rate{0.0};
   };
 
   /**
@@ -1218,6 +1224,13 @@ class BallGamepieceSim {
   void integrateRobots(double dt_s) {
     for (auto& robot : robots_) {
       robot.position_m += robot.velocity_mps * dt_s;
+
+      // Fuel simulation: decrement fuel by consumption rate * dt_s
+      if (robot.fuel_consumption_rate > 0.0 && robot.fuel_level > 0.0) {
+        robot.fuel_level -= robot.fuel_consumption_rate * dt_s;
+        if (robot.fuel_level < 0.0) robot.fuel_level = 0.0;
+        if (robot.fuel_level > 1.0) robot.fuel_level = 1.0;
+      }
 
       const double min_x = field_.min_corner_m.x + robot.radius_m;
       const double max_x = field_.max_corner_m.x - robot.radius_m;
