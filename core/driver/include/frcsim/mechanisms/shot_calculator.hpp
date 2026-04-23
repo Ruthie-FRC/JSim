@@ -141,18 +141,18 @@ class ShotCalculator3D {
 
   /**
    * @brief Computes a shot solution for current robot/target kinematics.
-   * @param shooter_origin_m Shooter origin in world coordinates.
+   * @param flywheel_origin_m Flywheel origin in world coordinates.
    * @param robot_velocity_mps Robot chassis velocity in world frame.
    * @param target_position_m Target center position in world coordinates.
    * @param now_s Current timestamp in seconds.
    * @return ShotParameters with validity flag and computed
    * yaw/pitch/speed/time.
    */
-  ShotParameters calculateShot(const Vector3& shooter_origin_m,
+  ShotParameters calculateShot(const Vector3& flywheel_origin_m,
                                const Vector3& robot_velocity_mps,
                                const Vector3& target_position_m, double now_s) {
     ShotParameters result{};
-    if (table_.empty() || !finiteVector(shooter_origin_m) ||
+    if (table_.empty() || !finiteVector(flywheel_origin_m) ||
         !finiteVector(robot_velocity_mps) || !finiteVector(target_position_m) ||
         !std::isfinite(now_s)) {
       return result;
@@ -161,7 +161,7 @@ class ShotCalculator3D {
     trimRecentShotHistory(now_s);
 
     const Vector3 delayed_origin =
-        shooter_origin_m + robot_velocity_mps * config_.phase_delay_s;
+        flywheel_origin_m + robot_velocity_mps * config_.phase_delay_s;
     Vector3 lookahead_origin = delayed_origin;
     double lookahead_distance_m =
         planarDistance(lookahead_origin, target_position_m);

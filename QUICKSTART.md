@@ -23,7 +23,7 @@ Complete vendordep package with:
 - `Vec3`: 3D vector type
 
 ### Examples
-- [ShooterPredictionExample.java](examples/java/ShooterPredictionExample.java): Projectile trajectory with gravity
+- [FlywheelPredictionExample.java](examples/java/FlywheelPredictionExample.java): Projectile trajectory with gravity
 
 ## Building
 
@@ -127,7 +127,7 @@ Expected verification signals:
 ## Prerelease Notes
 
 This release provides a **solid foundation for physics-based simulations**. The constraint solver and force integration are production-ready for:
-- Trajectory prediction (shooters, intakes, climbers)
+- Trajectory prediction (flywheels, intakes, climbers)
 - Mechanism tuning (arm kinematics, drivetrain dynamics)
 - Control algorithm validation
 

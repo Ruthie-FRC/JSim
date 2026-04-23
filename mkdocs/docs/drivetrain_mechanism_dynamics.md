@@ -26,7 +26,7 @@ The following headers currently exist as placeholders in core/driver:
 - core/driver/include/frcsim/drivetrains/swerve_model.hpp
 - core/driver/include/frcsim/mechanisms/arm.hpp
 - core/driver/include/frcsim/mechanisms/elevator.hpp
-- core/driver/include/frcsim/mechanisms/shooter_wheel.hpp
+- core/driver/include/frcsim/mechanisms/flywheel_wheel.hpp
 
 Because APIs are still evolving, this page documents the baseline equations and assumptions to keep future implementations consistent.
 
@@ -124,7 +124,7 @@ Assumptions and limitations:
 
 When these effects are omitted, indicate expected mismatch regimes (for example, direction reversals, near-zero speed hold).
 
-## Shooter wheel baseline
+## Flywheel wheel baseline
 
 Rotational speed dynamics:
 
