@@ -29,7 +29,7 @@ JSim uses date-based versioning: `YYYY.MM.DD.patch-no`
 - **Assemblies**: Multi-body systems with constraint solving
 - **Material System**: Restitution, kinetic/static friction, collision damping
 - **Java/JNI API**: Complete vendordep with PhysicsWorld, PhysicsBody, Vec3
-- **Examples**: Java shooter trajectory prediction, C++ minimal world simulations
+- **Examples**: Java flywheel trajectory prediction, C++ minimal world simulations
 - **Comprehensive Test Suite**: 9 tests covering all major systems
 
 ### Fixed

@@ -233,11 +233,11 @@ def example_metadata_format():
                 ],
             },
             {
-                "name": "shooter",
+                "name": "flywheel",
                 "type": "motor_driven",
                 "components": [
                     {
-                        "name": "shooter_wheel",
+                        "name": "Flywheel_wheel",
                         "material": "aluminum",
                         "mass": 1.2,
                         "volume": 0.00005,
