@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "frcsim/mechanisms/shot_calculator.hpp"
-#include "frcsim/mechanisms/turret_shooter_sim.hpp"
+#include "frcsim/mechanisms/turret_flywheel_sim.hpp"
 
 int main() {
     frcsim::ShotCalculator3D::Config config;
@@ -23,10 +23,10 @@ int main() {
     });
 
     const frcsim::Vector3 target(5.0, 0.0, 2.1);
-    const frcsim::Vector3 shooter_origin(0.0, 0.0, 1.0);
+    const frcsim::Vector3 flywheel_origin(0.0, 0.0, 1.0);
     const frcsim::Vector3 robot_velocity(1.0, 0.4, 0.0);
 
-    auto shot = calculator.calculateShot(shooter_origin, robot_velocity, target, 1.0);
+    auto shot = calculator.calculateShot(flywheel_origin, robot_velocity, target, 1.0);
     assert(shot.is_valid);
     assert(shot.flywheel_speed_mps > 15.0 && shot.flywheel_speed_mps < 22.5);
     assert(shot.hood_pitch_rad > 0.7 && shot.hood_pitch_rad < 1.05);
@@ -36,7 +36,7 @@ int main() {
 
     // Recent-shot blending path: second query near first pose should stay valid and finite.
     auto shot_blended = calculator.calculateShot(
-        shooter_origin + frcsim::Vector3(0.04, 0.01, 0.0), robot_velocity, target, 1.15);
+        flywheel_origin + frcsim::Vector3(0.04, 0.01, 0.0), robot_velocity, target, 1.15);
     assert(shot_blended.is_valid);
     assert(std::isfinite(shot_blended.hood_pitch_rad));
     assert(std::isfinite(shot_blended.flywheel_speed_mps));
@@ -73,8 +73,8 @@ int main() {
     });
 
     const frcsim::Vector3 far_target(7.0, 0.0, 2.2);
-    const auto baseline_shot = baseline_calc.calculateShot(shooter_origin, frcsim::Vector3::zero(), far_target, 2.0);
-    const auto refined_shot = refined_calc.calculateShot(shooter_origin, frcsim::Vector3::zero(), far_target, 2.0);
+    const auto baseline_shot = baseline_calc.calculateShot(flywheel_origin, frcsim::Vector3::zero(), far_target, 2.0);
+    const auto refined_shot = refined_calc.calculateShot(flywheel_origin, frcsim::Vector3::zero(), far_target, 2.0);
     assert(baseline_shot.is_valid);
     assert(refined_shot.is_valid);
     assert(std::isfinite(refined_shot.hood_pitch_rad));

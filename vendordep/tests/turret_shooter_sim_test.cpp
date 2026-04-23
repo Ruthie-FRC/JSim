@@ -1,7 +1,7 @@
 #include <cassert>
 #include <cmath>
 
-#include "frcsim/mechanisms/turret_shooter_sim.hpp"
+#include "frcsim/mechanisms/turret_flywheel_sim.hpp"
 
 int main() {
     frcsim::TurretFlywheelSim::Config config;

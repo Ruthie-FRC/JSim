@@ -10,11 +10,11 @@
 #include "frcsim/math/quaternion.hpp"
 #include "frcsim/math/vector.hpp"
 #include "frcsim/mechanisms/double_differential.hpp"
-#include "frcsim/mechanisms/shooter_wheel.hpp"
+#include "frcsim/mechanisms/flywheel_wheel.hpp"
 
 namespace frcsim {
 
-/** @brief Integrated turret + shooter + carried-ball simulator for aiming,
+/** @brief Integrated turret + flywheel + carried-ball simulator for aiming,
  * pickup, and firing flows. */
 class TurretFlywheelSim {
  public:
@@ -46,7 +46,7 @@ class TurretFlywheelSim {
 
   /**
    * @brief Constructs simulator from explicit configuration.
-   * @param config Initial turret/shooter/ball configuration.
+   * @param config Initial turret/flywheel/ball configuration.
    */
   explicit TurretFlywheelSim(const Config& config)
       : config_(config),

@@ -9,11 +9,11 @@
 
 namespace frcsim {
 
-/** @brief Single-wheel shooter velocity model with optional closed-loop speed
+/** @brief Single-wheel flywheel velocity model with optional closed-loop speed
  * command behavior. */
 class FlywheelWheelSim {
  public:
-  /** @brief DC motor approximation constants for shooter drive. */
+  /** @brief DC motor approximation constants for flywheel drive. */
   struct MotorConfig {
     // Motor free speed at nominal voltage.
     double free_speed_radps{600.0};
@@ -145,7 +145,7 @@ class FlywheelWheelSim {
   }
 
   /**
-   * @brief Advances the shooter wheel state by one step.
+   * @brief Advances the flywheel wheel state by one step.
    * @param dt_s Timestep in seconds.
    * @param control Control input for this step.
    */
