@@ -1,3 +1,4 @@
+
 package jsim.api;
 
 import jsim.driver.WPILibClones.Rotation3d;
@@ -12,13 +13,15 @@ public class GamepieceZone {
 
     private double exitVelocity;
     private Rotation3d exitRotation;
+    private Mode mode = Mode.DISABLED;
 
     public GamepieceZone(SimRobot robot) {
-        // TODO: Link to robot and initialize
+        // Optionally link to robot or state manager if needed
     }
 
     public void setMode(Mode mode) {
-        // TODO: Implement mode logic
+        this.mode = mode;
+        // Integrate with StateManager if needed
     }
 
     public void setExitParameters(double velocity, Rotation3d rotation) {
@@ -32,5 +35,9 @@ public class GamepieceZone {
 
     public Rotation3d getExitRotation() {
         return exitRotation;
+    }
+
+    public Mode getMode() {
+        return mode;
     }
 }
