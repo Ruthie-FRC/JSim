@@ -1,7 +1,3 @@
-package jsim.api;
-
-import jsim.driver.WPILibClones.Translation2d;
-import jsim.core.StateManager;
 
 package jsim.api;
 
