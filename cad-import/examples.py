@@ -237,7 +237,7 @@ def example_metadata_format():
                 "type": "motor_driven",
                 "components": [
                     {
-                        "name": "Flywheel_wheel",
+                        "name": "flywheel_wheel",
                         "material": "aluminum",
                         "mass": 1.2,
                         "volume": 0.00005,

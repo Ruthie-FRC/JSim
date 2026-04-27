@@ -11,8 +11,6 @@ JSim is an open source, FRC physics library for simulation, analysis, and roboti
 
 This repository is organized as a monorepo containing the core simulation engine, language bindings, runtime apps, examples, and documentation tooling.
 
-## Quick Start
-
 ## Vendordep URL
 ```
 https://jsim.dev/JSim.json
@@ -22,13 +20,6 @@ https://jsim.dev/JSim.json
 
 ```bash
 ./scripts/build-all.sh
-```
-
-For vendordep-only builds:
-
-```bash
-cd vendordep
-./gradlew test
 ```
 
 ### Run Tests
@@ -42,7 +33,7 @@ cd vendordep
 
 This command runs Java tests plus the standalone native verification suite in `vendordep/tests/` through Gradle.
 
-Vendordep build tooling currently requires Java 21.
+Vendordep build tooling requires Java 21.
 
 ### Preview Docs Locally
 
