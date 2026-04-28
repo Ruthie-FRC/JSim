@@ -1,4 +1,3 @@
-
 package frc.robot.sim.core;
 
 import api.GamePieceState;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 
 public class StateManager {
     private final Map<String, List<GamePieceState>> robotInventory = new HashMap<>();
