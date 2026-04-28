@@ -1,4 +1,4 @@
-#include "math_jni.h"
+#include "jni/math_jni.h"
 #include <memory>
 
 // Helper macros for pointer conversion
