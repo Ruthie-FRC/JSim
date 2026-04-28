@@ -27,8 +27,8 @@ if (project.hasProperty('releaseMode')) {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 var javaVersion = "17"
 
@@ -212,7 +212,7 @@ model {
                 cpp {
                     source {
                         srcDirs 'src/main/driver/cpp'
-                        include 'src/main/drvier/include'
+                        include 'src/main/driver/include'
                         exclude nativeFromDriverExcludes
                         exclude driverWpilibCExcludes
                     }
