@@ -1,4 +1,4 @@
-package frc.robot.sim.core;
+package robot.sim.core;
 
 import api.GamePieceState;
 import api.GamePieceType;
