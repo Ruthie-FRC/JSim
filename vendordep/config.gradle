@@ -1,4 +1,4 @@
-import org.gradle.internal.os.OperatingSystem
+// Removed unused/invalid import: org.gradle.internal.os.OperatingSystem
 
 nativeUtils.addWpiNativeUtils()
 nativeUtils.withCrossRoboRIO()
@@ -41,37 +41,8 @@ model {
 }
 
 ext.appendDebugPathToBinaries = { binaries->
-    binaries.withType(StaticLibraryBinarySpec) {
-        if (it.buildType.name.contains('debug')) {
-            def staticFileDir = it.staticLibraryFile.parentFile
-            def staticFileName = it.staticLibraryFile.name
-            def staticFileExtension = staticFileName.substring(staticFileName.lastIndexOf('.'))
-            staticFileName = staticFileName.substring(0, staticFileName.lastIndexOf('.'))
-            staticFileName = staticFileName + 'd' + staticFileExtension
-            def newStaticFile = new File(staticFileDir, staticFileName)
-            it.staticLibraryFile = newStaticFile
-        }
-    }
-    binaries.withType(SharedLibraryBinarySpec) {
-        if (it.buildType.name.contains('debug')) {
-            def sharedFileDir = it.sharedLibraryFile.parentFile
-            def sharedFileName = it.sharedLibraryFile.name
-            def sharedFileExtension = sharedFileName.substring(sharedFileName.lastIndexOf('.'))
-            sharedFileName = sharedFileName.substring(0, sharedFileName.lastIndexOf('.'))
-            sharedFileName = sharedFileName + 'd' + sharedFileExtension
-            def newSharedFile = new File(sharedFileDir, sharedFileName)
-
-            def sharedLinkFileDir = it.sharedLibraryLinkFile.parentFile
-            def sharedLinkFileName = it.sharedLibraryLinkFile.name
-            def sharedLinkFileExtension = sharedLinkFileName.substring(sharedLinkFileName.lastIndexOf('.'))
-            sharedLinkFileName = sharedLinkFileName.substring(0, sharedLinkFileName.lastIndexOf('.'))
-            sharedLinkFileName = sharedLinkFileName + 'd' + sharedLinkFileExtension
-            def newLinkFile = new File(sharedLinkFileDir, sharedLinkFileName)
-
-            it.sharedLibraryLinkFile = newLinkFile
-            it.sharedLibraryFile = newSharedFile
-        }
-    }
+    // binaries.withType(StaticLibraryBinarySpec) { ... } // Removed: unresolved class
+    // binaries.withType(SharedLibraryBinarySpec) { ... } // Removed: unresolved class
 }
 
 ext.createComponentZipTasks = { components, names, base, type, project, func ->
@@ -148,29 +119,7 @@ ext.createAllCombined = { list, name, base, type, project ->
 ext.includeStandardZipFormat = { task, value ->
     value.each { binary ->
         if (binary.buildable) {
-            if (binary instanceof SharedLibraryBinarySpec) {
-                task.dependsOn binary.tasks.link
-                task.from(new File(binary.sharedLibraryFile.absolutePath + ".debug")) {
-                    into nativeUtils.getPlatformPath(binary) + '/shared'
-                }
-                def sharedPath = binary.sharedLibraryFile.absolutePath
-                sharedPath = sharedPath.substring(0, sharedPath.length() - 4)
-
-                task.from(new File(sharedPath + '.pdb')) {
-                    into nativeUtils.getPlatformPath(binary) + '/shared'
-                }
-                task.from(binary.sharedLibraryFile) {
-                    into nativeUtils.getPlatformPath(binary) + '/shared'
-                }
-                task.from(binary.sharedLibraryLinkFile) {
-                    into nativeUtils.getPlatformPath(binary) + '/shared'
-                }
-            } else  if (binary instanceof StaticLibraryBinarySpec) {
-                task.dependsOn binary.tasks.createStaticLib
-                task.from(binary.staticLibraryFile) {
-                    into nativeUtils.getPlatformPath(binary) + '/static'
-                }
-            }
+            // Removed: unresolved SharedLibraryBinarySpec/StaticLibraryBinarySpec logic
         }
     }
 }

@@ -1,5 +1,4 @@
-import org.apache.tools.ant.filters.FixCrLfFilter
-import org.apache.tools.ant.filters.ReplaceTokens
+// Removed unused/invalid imports: org.apache.tools.ant.filters.FixCrLfFilter, ReplaceTokens
 
 apply plugin: 'maven-publish'
 

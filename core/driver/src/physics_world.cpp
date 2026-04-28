@@ -8,7 +8,7 @@
 #include <cmath>
 #include <memory>
 
-#include "frcsim/aerodynamics/drag_model.hpp"
+#include "frcsim/physics/aerodynamics/drag_model.hpp"
 
 namespace frcsim {
 

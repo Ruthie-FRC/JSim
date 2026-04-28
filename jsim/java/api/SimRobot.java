@@ -1,8 +1,8 @@
 package api;
 
-import driver.WPILibClones.Translation2d;
-import driver.WPILibClones.Pose2d;
-import driver.WPILibClones.ChassisSpeeds;
+import api.Translation2d;
+import api.Pose2d;
+import api.ChassisSpeeds;
 import api.RobotID;
 import api.FieldState;
 import core.StateManager;
