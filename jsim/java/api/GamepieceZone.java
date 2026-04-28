@@ -1,7 +1,6 @@
 
 package api;
 
-import api.Rotation3d;
 
 public class GamepieceZone {
     public enum Mode {

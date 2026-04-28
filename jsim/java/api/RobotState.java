@@ -1,11 +1,8 @@
 package api;
 
-import api.Pose2d;
-import api.Translation2d;
-import api.ChassisSpeeds;
 
 public class RobotState {
-    private RobotID id;
+    // private RobotID id; // Unused field removed
     private Pose2d pose;
     private Translation2d[] frameVertices;
     private ChassisSpeeds chassisSpeeds;

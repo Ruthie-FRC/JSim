@@ -1,8 +1,5 @@
 package api;
 
-import api.Rotation3d;
-import api.Translation2d;
-import api.Translation3d;
 
 /**
  * Represents the state of a game piece in the simulation.
