@@ -33,7 +33,7 @@ cd vendordep
 
 This command runs Java tests plus the standalone native verification suite in `vendordep/tests/` through Gradle.
 
-Vendordep build tooling requires Java 21.
+Vendordep build tooling requires Java 17.
 
 ### Preview Docs Locally
 

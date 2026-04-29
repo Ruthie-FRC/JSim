@@ -31,7 +31,7 @@ The architecture is designed to support extension through additional force model
 
 - Gradle drives native, JNI, and Java builds.
 - `vendordep/gradlew test` executes Java tests and native verification binaries.
-- `scripts/run-tests.sh` enforces Java 21 and runs the vendordep test workflow from repo root.
+- `scripts/run-tests.sh` enforces Java 17 and runs the vendordep test workflow from repo root.
 
 ## Documentation Strategy
 

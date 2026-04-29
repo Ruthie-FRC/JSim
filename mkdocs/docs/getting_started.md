@@ -16,7 +16,7 @@ From the repository root:
 scripts/run-tests.sh
 ```
 
-This script selects a Java 21 runtime and runs the vendordep Gradle test workflow.
+This script selects a Java 17 runtime and runs the vendordep Gradle test workflow.
 
 You can also run the tests directly:
 
