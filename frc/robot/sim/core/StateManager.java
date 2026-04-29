@@ -1,4 +1,3 @@
-
 package frc.robot.sim.core;
 
 import api.GamePieceState;

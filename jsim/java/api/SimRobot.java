@@ -14,17 +14,15 @@ import core.StateManager;
 public final class SimRobot {
     private final RobotID robotID;
     private final StateManager stateManager;
-    private final FieldState<RobotState> stateManagerRef;
 
-    private SimRobot(RobotID robotID, StateManager stateManager, FieldState<RobotState> stateManagerRef) {
+    private SimRobot(RobotID robotID, StateManager stateManager) {
         this.robotID = robotID;
         this.stateManager = stateManager;
-        this.stateManagerRef = stateManagerRef;
     }
 
     public static SimRobot createRobot(Translation2d[] frameDimensions, StateManager stateManager, RobotID robotID) {
-        FieldState<RobotState> ref = stateManager.initializeRobot(robotID, new Pose2d(0,0,0), frameDimensions);
-        return new SimRobot(robotID, stateManager, ref);
+        stateManager.initializeRobot(robotID, new Pose2d(0, 0, 0), frameDimensions);
+        return new SimRobot(robotID, stateManager);
     }
 
     public Pose2d getPose() {
