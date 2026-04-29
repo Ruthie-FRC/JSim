@@ -158,11 +158,11 @@ class BallGamepieceSim {
   /** Index of carried ball or kNoBall when not carrying. */
   std::size_t carried_ball_index{kNoBall};
 
-  /** Fuel level (0.0 = empty, 1.0 = full tank). */
-  double fuel_level{1.0};
+  /** Ball level (0.0 = empty, 1.0 = full tank). */
+  double ball_level{1.0};
 
-  /** Fuel consumption rate (units per second). */
-  double fuel_consumption_rate{0.0};
+  /** Ball consumption rate (units per second). */
+  double ball_consumption_rate{0.0};
   };
 
   /**
@@ -1226,11 +1226,11 @@ class BallGamepieceSim {
     for (auto& robot : robots_) {
       robot.position_m += robot.velocity_mps * dt_s;
 
-      // Fuel simulation: decrement fuel by consumption rate * dt_s
-      if (robot.fuel_consumption_rate > 0.0 && robot.fuel_level > 0.0) {
-        robot.fuel_level -= robot.fuel_consumption_rate * dt_s;
-        if (robot.fuel_level < 0.0) robot.fuel_level = 0.0;
-        if (robot.fuel_level > 1.0) robot.fuel_level = 1.0;
+      // Ball simulation: decrement ball by consumption rate * dt_s
+      if (robot.ball_consumption_rate > 0.0 && robot.ball_level > 0.0) {
+        robot.ball_level -= robot.ball_consumption_rate * dt_s;
+        if (robot.ball_level < 0.0) robot.ball_level = 0.0;
+        if (robot.ball_level > 1.0) robot.ball_level = 1.0;
       }
 
       const double min_x = field_.min_corner_m.x + robot.radius_m;
