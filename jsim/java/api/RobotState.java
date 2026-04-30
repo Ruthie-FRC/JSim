@@ -1,10 +1,10 @@
 package api;
 
 public class RobotState {
-    // private RobotID id; // Unused field removed
     private Pose2d pose;
     private Translation2d[] frameVertices;
     private ChassisSpeeds chassisSpeeds;
+    private final RobotID id;
 
     public RobotState(RobotID id, Pose2d pose, Translation2d[] frameVertices) {
         this.id = id;

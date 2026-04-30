@@ -1,13 +1,11 @@
-
 package api;
-
 
 public class GamepieceZone {
     public enum Mode {
-        INTAKE,
-        OUTTAKE,
-        SHOOT,
-        DISABLED
+        INTAKE, // Intake gamepiece, motor count irrelevant
+        OUTTAKE, // Outtake gamepiece with only one roller (intake, flywheel wihout backrollers, etc.)
+        SHOOT, // Outtake gamepiece with two rollers (flywheel with backrollers, etc.)
+        DISABLED // No gamepiece interaction, motor count irrelevant
     }
 
     private double exitVelocity;
