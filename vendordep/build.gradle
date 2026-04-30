@@ -133,6 +133,8 @@ doxygen {
 nativeUtils {
     exportsConfigs {
         JSim {
+            generateAll = true
+
             x86ExcludeSymbols = [
                 '_CT??_R0?AV_System_error',
                 '_CT??_R0?AVexception',
