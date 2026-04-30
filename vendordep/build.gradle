@@ -146,6 +146,7 @@ nativeUtils {
                 '_TI3?AVout_of_range',
                 '_CT??_R0?AVbad_cast'
             ]
+            
             x64ExcludeSymbols = x86ExcludeSymbols
         }
     }
