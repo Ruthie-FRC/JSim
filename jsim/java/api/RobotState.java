@@ -1,6 +1,5 @@
 package api;
 
-
 public class RobotState {
     // private RobotID id; // Unused field removed
     private Pose2d pose;
