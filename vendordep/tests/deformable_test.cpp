@@ -7,7 +7,7 @@
 int main() {
     std::cout << "Testing deformable bodies...\n";
 
-    // ===== Deformable Body Creation Tests =====
+    //  Deformable Body Creation Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -18,7 +18,7 @@ int main() {
         std::cout << "  ✓ Deformable body creation works\n";
     }
 
-    // ===== Deformable Body Stiffness Tests =====
+    //  Deformable Body Stiffness Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -28,7 +28,7 @@ int main() {
         std::cout << "  ✓ Bend stiffness settable\n";
     }
 
-    // ===== Deformable Body Damping Tests =====
+    //  Deformable Body Damping Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -38,7 +38,7 @@ int main() {
         std::cout << "  ✓ Warp damping settable\n";
     }
 
-    // ===== Deformable Body Enable/Disable Tests =====
+    //  Deformable Body Enable/Disable Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -53,7 +53,7 @@ int main() {
         std::cout << "  ✓ Deformation enable/disable works\n";
     }
 
-    // ===== Deformation Nodes Management Tests =====
+    //  Deformation Nodes Management Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -70,7 +70,7 @@ int main() {
         std::cout << "  ✓ Deformation nodes manageable\n";
     }
 
-    // ===== Deformation Velocities Management Tests =====
+    //  Deformation Velocities Management Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -86,7 +86,7 @@ int main() {
         std::cout << "  ✓ Deformation velocities manageable\n";
     }
 
-    // ===== Rigid Base Access Tests =====
+    //  Rigid Base Access Tests 
     {
         frcsim::DeformableBody def_body(3.0);
         
@@ -99,7 +99,7 @@ int main() {
         std::cout << "  ✓ Rigid base properties accessible\n";
     }
 
-    // ===== Deformable Body Flags Tests =====
+    //  Deformable Body Flags Tests 
     {
         frcsim::DeformableBody def_body(2.0);
         
@@ -113,7 +113,7 @@ int main() {
         std::cout << "  ✓ Deformable body flags work through rigid base\n";
     }
 
-    // ===== Deformable Body in Physics World Tests =====
+    //  Deformable Body in Physics World Tests 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -143,7 +143,7 @@ int main() {
         std::cout << "  ✓ Deformable body integrates with physics world\n";
     }
 
-    // ===== Deformable Body Configuration Scenario =====
+    //  Deformable Body Configuration Scenario 
     {
         // Create a deformable object representing a spring-like material
         frcsim::DeformableBody spring(0.5);

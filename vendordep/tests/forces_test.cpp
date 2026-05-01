@@ -9,7 +9,7 @@
 int main() {
     std::cout << "Testing forces and aerodynamics...\n";
 
-    // ===== Basic Applied Force Tests =====
+    //  Basic Applied Force Tests 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -33,7 +33,7 @@ int main() {
         std::cout << "  ✓ Direct force application works\n";
     }
 
-    // ===== Gravity Force via Global Config =====
+    //  Gravity Force via Global Config 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -57,7 +57,7 @@ int main() {
         std::cout << "  ✓ Global gravity force works\n";
     }
 
-    // ===== Gravity Force Generator Class =====
+    //  Gravity Force Generator Class 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -84,7 +84,7 @@ int main() {
         std::cout << "  ✓ Gravity force generator works\n";
     }
 
-    // ===== Multiple Force Accumulation =====
+    //  Multiple Force Accumulation 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -110,7 +110,7 @@ int main() {
         std::cout << "  ✓ Force accumulation works\n";
     }
 
-    // ===== Aerodynamics: Drag Model Tests =====
+    //  Aerodynamics: Drag Model Tests 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -133,7 +133,7 @@ int main() {
         std::cout << "  ✓ Drag model reduces velocity\n";
     }
 
-    // ===== Aerodynamics: Detailed Drag Diagnostics =====
+    //  Aerodynamics: Detailed Drag Diagnostics 
     {
         const auto details = frcsim::Vector3::dragForceDetailed(
             frcsim::Vector3(10.0, 0.0, 0.0), 0.47, 0.01);
@@ -147,7 +147,7 @@ int main() {
         std::cout << "  ✓ Detailed drag diagnostics are populated\n";
     }
 
-    // ===== Aerodynamics: Nonlinear Drag Includes Linear and Quadratic Terms =====
+    //  Aerodynamics: Nonlinear Drag Includes Linear and Quadratic Terms 
     {
         const auto details = frcsim::Vector3::dragForceDetailed(
             frcsim::Vector3(10.0, 0.0, 0.0), 0.47, 0.01, 1.225, 0.25);
@@ -159,7 +159,7 @@ int main() {
         std::cout << "  ✓ Nonlinear drag terms are combined\n";
     }
 
-    // ===== Aerodynamics: Drag Compared With Gravity =====
+    //  Aerodynamics: Drag Compared With Gravity 
     {
         frcsim::DragModel drag_model(0.47, 0.01);
         frcsim::RigidBody body(2.0);
@@ -175,7 +175,7 @@ int main() {
         std::cout << "  ✓ Drag-to-gravity comparison is available\n";
     }
 
-    // ===== Aerodynamics: Body Geometry Controls Cross Section =====
+    //  Aerodynamics: Body Geometry Controls Cross Section 
     {
         frcsim::RigidBody body(1.0);
         frcsim::RigidBody::AerodynamicGeometry geometry;
@@ -197,7 +197,7 @@ int main() {
         std::cout << "  ✓ Body geometry drives projected drag area\n";
     }
 
-    // ===== Aerodynamics: Cylinder Geometry Projects By Orientation =====
+    //  Aerodynamics: Cylinder Geometry Projects By Orientation 
     {
         frcsim::RigidBody body(1.0);
         frcsim::RigidBody::AerodynamicGeometry geometry;
@@ -219,7 +219,7 @@ int main() {
         std::cout << "  ✓ Cylinder projected drag area follows orientation\n";
     }
 
-    // ===== Aerodynamics: Cylinder Axis Convenience Setter =====
+    //  Aerodynamics: Cylinder Axis Convenience Setter 
     {
         frcsim::RigidBody body(1.0);
         frcsim::RigidBody::AerodynamicGeometry geometry;
@@ -241,7 +241,7 @@ int main() {
         std::cout << "  ✓ Cylinder axis convenience setter works\n";
     }
 
-    // ===== Aerodynamics: Cylinder World Axis Convenience Setter =====
+    //  Aerodynamics: Cylinder World Axis Convenience Setter 
     {
         frcsim::RigidBody body(1.0);
         frcsim::RigidBody::AerodynamicGeometry geometry;
@@ -271,7 +271,7 @@ int main() {
         std::cout << "  ✓ Cylinder world-axis convenience setter works\n";
     }
 
-    // ===== Aerodynamics: Invalid Drag Inputs Return Zero Force =====
+    //  Aerodynamics: Invalid Drag Inputs Return Zero Force 
     {
         const auto details = frcsim::Vector3::dragForceDetailed(
             frcsim::Vector3(10.0, 0.0, 0.0), -0.47, 0.01);
@@ -281,7 +281,7 @@ int main() {
         std::cout << "  ✓ Invalid drag inputs fail closed\n";
     }
 
-    // ===== Aerodynamics: Disabled Test =====
+    //  Aerodynamics: Disabled Test 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;
@@ -304,7 +304,7 @@ int main() {
         std::cout << "  ✓ Aerodynamics can be disabled\n";
     }
 
-    // ===== Magnus Effect Simulation Test =====
+    //  Magnus Effect Simulation Test 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;

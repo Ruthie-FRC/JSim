@@ -9,7 +9,7 @@
 int main() {
     std::cout << "Testing rigid assemblies and material system...\n";
 
-    // ===== Assembly Creation Tests =====
+    // Assembly Creation Tests
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -32,7 +32,7 @@ int main() {
         std::cout << "  ✓ Assembly body creation works\n";
     }
 
-    // ===== Assembly Mass Calculation Tests =====
+    // Assembly Mass Calculation Tests
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -51,7 +51,7 @@ int main() {
         std::cout << "  ✓ Assembly total mass calculation correct\n";
     }
 
-    // ===== Center of Mass Tests =====
+    // Center of Mass Tests
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -78,7 +78,7 @@ int main() {
         std::cout << "  ✓ Center of mass calculation correct\n";
     }
 
-    // ===== Joint Creation Tests =====
+    //  Joint Creation Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -141,7 +141,7 @@ int main() {
         std::cout << "  ✓ Fixed joint creation works\n";
     }
 
-    // ===== Revolute Joint Properties Tests =====
+    //  Revolute Joint Properties Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -175,7 +175,7 @@ int main() {
         std::cout << "  ✓ Revolute joint properties work correctly\n";
     }
 
-    // ===== Prismatic Joint Properties Tests =====
+    //  Prismatic Joint Properties Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -205,7 +205,7 @@ int main() {
         std::cout << "  ✓ Prismatic joint properties work correctly\n";
     }
 
-    // ===== Joint Base Properties Tests =====
+    //  Joint Base Properties Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -241,7 +241,7 @@ int main() {
         std::cout << "  ✓ Joint base properties work correctly\n";
     }
 
-    // ===== Material Properties Tests =====
+    //  Material Properties Tests 
     {
         frcsim::Material mat;
         
@@ -262,7 +262,7 @@ int main() {
         std::cout << "  ✓ Material properties work correctly\n";
     }
 
-    // ===== Body Material Assignment Tests =====
+    //  Body Material Assignment Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -280,7 +280,7 @@ int main() {
         std::cout << "  ✓ Body material assignment works\n";
     }
 
-    // ===== Assembly Constraint Control Tests =====
+    //  Assembly Constraint Control Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -306,7 +306,7 @@ int main() {
         std::cout << "  ✓ Assembly constraint control works\n";
     }
 
-    // ===== Body Flags Tests =====
+    //  Body Flags Tests 
     {
         frcsim::BodyFlags flags;
         

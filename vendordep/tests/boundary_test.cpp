@@ -7,7 +7,7 @@
 int main() {
     std::cout << "Testing environmental boundaries and field objects...\n";
 
-    // ===== Boundary Creation Tests =====
+    //  Boundary Creation Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -22,7 +22,7 @@ int main() {
         std::cout << "  ✓ Boundary creation works\n";
     }
 
-    // ===== Boundary Type Configuration Tests =====
+    //  Boundary Type Configuration Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -58,7 +58,7 @@ int main() {
         std::cout << "  ✓ All boundary types can be created\n";
     }
 
-    // ===== Boundary Behavior Configuration Tests =====
+    //  Boundary Behavior Configuration Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -80,7 +80,7 @@ int main() {
         std::cout << "  ✓ Boundary behaviors configurable\n";
     }
 
-    // ===== Boundary Position and Orientation Tests =====
+    //  Boundary Position and Orientation Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -101,7 +101,7 @@ int main() {
         std::cout << "  ✓ Boundary position and orientation configurable\n";
     }
 
-    // ===== Boundary Geometry Tests =====
+    //  Boundary Geometry Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -129,7 +129,7 @@ int main() {
         std::cout << "  ✓ Boundary geometry configurable\n";
     }
 
-    // ===== Boundary Physical Properties Tests =====
+    //  Boundary Physical Properties Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -146,7 +146,7 @@ int main() {
         std::cout << "  ✓ Boundary physical properties configurable\n";
     }
 
-    // ===== Boundary Metadata Tests =====
+    //  Boundary Metadata Tests 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -168,7 +168,7 @@ int main() {
         std::cout << "  ✓ Boundary metadata works\n";
     }
 
-    // ===== Multiple Boundaries Test =====
+    //  Multiple Boundaries Test 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -199,7 +199,7 @@ int main() {
         std::cout << "  ✓ Multiple boundaries managed correctly\n";
     }
 
-    // ===== Boundary Normal Vector Test =====
+    //  Boundary Normal Vector Test 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;
@@ -216,7 +216,7 @@ int main() {
         std::cout << "  ✓ Boundary normal vector correct\n";
     }
 
-    // ===== Field Boundary Integration Test =====
+    //  Field Boundary Integration Test 
     {
         frcsim::PhysicsConfig config;
         config.enable_collision_detection = false;

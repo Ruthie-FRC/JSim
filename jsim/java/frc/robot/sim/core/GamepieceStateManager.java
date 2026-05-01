@@ -25,10 +25,7 @@ public class GamepieceStateManager {
         public int spawnedSoFar = 0;
     }
 
-    // =========================
     // Robot config
-    // =========================
-
     public void setRobotCapacity(RobotID robotId, int capacity) {
         robotCapacity.put(robotId, capacity);
     }
@@ -41,10 +38,8 @@ public class GamepieceStateManager {
         return robotInventory.getOrDefault(robotId, List.of()).size();
     }
 
-    // =========================
-    // Config
-    // =========================
 
+    // Config
     public void setPieceConfig(GamePieceType type, PieceConfig config) {
         pieceConfigs.put(type, config);
     }
@@ -61,10 +56,7 @@ public class GamepieceStateManager {
         fieldCounts.put(type, Math.max(0, getFieldCount(type) - 1));
     }
 
-    // =========================
     // Intake
-    // =========================
-
     public boolean intake(RobotID robotId, GamePieceState piece) {
         robotInventory.putIfAbsent(robotId, new ArrayList<>());
         List<GamePieceState> held = robotInventory.get(robotId);
@@ -80,10 +72,7 @@ public class GamepieceStateManager {
         return true;
     }
 
-    // =========================
     // Outtake
-    // =========================
-
     public boolean outtake(RobotID robotId, GamePieceType type, double velocity, Rotation3d rotation) {
         List<GamePieceState> held = robotInventory.get(robotId);
 
@@ -112,10 +101,7 @@ public class GamepieceStateManager {
         return false;
     }
 
-    // =========================
     // Spawning
-    // =========================
-
     private GamePieceState spawnFieldPiece(GamePieceType type, double velocity, Rotation3d rotation) {
         PieceConfig cfg = pieceConfigs.get(type);
 

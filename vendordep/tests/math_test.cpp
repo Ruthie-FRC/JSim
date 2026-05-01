@@ -9,7 +9,7 @@
 int main() {
     std::cout << "Testing math library...\n";
 
-    // ===== Vector3 Tests =====
+    //  Vector3 Tests 
     {
         // Basic construction and zero
         frcsim::Vector3 v1;
@@ -52,7 +52,7 @@ int main() {
         assert(std::fabs(normalized_mag - 1.0) < 1e-9);
     }
 
-    // ===== Quaternion Tests =====
+    //  Quaternion Tests 
     {
         // Identity quaternion
         frcsim::Quaternion q_identity;
@@ -87,7 +87,7 @@ int main() {
         assert(std::fabs(v_rotated.x - 1.0) < 1e-3);
     }
 
-    // ===== Matrix3 Tests =====
+    //  Matrix3 Tests 
     {
         // Identity matrix
         frcsim::Matrix3 m_identity;
