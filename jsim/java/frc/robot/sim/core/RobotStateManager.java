@@ -35,7 +35,6 @@ public class RobotStateManager {
         robotPoses.put(id, initialPose);
         robotSpeeds.put(id, new ChassisSpeeds(0, 0, 0));
 
-        // You can expand this if your FieldState actually needs frameDimensions
         FieldState<RobotState> state =
             new FieldState<>(new RobotState(id, initialPose, frameDimensions));        
             robotStates.put(id, state);
