@@ -29,8 +29,10 @@ public class RobotStateManager {
         RobotState state = new RobotState(id, initialPose, frameDimensions);
         FieldState<RobotState> fieldState = new FieldState<>(state);
 
-        robotStates.put(id, fieldState);
-        return fieldState;
+        FieldState<RobotState> state =
+            new FieldState<>(new RobotState(id, initialPose, frameDimensions));        
+            robotStates.put(id, state);
+        return state;
     }
 
     // =========================
