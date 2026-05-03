@@ -14,7 +14,6 @@ public class GamePieceState {
     public Rotation3d exitAngle;
     public Translation3d[] intakeArea;
 
-
     /**
      * Constructs a new GamePieceState with the specified type.
      * @param type The type of the game piece.
