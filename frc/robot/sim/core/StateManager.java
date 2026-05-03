@@ -19,6 +19,7 @@ public class StateManager {
         public int maxOnField = Integer.MAX_VALUE;
         public int maxSpawnTotal = Integer.MAX_VALUE;
         public int spawnedSoFar = 0;
+        public int aliveCount = 0;
     }
 
     public void setRobotCapacity(String robotId, int capacity) {
