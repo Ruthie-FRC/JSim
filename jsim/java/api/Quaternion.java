@@ -60,8 +60,4 @@ public class Quaternion {
 
     // For internal JNI pointer passing
     long getNativePtr() { return nativePtr; }
-
-    static {
-        System.loadLibrary("jsimcore");
-    }
 }
