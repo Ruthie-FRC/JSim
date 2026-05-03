@@ -6,13 +6,13 @@ package api;
  * Includes type, velocity, rotation, and other physical properties.
  */
 public class GamePieceState {
-    private GamePieceType type;
-    private double velocity;
-    private Rotation3d rotation;
-    private Translation2d robotOffsetStart;
-    private Translation3d exitVelocity;
-    private Rotation3d exitAngle;
-    private Translation3d[] intakeArea;
+    public GamePieceType type;
+    public double velocity;
+    public Rotation3d rotation;
+    public Translation2d robotOffsetStart;
+    public Translation3d exitVelocity;
+    public Rotation3d exitAngle;
+    public Translation3d[] intakeArea;
 
 
     /**
