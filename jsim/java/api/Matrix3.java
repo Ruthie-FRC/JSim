@@ -32,8 +32,4 @@ public class Matrix3 {
     private native long nativeCreate();
     private native long nativeMultiply(long mPtr, long vPtr);
     private native void nativeDelete(long ptr);
-
-    static {
-        System.loadLibrary("jsimcore");
-    }
 }

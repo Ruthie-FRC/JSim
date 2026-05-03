@@ -16,9 +16,6 @@ import java.util.Map;
  */
 public class RobotStateManager {
 
-    static {
-        System.loadLibrary("jsimcore");
-    }
 
     private final Map<RobotID, FieldState<RobotState>> robotStates = new HashMap<>();
 

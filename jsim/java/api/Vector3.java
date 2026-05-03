@@ -48,8 +48,4 @@ public class Vector3 {
     private native long nativeCreate(double x, double y, double z);
     private native double nativeNorm(long ptr);
     private native void nativeDelete(long ptr);
-
-    static {
-        System.loadLibrary("jsimcore");
-    }
 }

@@ -99,4 +99,8 @@ public class StateManager {
         incrementField(type);
         return piece;
     }
+    
+    static {
+        System.loadLibrary("jsimcore");
+    }
 }
