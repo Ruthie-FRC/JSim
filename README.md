@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/Ruthie-FRC/JSim)](LICENSE.txt)
 [![Open Issues](https://img.shields.io/github/issues/Ruthie-FRC/JSim)](https://github.com/Ruthie-FRC/JSim/issues)
 
-JSim is an open source, FRC physics library for simulation, analysis, and robotics workflow integration.
+JSim is an open source, FRC physics library for simulation and robotics workflow integration.
 
 ## Overview
 
@@ -32,6 +32,8 @@ cd vendordep
 ```
 
 This command runs Java tests plus the standalone native verification suite in `vendordep/tests/` through Gradle.
+
+Vendordep build tooling requires Java 17.
 
 ### Preview Docs Locally
 

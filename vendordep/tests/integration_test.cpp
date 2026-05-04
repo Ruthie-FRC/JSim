@@ -8,7 +8,7 @@
 int main() {
     std::cout << "Testing integration methods and rigid body dynamics...\n";
 
-    // ===== Integration Method Tests =====
+    //  Integration Method Tests 
     {
         // Test Semi-Implicit Euler integration
         // Expected: v = v0 + a*dt; x = x0 + v*dt
@@ -78,7 +78,7 @@ int main() {
         std::cout << "  ✓ Angular integration correct\n";
     }
 
-    // ===== Rigid Body Dynamics Tests =====
+    //  Rigid Body Dynamics Tests 
     {
         frcsim::PhysicsConfig config;
         config.fixed_dt_s = 0.01;

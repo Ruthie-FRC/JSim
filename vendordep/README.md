@@ -57,7 +57,7 @@ Use `jsim::PhysicsWorld` from `src/main/driver/include/driverheader.h`.
 ## Build Notes
 
 - Native and Java builds/tests are driven by vendordep Gradle tasks.
-- Vendordep Gradle build requires a WPILib-compatible JDK (Java 21 recommended).
+- Vendordep Gradle build requires a WPILib-compatible JDK (Java 17 recommended).
 
 ## Release Packaging
 
