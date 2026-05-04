@@ -1,5 +1,5 @@
 import pytest
-from sim_runtime.main_loop import SimLoop
+from apps.sim_runtime.main_loop import SimLoop
 from viewer_plugin.camera import Camera
 
 def test_sim_loop_init():
