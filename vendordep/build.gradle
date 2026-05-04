@@ -100,8 +100,8 @@ doxygen {
             option "project_number", "$pubVersion"
 
             // Driver C++ headers + sources
-            sources "../core/driver/src"
-            sources "../core/driver/include"
+            sources "src/main/driver/cpp"
+            sources "src/main/driver/include"
 
             // Java (for JNI + API docs)
             sources "src/main/java"
@@ -155,7 +155,7 @@ def nativeFromDriverExcludes = [
 // Native code can still reference WPILibC elsewhere, but driver targets should
 // not compile WPILibC-labeled sources.
 def driverWpilibCExcludes = [
-    '../core/driver/src/**/wpilib/**'
+    'src/main/driver/cpp/**/wpilib/**'
 ]
 
 
@@ -179,13 +179,13 @@ model {
             sources {
                 cpp {
                     source {
-                        srcDirs '../core/driver/src'
-                        include '../core/driver/include'
+                        srcDirs 'src/main/driver/cpp'
+                        include 'src/main/driver/include'
                         exclude nativeFromDriverExcludes
                         exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
-                        srcDirs '../core/driver/include'
+                        srcDirs 'src/main/driver/include'
                     }
                 }
             }
@@ -205,12 +205,12 @@ model {
             sources {
                 cpp {
                     source {
-                        srcDirs '../core/driver/src'
+                        srcDirs 'src/main/driver/cpp'
                         include '**/*.cpp'
                         exclude driverWpilibCExcludes
                     }
                     exportedHeaders {
-                        srcDirs '../core/driver/include'
+                        srcDirs 'src/main/driver/include'
                     }
                 }
             }

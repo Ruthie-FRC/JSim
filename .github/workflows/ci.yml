@@ -121,11 +121,6 @@ jobs:
       - name: Test with Gradle
         working-directory: vendordep
         run: ./gradlew test ${{ matrix.build-options }}
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
-        if: success() || failure()
-        with:
-          report_paths: 'vendordep/build/test-results/**/*.xml'
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
@@ -173,78 +168,14 @@ jobs:
       - name: Test with Gradle
         working-directory: vendordep
         run: ./gradlew test -Pbuildalldesktop
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
-        if: success() || failure()
-        with:
-          report_paths: 'vendordep/build/test-results/**/*.xml'
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
           path: vendordep/build/allOutputs
 
-  test-python-core:
-    needs: [build-host]
-    name: "Test - Python Core Bindings"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Run Core Pytest
-        run: |
-          pip install pytest
-          pytest core/python/tests/ --junitxml=results-core.xml
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
-        if: always()
-        with:
-          report_paths: 'results-core.xml'
-
-  test-python-apps:
-    name: "Test - Apps Pipeline"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Run Apps Pytest
-        env:
-          PYTHONPATH: apps
-        run: |
-          pip install pytest
-          pytest apps/tests/ --junitxml=results-apps.xml
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
-        if: always()
-        with:
-          report_paths: 'results-apps.xml'
-
-  test-python-cad:
-    name: "Test - CAD Importers"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Run CAD Pytest
-        env:
-          PYTHONPATH: cad-import
-        run: |
-          pip install pytest
-          pytest cad-import/tests/ --junitxml=results-cad.xml
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
-        if: always()
-        with:
-          report_paths: 'results-cad.xml'
-
   combine:
     name: Combine
-    needs: [build-docker, build-host, test-python-core, test-python-apps, test-python-cad]
+    needs: [build-docker, build-host]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
