@@ -15,8 +15,17 @@ public class SimRobot {
     /**
      * Hidden internal state snapshot.
      */
+    /**
+     * Internal state for a simulated robot, including pose and speeds.
+     */
     public static class RobotState {
+        /**
+         * The current field-relative pose of the robot.
+         */
         public Pose2d pose = new Pose2d();
+        /**
+         * The current chassis speeds of the robot.
+         */
         public ChassisSpeeds speeds = new ChassisSpeeds();
     }
 
@@ -61,6 +70,10 @@ public class SimRobot {
         stateManagerRef.get().speeds = speeds;
     }
 
+    /**
+     * Gets the RobotID for this robot.
+     * @return the RobotID assigned to this robot.
+     */
     public RobotID getRobotID() {
         return robotID;
     }

@@ -20,6 +20,10 @@ public class StateManager {
 
     private StateManager() {}
 
+    /**
+     * Gets the singleton instance of the StateManager.
+     * @return the StateManager instance.
+     */
     public static StateManager getInstance() {
         return INSTANCE;
     }
@@ -27,12 +31,23 @@ public class StateManager {
     /**
      * Loads JSON field definition and builds all FieldElements and collision zones.
      */
+    /**
+     * Loads JSON field definition and builds all FieldElements and collision zones.
+     * @param config The field configuration to initialize.
+     */
     public void initializeField(FieldConfig config) {
         // Build collision zones based on parsed config schemas
     }
 
     /**
      * Creates a robot instance, assigns starting pose, and registers it in the simulation.
+     */
+    /**
+     * Creates a robot instance, assigns starting pose, and registers it in the simulation.
+     * @param id The RobotID for the robot.
+     * @param startingPose The initial pose of the robot.
+     * @param frameVertices The vertices of the robot's frame.
+     * @return the initialized SimRobot instance.
      */
     public SimRobot initializeRobot(RobotID id, Pose2d startingPose, Translation2d[] frameVertices) {
         SimRobot.RobotState internalState = new SimRobot.RobotState();
