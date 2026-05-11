@@ -104,6 +104,39 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
+	 * Sets per-body material properties.
+	 *
+	 * @param bodyIndex native body index
+	 * @param restitution coefficient of restitution [0, 1]
+	 * @param frictionKinetic kinetic friction coefficient
+	 * @param frictionStatic static friction coefficient
+	 * @param collisionDamping collision damping [0, 1]
+	 */
+	void setBodyMaterial(int bodyIndex, double restitution, double frictionKinetic,
+			double frictionStatic, double collisionDamping) {
+		ensureOpen();
+		int rc = JSimJNI.setBodyMaterial(worldHandle, bodyIndex, restitution, frictionKinetic,
+				frictionStatic, collisionDamping);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to set body material: rc=" + rc);
+		}
+	}
+
+	/**
+	 * Sets the numeric material id for this body.
+	 *
+	 * @param bodyIndex native body index
+	 * @param materialId material identifier
+	 */
+	void setBodyMaterialId(int bodyIndex, int materialId) {
+		ensureOpen();
+		int rc = JSimJNI.setBodyMaterialId(worldHandle, bodyIndex, materialId);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to set body material id: rc=" + rc);
+		}
+	}
+
+	/**
 	 * Sets the body's collision filter.
 	 *
 	 * @param bodyIndex native body index
@@ -260,6 +293,40 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
+	 * Exports flattened body pose blocks.
+	 *
+	 * <p>Layout per body is: [x, y, z, qw, qx, qy, qz].
+	 *
+	 * @param outPose7 destination array sized for N*7 entries
+	 * @return number of body blocks written
+	 */
+	public int getBodyPose7Array(double[] outPose7) {
+		ensureOpen();
+		int rc = JSimJNI.getBodyPose7Array(worldHandle, outPose7);
+		if (rc < 0) {
+			throw new IllegalStateException("Failed to get body pose array: rc=" + rc);
+		}
+		return rc;
+	}
+
+	/**
+	 * Exports flattened body velocity blocks.
+	 *
+	 * <p>Layout per body is: [vx, vy, vz, wx, wy, wz].
+	 *
+	 * @param outVelocity6 destination array sized for N*6 entries
+	 * @return number of body blocks written
+	 */
+	public int getBodyVelocity6Array(double[] outVelocity6) {
+		ensureOpen();
+		int rc = JSimJNI.getBodyVelocity6Array(worldHandle, outVelocity6);
+		if (rc < 0) {
+			throw new IllegalStateException("Failed to get body velocity array: rc=" + rc);
+		}
+		return rc;
+	}
+
+	/**
 	 * Gets the world position for the given ball.
 	 *
 	 * @param ballIndex native ball index
@@ -356,6 +423,47 @@ public final class PhysicsWorld implements AutoCloseable {
 				gyMetersPerSecondSquared, gzMetersPerSecondSquared);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set gravity: rc=" + rc);
+		}
+	}
+
+	/**
+	 * Configures world-level aerodynamics.
+	 *
+	 * @param enabled true to enable aerodynamics
+	 * @param airDensityKgPm3 air density in kg/m^3
+	 * @param linearDragNPerMps linear drag coefficient in N/(m/s)
+	 * @param magnusCoefficient magnus coefficient
+	 * @param defaultDragCoefficient default drag coefficient
+	 * @param defaultReferenceAreaM2 default reference area in m^2
+	 */
+	public void setAerodynamics(boolean enabled, double airDensityKgPm3,
+			double linearDragNPerMps, double magnusCoefficient,
+			double defaultDragCoefficient, double defaultReferenceAreaM2) {
+		ensureOpen();
+		int rc = JSimJNI.setWorldAerodynamics(worldHandle, enabled, airDensityKgPm3,
+				linearDragNPerMps, magnusCoefficient, defaultDragCoefficient,
+				defaultReferenceAreaM2);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to set world aerodynamics: rc=" + rc);
+		}
+	}
+
+	/**
+	 * Sets per-material pair interaction overrides.
+	 *
+	 * @param materialAId first material id
+	 * @param materialBId second material id
+	 * @param restitution restitution override
+	 * @param friction friction override
+	 * @param enabled true to enable override
+	 */
+	public void setMaterialInteraction(int materialAId, int materialBId,
+			double restitution, double friction, boolean enabled) {
+		ensureOpen();
+		int rc = JSimJNI.setMaterialInteraction(worldHandle, materialAId, materialBId,
+				restitution, friction, enabled);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to set material interaction: rc=" + rc);
 		}
 	}
 
