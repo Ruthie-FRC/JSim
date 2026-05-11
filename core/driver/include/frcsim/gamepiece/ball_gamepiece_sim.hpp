@@ -96,7 +96,9 @@ class BallGamepieceSim {
     /** Friction used for robot-ball collision impulse. */
     double robot_ball_contact_friction{0.2};
     /** Enable automatic snapping of game elements to scoring zones when within
-     * snap_distance_m. Used for pick-and-place games. */
+     * snap_distance_m. Used for pick-and-place games or ball scoring where the
+     * element disappears and is added to a hub-like device, then teleported out
+     * X seconds later. */
     bool scoring_element_snapping_enabled{false};
     /** Distance threshold for automatic snapping to scoring zones, in meters.
      */
