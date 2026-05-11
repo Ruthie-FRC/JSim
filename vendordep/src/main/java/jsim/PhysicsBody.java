@@ -77,32 +77,6 @@ public final class PhysicsBody {
   }
 
   /**
-   * Sets per-body material contact properties.
-   *
-   * @param restitution coefficient of restitution [0, 1]
-   * @param frictionKinetic kinetic friction coefficient
-   * @param frictionStatic static friction coefficient
-   * @param collisionDamping collision damping [0, 1]
-   */
-  public void setMaterial(
-      double restitution,
-      double frictionKinetic,
-      double frictionStatic,
-      double collisionDamping) {
-    world.setBodyMaterial(
-        bodyIndex, restitution, frictionKinetic, frictionStatic, collisionDamping);
-  }
-
-  /**
-   * Sets the numeric material id for this body.
-   *
-   * @param materialId material identifier
-   */
-  public void setMaterialId(int materialId) {
-    world.setBodyMaterialId(bodyIndex, materialId);
-  }
-
-  /**
    * Sets an approximate spherical collision/body shape for this body.
    *
    * @param radiusMeters sphere radius in meters
