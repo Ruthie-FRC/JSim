@@ -371,6 +371,68 @@ int c_rsGetBodyVelocity6Array(uint64_t world_handle, double* out_velocity6,
 int c_rsGetBodyState13Array(uint64_t world_handle, double* out_state13,
                             int max_bodies);
 
+/**
+ * @brief Creates and registers a rigid assembly container.
+ * @param world_handle Target world handle.
+ * @return Non-negative assembly index on success; negative on failure.
+ */
+int c_rsCreateAssembly(uint64_t world_handle);
+
+/**
+ * @brief Adds a revolute joint to an assembly.
+ * @param world_handle Target world handle.
+ * @param assembly_index Zero-based assembly index returned by c_rsCreateAssembly().
+ * @param body_a_idx Zero-based body index within the assembly (or world bodies vector).
+ * @param body_b_idx Zero-based body index within the assembly (or world bodies vector).
+ * @param axis_x Joint axis x component (local to the first body) in world units.
+ * @param axis_y Joint axis y component.
+ * @param axis_z Joint axis z component.
+ * @return Non-negative joint id on success; negative on failure.
+ */
+int c_rsAddRevoluteJoint(uint64_t world_handle, int assembly_index,
+                         int body_a_idx, int body_b_idx,
+                         double axis_x, double axis_y, double axis_z);
+
+/**
+ * @brief Sets soft angular limits for a revolute joint.
+ * @param world_handle Target world handle.
+ * @param joint_id Joint id returned by c_rsAddRevoluteJoint().
+ * @param min_angle_rad Minimum allowed angle in radians.
+ * @param max_angle_rad Maximum allowed angle in radians.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsSetJointLimits(uint64_t world_handle, int joint_id,
+                       double min_angle_rad, double max_angle_rad);
+
+/**
+ * @brief Sets a motor target velocity and max torque for a revolute joint.
+ * @param world_handle Target world handle.
+ * @param joint_id Joint id returned by c_rsAddRevoluteJoint().
+ * @param target_velocity_radps Target angular velocity in rad/s.
+ * @param max_torque_nm Maximum torque (Nm) the motor can apply.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsSetJointMotorTarget(uint64_t world_handle, int joint_id,
+                           double target_velocity_radps, double max_torque_nm);
+
+/**
+ * @brief Reads the current joint angle for a revolute joint.
+ * @param world_handle Target world handle.
+ * @param joint_id Joint id returned by c_rsAddRevoluteJoint().
+ * @param out_angle_rad Output pointer for angle in radians.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsGetJointAngle(uint64_t world_handle, int joint_id, double* out_angle_rad);
+
+/**
+ * @brief Reads the current relative angular velocity for a revolute joint.
+ * @param world_handle Target world handle.
+ * @param joint_id Joint id returned by c_rsAddRevoluteJoint().
+ * @param out_vel_radps Output pointer for angular velocity in rad/s.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsGetJointVelocity(uint64_t world_handle, int joint_id, double* out_vel_radps);
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif
