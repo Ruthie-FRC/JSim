@@ -20,11 +20,12 @@
 
 namespace frcsim {
 
-/**
- * @brief Simulates robot interaction with spherical game pieces and free-flight
+  /**
+   * @brief Resolves robot-ball contact response.
  * projectiles.
- *
- * Owns robot, grounded-ball, projectile, goal-zone, and field-boundary state.
+   * @note Not thread-safe. This mutates ball state while reading shared
+   *       simulator state (for example: robot list plus field parameters)
+   *       without synchronization;
  *
   * @note Not thread-safe. This mutates ball state while reading shared
   *       simulator state (for example: robot list plus field parameters)
@@ -1207,11 +1208,12 @@ class BallGamepieceSim {
     }
   }
 
-
+  /**
    * @brief Resolves robot-ball contact response.
    * @param ball Ball entity updated in place when contact occurs.
-   * @note Not thread-safe. This mutates ball state and reads shared simulator
-   *       state (e.g., robot list and field parameters) without synchronization;
+   * @note Not thread-safe. This mutates ball state while reading shared
+   *       simulator state (for example: robot list plus field parameters)
+   *       without synchronization;
    *       call from the single-threaded simulation update path only.
    */
   void resolveRobotBallContacts(BallEntity& ball) {
