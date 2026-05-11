@@ -26,8 +26,10 @@ namespace frcsim {
  *
  * Owns robot, grounded-ball, projectile, goal-zone, and field-boundary state.
  *
- * Coordinate conventions:
- * - Position vectors are world-frame meters.
+  * @note Not thread-safe. This mutates ball state while reading shared
+  *       simulator state (for example: robot list plus field parameters)
+  *       without synchronization;
+  *       without synchronization;
  * - Velocity vectors are world-frame meters/second.
  * - Robot yaw is radians about +Z.
  *
