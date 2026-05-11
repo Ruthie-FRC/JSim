@@ -56,20 +56,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Creates a logical assembly for joints.
-	 *
-	 * @return the new joint assembly
-	 */
-	public JointAssembly createAssembly() {
-		ensureOpen();
-		int assemblyIndex = JSimJNI.createAssembly(worldHandle);
-		if (assemblyIndex < 0) {
-			throw new IllegalStateException("Failed to create assembly");
-		}
-		return new JointAssembly(this, assemblyIndex);
-	}
-
-	/**
 	 * Sets the body's world-space position in meters.
 	 *
 	 * @param bodyIndex native body index
@@ -200,52 +186,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set ball linear velocity: rc=" + rc);
 		}
-	}
-
-	int addRevoluteJoint(int assemblyIndex, int bodyAIndex, int bodyBIndex, Vec3 axisLocal) {
-		ensureOpen();
-		int jointId = JSimJNI.addRevoluteJoint(worldHandle, assemblyIndex, bodyAIndex, bodyBIndex,
-				axisLocal.x(), axisLocal.y(), axisLocal.z());
-		if (jointId < 0) {
-			throw new IllegalStateException("Failed to add revolute joint");
-		}
-		return jointId;
-	}
-
-	void setJointLimits(int jointId, double minAngleRad, double maxAngleRad) {
-		ensureOpen();
-		int rc = JSimJNI.setJointLimits(worldHandle, jointId, minAngleRad, maxAngleRad);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to set joint limits: rc=" + rc);
-		}
-	}
-
-	void setJointMotorTarget(int jointId, double targetVelocityRadps, double maxTorqueNm) {
-		ensureOpen();
-		int rc = JSimJNI.setJointMotorTarget(worldHandle, jointId, targetVelocityRadps, maxTorqueNm);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to set joint motor target: rc=" + rc);
-		}
-	}
-
-	double getJointAngleRadians(int jointId) {
-		ensureOpen();
-		double[] values = new double[1];
-		int rc = JSimJNI.getJointAngle(worldHandle, jointId, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get joint angle: rc=" + rc);
-		}
-		return values[0];
-	}
-
-	double getJointVelocityRadiansPerSecond(int jointId) {
-		ensureOpen();
-		double[] values = new double[1];
-		int rc = JSimJNI.getJointVelocity(worldHandle, jointId, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get joint velocity: rc=" + rc);
-		}
-		return values[0];
 	}
 
 	/**

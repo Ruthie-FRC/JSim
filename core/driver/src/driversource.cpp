@@ -11,7 +11,6 @@
 #include <unordered_map>
 
 #include "frcsim/physics_world.hpp"
-#include "frcsim/joints/detail/joint_math.hpp"
 #include "frcsim/rigidbody/material.hpp"
 
 namespace {
@@ -20,23 +19,6 @@ std::mutex g_world_mutex;
 std::unordered_map<std::uint64_t, std::unique_ptr<frcsim::PhysicsWorld>>
     g_worlds;
 std::uint64_t g_next_handle = 1;
-
-struct RevoluteJointRecord {
-  std::uint64_t world_handle{0};
-  int assembly_index{-1};
-  int body_a_index{-1};
-  int body_b_index{-1};
-  frcsim::Vector3 axis_local{frcsim::Vector3::unitZ()};
-  bool has_limits{false};
-  double min_angle_rad{0.0};
-  double max_angle_rad{0.0};
-  bool has_motor{false};
-  double target_velocity_radps{0.0};
-  double max_torque_nm{0.0};
-};
-
-std::unordered_map<int, RevoluteJointRecord> g_joint_records;
-int g_next_joint_id = 1;
 
 frcsim::PhysicsWorld* getWorld(std::uint64_t handle) {
   const auto it = g_worlds.find(handle);
@@ -58,106 +40,6 @@ frcsim::RigidBody* getBody(frcsim::PhysicsWorld* world, int body_index) {
   return &bodies[idx];
 }
 
-RevoluteJointRecord* getJoint(int joint_id, std::uint64_t world_handle) {
-  const auto it = g_joint_records.find(joint_id);
-  if (it == g_joint_records.end() || it->second.world_handle != world_handle) {
-    return nullptr;
-  }
-  return &it->second;
-}
-
-void solveRevoluteJoint(const RevoluteJointRecord& joint,
-                        frcsim::PhysicsWorld* world, double dt_s) {
-  if (!world) {
-    return;
-  }
-
-  auto& bodies = world->bodies();
-  const std::size_t body_a_idx = static_cast<std::size_t>(joint.body_a_index);
-  const std::size_t body_b_idx = static_cast<std::size_t>(joint.body_b_index);
-  if (joint.body_a_index < 0 || joint.body_b_index < 0 ||
-      body_a_idx >= bodies.size() || body_b_idx >= bodies.size()) {
-    return;
-  }
-
-  frcsim::RigidBody* body_a = &bodies[body_a_idx];
-  frcsim::RigidBody* body_b = &bodies[body_b_idx];
-  if (!body_a || !body_b) {
-    return;
-  }
-
-  using frcsim::detail::applyPositionCorrection;
-  using frcsim::detail::applyVelocityCorrection;
-  using frcsim::detail::clampValue;
-  using frcsim::detail::signedTwistAngleRad;
-  using frcsim::detail::worldAxisOrFallback;
-
-  const frcsim::Vector3 axis_world =
-      worldAxisOrFallback(body_a, joint.axis_local, frcsim::Vector3::unitZ());
-
-  applyPositionCorrection(body_a, body_b,
-                          body_b->position() - body_a->position(), 0.7);
-
-  const frcsim::Vector3 rel_ang = body_b->angularVelocity() - body_a->angularVelocity();
-  const frcsim::Vector3 orthogonal_rel_ang =
-      rel_ang - axis_world * rel_ang.dot(axis_world);
-  applyVelocityCorrection(body_a, body_b, orthogonal_rel_ang, 0.6);
-
-  const double inv_a = body_a->flags().is_kinematic ? 0.0 : body_a->inverseMass();
-  const double inv_b = body_b->flags().is_kinematic ? 0.0 : body_b->inverseMass();
-  const double total_inv = inv_a + inv_b;
-
-  if (total_inv > frcsim::detail::kJointEpsilon && joint.has_motor && dt_s > 0.0) {
-    const double current_rel = rel_ang.dot(axis_world);
-    const double target_delta = joint.target_velocity_radps - current_rel;
-    const double max_step = std::max(0.0, joint.max_torque_nm) * dt_s;
-    const double applied_delta = clampValue(target_delta, -max_step, max_step);
-    if (!body_a->flags().is_kinematic) {
-      body_a->setAngularVelocity(body_a->angularVelocity() -
-                                 axis_world * (applied_delta * inv_a / total_inv));
-    }
-    if (!body_b->flags().is_kinematic) {
-      body_b->setAngularVelocity(body_b->angularVelocity() +
-                                 axis_world * (applied_delta * inv_b / total_inv));
-    }
-  }
-
-  if (joint.has_limits && dt_s > 0.0) {
-    const double rel_angle = signedTwistAngleRad(body_a->orientation(),
-                                                 body_b->orientation(),
-                                                 axis_world);
-    double violation = 0.0;
-    if (rel_angle < joint.min_angle_rad) {
-      violation = joint.min_angle_rad - rel_angle;
-    } else if (rel_angle > joint.max_angle_rad) {
-      violation = joint.max_angle_rad - rel_angle;
-    }
-
-    if (std::abs(violation) > 1e-8 && total_inv > frcsim::detail::kJointEpsilon) {
-      const double correction_speed = clampValue(violation / dt_s, -5.0, 5.0);
-      if (!body_a->flags().is_kinematic) {
-        body_a->setAngularVelocity(body_a->angularVelocity() -
-                                   axis_world * (correction_speed * inv_a / total_inv));
-      }
-      if (!body_b->flags().is_kinematic) {
-        body_b->setAngularVelocity(body_b->angularVelocity() +
-                                   axis_world * (correction_speed * inv_b / total_inv));
-      }
-    }
-  }
-}
-
-void solveRevoluteJoints(std::uint64_t world_handle, frcsim::PhysicsWorld* world,
-                         double dt_s) {
-  for (const auto& [joint_id, joint] : g_joint_records) {
-    (void)joint_id;
-    if (joint.world_handle != world_handle) {
-      continue;
-    }
-    solveRevoluteJoint(joint, world, dt_s);
-  }
-}
-
 }  // namespace
 
 extern "C" {
@@ -176,145 +58,7 @@ uint64_t c_rsCreateWorld(double fixed_dt_s, int enable_gravity) {
 
 void c_rsDestroyWorld(uint64_t world_handle) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
-  for (auto it = g_joint_records.begin(); it != g_joint_records.end();) {
-    if (it->second.world_handle == world_handle) {
-      it = g_joint_records.erase(it);
-    } else {
-      ++it;
-    }
-  }
   g_worlds.erase(world_handle);
-}
-
-int c_rsCreateAssembly(uint64_t world_handle) {
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world = getWorld(world_handle);
-  if (!world) {
-    return -1;
-  }
-
-  world->createAssembly();
-  world->config().enable_joint_constraints = true;
-  return static_cast<int>(world->assemblies().size() - 1);
-}
-
-int c_rsAddRevoluteJoint(uint64_t world_handle, int assembly_index,
-                         int body_a_idx, int body_b_idx,
-                         double axis_x, double axis_y, double axis_z) {
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  frcsim::PhysicsWorld* world = getWorld(world_handle);
-  if (!world || assembly_index < 0) {
-    return -1;
-  }
-
-  const std::size_t assembly_idx = static_cast<std::size_t>(assembly_index);
-  if (assembly_idx >= world->assemblies().size()) {
-    return -1;
-  }
-  if (!getBody(world, body_a_idx) || !getBody(world, body_b_idx)) {
-    return -1;
-  }
-
-  RevoluteJointRecord record;
-  record.world_handle = world_handle;
-  record.assembly_index = assembly_index;
-  record.body_a_index = body_a_idx;
-  record.body_b_index = body_b_idx;
-  record.axis_local = frcsim::Vector3{axis_x, axis_y, axis_z};
-
-  const int joint_id = g_next_joint_id++;
-  g_joint_records.emplace(joint_id, record);
-  world->config().enable_joint_constraints = true;
-  return joint_id;
-}
-
-int c_rsSetJointLimits(uint64_t world_handle, int joint_id,
-                       double min_angle_rad, double max_angle_rad) {
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  RevoluteJointRecord* joint = getJoint(joint_id, world_handle);
-  if (!joint) {
-    return -1;
-  }
-
-  if (min_angle_rad <= max_angle_rad) {
-    joint->has_limits = true;
-    joint->min_angle_rad = min_angle_rad;
-    joint->max_angle_rad = max_angle_rad;
-  } else {
-    joint->has_limits = true;
-    joint->min_angle_rad = max_angle_rad;
-    joint->max_angle_rad = min_angle_rad;
-  }
-  return 0;
-}
-
-int c_rsSetJointMotorTarget(uint64_t world_handle, int joint_id,
-                           double target_velocity_radps, double max_torque_nm) {
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  RevoluteJointRecord* joint = getJoint(joint_id, world_handle);
-  if (!joint) {
-    return -1;
-  }
-
-  joint->has_motor = true;
-  joint->target_velocity_radps = target_velocity_radps;
-  joint->max_torque_nm = std::max(0.0, max_torque_nm);
-  return 0;
-}
-
-int c_rsGetJointAngle(uint64_t world_handle, int joint_id, double* out_angle_rad) {
-  if (!out_angle_rad) {
-    return -1;
-  }
-
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  RevoluteJointRecord* joint = getJoint(joint_id, world_handle);
-  frcsim::PhysicsWorld* world = getWorld(world_handle);
-  if (!joint || !world) {
-    return -1;
-  }
-
-  auto& bodies = world->bodies();
-  const std::size_t body_a_idx = static_cast<std::size_t>(joint->body_a_index);
-  const std::size_t body_b_idx = static_cast<std::size_t>(joint->body_b_index);
-  if (body_a_idx >= bodies.size() || body_b_idx >= bodies.size()) {
-    return -1;
-  }
-
-  const frcsim::Vector3 axis_world =
-      frcsim::detail::worldAxisOrFallback(&bodies[body_a_idx], joint->axis_local,
-                                           frcsim::Vector3::unitZ());
-  *out_angle_rad = frcsim::detail::signedTwistAngleRad(
-      bodies[body_a_idx].orientation(), bodies[body_b_idx].orientation(), axis_world);
-  return 0;
-}
-
-int c_rsGetJointVelocity(uint64_t world_handle, int joint_id, double* out_vel_radps) {
-  if (!out_vel_radps) {
-    return -1;
-  }
-
-  std::lock_guard<std::mutex> lock(g_world_mutex);
-  RevoluteJointRecord* joint = getJoint(joint_id, world_handle);
-  frcsim::PhysicsWorld* world = getWorld(world_handle);
-  if (!joint || !world) {
-    return -1;
-  }
-
-  auto& bodies = world->bodies();
-  const std::size_t body_a_idx = static_cast<std::size_t>(joint->body_a_index);
-  const std::size_t body_b_idx = static_cast<std::size_t>(joint->body_b_index);
-  if (body_a_idx >= bodies.size() || body_b_idx >= bodies.size()) {
-    return -1;
-  }
-
-  const frcsim::Vector3 axis_world =
-      frcsim::detail::worldAxisOrFallback(&bodies[body_a_idx], joint->axis_local,
-                                           frcsim::Vector3::unitZ());
-  const frcsim::Vector3 rel_ang = bodies[body_b_idx].angularVelocity() -
-                                  bodies[body_a_idx].angularVelocity();
-  *out_vel_radps = rel_ang.dot(axis_world);
-  return 0;
 }
 
 int c_rsCreateBody(uint64_t world_handle, double mass_kg) {
@@ -558,10 +302,8 @@ int c_rsStepWorld(uint64_t world_handle, int steps) {
   }
 
   const int safe_steps = std::max(steps, 1);
-  const double dt_s = world->config().fixed_dt_s;
   for (int i = 0; i < safe_steps; ++i) {
     world->step();
-    solveRevoluteJoints(world_handle, world, dt_s);
   }
   return 0;
 }
