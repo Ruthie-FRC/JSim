@@ -93,6 +93,80 @@ public class JSimJNI {
    */
   public static native int createBall(long worldHandle);
 
+    /**
+     * Creates a logical joint assembly container in the given world.
+     *
+     * @param worldHandle the native world handle
+     * @return the native assembly index
+     */
+    public static native int createAssembly(long worldHandle);
+
+    /**
+     * Adds a revolute joint to an assembly.
+     *
+     * @param worldHandle the native world handle
+     * @param assemblyIndex the native assembly index
+     * @param bodyAIndex first body index
+     * @param bodyBIndex second body index
+     * @param axisX local x component of the hinge axis
+     * @param axisY local y component of the hinge axis
+     * @param axisZ local z component of the hinge axis
+     * @return the native joint id
+     */
+    public static native int addRevoluteJoint(
+      long worldHandle,
+      int assemblyIndex,
+      int bodyAIndex,
+      int bodyBIndex,
+      double axisX,
+      double axisY,
+      double axisZ);
+
+    /**
+     * Sets angle limits for a revolute joint.
+     *
+     * @param worldHandle the native world handle
+     * @param jointId the native joint id
+     * @param minAngleRad minimum angle in radians
+     * @param maxAngleRad maximum angle in radians
+     * @return zero on success
+     */
+    public static native int setJointLimits(
+      long worldHandle, int jointId, double minAngleRad, double maxAngleRad);
+
+    /**
+     * Sets a motor target for a revolute joint.
+     *
+     * @param worldHandle the native world handle
+     * @param jointId the native joint id
+     * @param targetVelocityRadps target angular velocity in rad/s
+     * @param maxTorqueNm maximum motor torque in N·m
+     * @return zero on success
+     */
+    public static native int setJointMotorTarget(
+      long worldHandle, int jointId, double targetVelocityRadps, double maxTorqueNm);
+
+    /**
+     * Reads the current revolute-joint angle into {@code outAngleRad}.
+     *
+     * @param worldHandle the native world handle
+     * @param jointId the native joint id
+     * @param outAngleRad destination array of length at least 1
+     * @return zero on success
+     */
+    public static native int getJointAngle(long worldHandle, int jointId, double[] outAngleRad);
+
+    /**
+     * Reads the current revolute-joint angular velocity into {@code outVelocityRadps}.
+     *
+     * @param worldHandle the native world handle
+     * @param jointId the native joint id
+     * @param outVelocityRadps destination array of length at least 1
+     * @return zero on success
+     */
+    public static native int getJointVelocity(
+      long worldHandle, int jointId, double[] outVelocityRadps);
+
   /**
    * Sets a body's position in meters.
    *
