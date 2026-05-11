@@ -86,6 +86,14 @@ public class JSimJNI {
   public static native int createBody(long worldHandle, double massKg);
 
   /**
+   * Creates a ball simulator in the world.
+   *
+   * @param worldHandle the native world handle
+   * @return the native ball index
+   */
+  public static native int createBall(long worldHandle);
+
+  /**
    * Sets a body's position in meters.
    *
    * @param worldHandle the native world handle
@@ -192,6 +200,32 @@ public class JSimJNI {
       double yMeters,
       double zMeters,
       double dragCoefficient);
+
+    /**
+     * Sets a ball's world-space position in meters.
+     *
+     * @param worldHandle the native world handle
+     * @param ballIndex the native ball index
+     * @param xMeters x position in meters
+     * @param yMeters y position in meters
+     * @param zMeters z position in meters
+     * @return zero on success
+     */
+    public static native int setBallPosition(
+      long worldHandle, int ballIndex, double xMeters, double yMeters, double zMeters);
+
+    /**
+     * Sets a ball's world-space linear velocity in meters per second.
+     *
+     * @param worldHandle the native world handle
+     * @param ballIndex the native ball index
+     * @param vxMps x velocity in meters per second
+     * @param vyMps y velocity in meters per second
+     * @param vzMps z velocity in meters per second
+     * @return zero on success
+     */
+    public static native int setBallLinearVelocity(
+      long worldHandle, int ballIndex, double vxMps, double vyMps, double vzMps);
 
   /**
    * Sets the world's gravity vector in meters per second squared.
@@ -302,4 +336,25 @@ public class JSimJNI {
    * @return the number of body blocks written, or negative on error
    */
   public static native int getBodyState13Array(long worldHandle, double[] outState13);
+
+  /**
+   * Reads a ball's world-space position.
+   *
+   * @param worldHandle the native world handle
+   * @param ballIndex the native ball index
+   * @param outXyzMeters output array of length at least 3
+   * @return zero on success
+   */
+  public static native int getBallPosition(long worldHandle, int ballIndex, double[] outXyzMeters);
+
+  /**
+   * Reads a ball's world-space linear velocity.
+   *
+   * @param worldHandle the native world handle
+   * @param ballIndex the native ball index
+   * @param outVxyzMps output array of length at least 3
+   * @return zero on success
+   */
+  public static native int getBallLinearVelocity(
+      long worldHandle, int ballIndex, double[] outVxyzMps);
 }

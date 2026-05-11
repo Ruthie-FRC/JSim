@@ -79,6 +79,19 @@ Java_jsim_jni_JSimJNI_createBody
 
 /*
  * Class:     jsim_jni_JSimJNI
+ * Method:    createBall
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_createBall
+  (JNIEnv*, jclass, jlong world_handle)
+{
+  return static_cast<jint>(
+      c_rsCreateBall(static_cast<uint64_t>(world_handle)));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
  * Method:    setBodyPosition
  * Signature: (JIDDD)I
  */
@@ -197,6 +210,36 @@ Java_jsim_jni_JSimJNI_setBodyAerodynamicBox
   return static_cast<jint>(
       c_rsSetBodyAerodynamicBox(static_cast<uint64_t>(world_handle),
                                 body_index, x_m, y_m, z_m, drag_coefficient));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setBallPosition
+ * Signature: (JI DDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBallPosition
+  (JNIEnv*, jclass, jlong world_handle, jint ball_index, jdouble x_m,
+   jdouble y_m, jdouble z_m)
+{
+  return static_cast<jint>(
+      c_rsSetBallPosition(static_cast<uint64_t>(world_handle), ball_index,
+                          x_m, y_m, z_m));
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    setBallLinearVelocity
+ * Signature: (JI DDD)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_setBallLinearVelocity
+  (JNIEnv*, jclass, jlong world_handle, jint ball_index, jdouble vx_mps,
+   jdouble vy_mps, jdouble vz_mps)
+{
+  return static_cast<jint>(
+      c_rsSetBallLinearVelocity(static_cast<uint64_t>(world_handle), ball_index,
+                                vx_mps, vy_mps, vz_mps));
 }
 
 /*
@@ -408,6 +451,62 @@ Java_jsim_jni_JSimJNI_getBodyState13Array
                                          data, max_bodies);
   env->ReleaseDoubleArrayElements(out_state13, data, 0);
   return static_cast<jint>(rc);
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    getBallPosition
+ * Signature: (JI[D)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_getBallPosition
+  (JNIEnv* env, jclass, jlong world_handle, jint ball_index,
+   jdoubleArray out_xyz)
+{
+  if (out_xyz == nullptr || env->GetArrayLength(out_xyz) < 3) {
+    return -1;
+  }
+
+  double x = 0.0;
+  double y = 0.0;
+  double z = 0.0;
+  const int rc = c_rsGetBallPosition(
+      static_cast<uint64_t>(world_handle), ball_index, &x, &y, &z);
+  if (rc != 0) {
+    return rc;
+  }
+
+  jdouble values[3] = {x, y, z};
+  env->SetDoubleArrayRegion(out_xyz, 0, 3, values);
+  return 0;
+}
+
+/*
+ * Class:     jsim_jni_JSimJNI
+ * Method:    getBallLinearVelocity
+ * Signature: (JI[D)I
+ */
+JNIEXPORT jint JNICALL
+Java_jsim_jni_JSimJNI_getBallLinearVelocity
+  (JNIEnv* env, jclass, jlong world_handle, jint ball_index,
+   jdoubleArray out_vxyz)
+{
+  if (out_vxyz == nullptr || env->GetArrayLength(out_vxyz) < 3) {
+    return -1;
+  }
+
+  double vx = 0.0;
+  double vy = 0.0;
+  double vz = 0.0;
+  const int rc = c_rsGetBallLinearVelocity(
+      static_cast<uint64_t>(world_handle), ball_index, &vx, &vy, &vz);
+  if (rc != 0) {
+    return rc;
+  }
+
+  jdouble values[3] = {vx, vy, vz};
+  env->SetDoubleArrayRegion(out_vxyz, 0, 3, values);
+  return 0;
 }
 
 }  // extern "C"

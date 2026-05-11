@@ -77,6 +77,36 @@ public final class PhysicsBody {
   }
 
   /**
+   * Sets an approximate spherical collision/body shape for this body.
+   *
+   * @param radiusMeters sphere radius in meters
+   */
+  public void setCollisionSphere(double radiusMeters) {
+    world.setBodyAerodynamicSphere(bodyIndex, radiusMeters, 0.0);
+  }
+
+  /**
+   * Sets an approximate box collision/body shape for this body.
+   *
+   * @param xMeters box x dimension in meters
+   * @param yMeters box y dimension in meters
+   * @param zMeters box z dimension in meters
+   */
+  public void setCollisionBox(double xMeters, double yMeters, double zMeters) {
+    world.setBodyAerodynamicBox(bodyIndex, xMeters, yMeters, zMeters, 0.0);
+  }
+
+  /**
+   * Sets broad-phase collision filtering for this body.
+   *
+   * @param collisionLayerBits body layer bitmask
+   * @param collisionMaskBits body mask bitmask
+   */
+  public void setCollisionFilter(int collisionLayerBits, int collisionMaskBits) {
+    world.setBodyCollisionFilter(bodyIndex, collisionLayerBits, collisionMaskBits);
+  }
+
+  /**
    * Gets the current world-space position in meters.
    *
    * @return the body position

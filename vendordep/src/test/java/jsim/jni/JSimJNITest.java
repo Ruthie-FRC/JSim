@@ -7,6 +7,7 @@ package jsim.jni;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import jsim.Ball;
 import jsim.PhysicsBody;
 import jsim.PhysicsWorld;
 
@@ -48,6 +49,27 @@ public class JSimJNITest {
       assertTrue(vel.length == 3);
       assertTrue(pos[2] < 1.0);
       assertTrue(vel[2] < 0.0);
+    }
+  }
+
+  @Test
+  void ballCollisionWrapperTest() {
+    try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
+      PhysicsBody bumper = world.createBody(10.0);
+      bumper.setCollisionBox(0.6, 0.6, 0.2);
+      bumper.setPosition(0.0, 0.0, 0.1);
+
+      Ball ball = world.createBall();
+      ball.shoot(new jsim.Vec3(0.5, 0.0, 0.12), new jsim.Vec3(-3.0, 0.0, 0.0));
+
+      world.step(20);
+
+      double[] pos = ball.positionArray();
+      double[] vel = ball.linearVelocityArray();
+      assertTrue(pos.length == 3);
+      assertTrue(vel.length == 3);
+      assertTrue(pos[2] >= 0.0);
+      assertTrue(vel[0] > -3.0);
     }
   }
 }

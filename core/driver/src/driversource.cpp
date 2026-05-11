@@ -72,6 +72,17 @@ int c_rsCreateBody(uint64_t world_handle, double mass_kg) {
   return static_cast<int>(world->bodies().size() - 1);
 }
 
+int c_rsCreateBall(uint64_t world_handle) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world) {
+    return -1;
+  }
+
+  world->createBall();
+  return static_cast<int>(world->balls().size() - 1);
+}
+
 int c_rsSetBodyPosition(uint64_t world_handle, int body_index,
                         double x_m, double y_m, double z_m) {
   std::lock_guard<std::mutex> lock(g_world_mutex);
@@ -199,6 +210,46 @@ int c_rsSetBodyAerodynamicBox(uint64_t world_handle, int body_index,
   return 0;
 }
 
+int c_rsSetBallPosition(uint64_t world_handle, int ball_index,
+                        double x_m, double y_m, double z_m) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world || ball_index < 0) {
+    return -1;
+  }
+
+  auto& balls = world->balls();
+  const std::size_t idx = static_cast<std::size_t>(ball_index);
+  if (idx >= balls.size()) {
+    return -1;
+  }
+
+  auto state = balls[idx].state();
+  state.position_m = frcsim::Vector3{x_m, y_m, z_m};
+  balls[idx].setState(state);
+  return 0;
+}
+
+int c_rsSetBallLinearVelocity(uint64_t world_handle, int ball_index,
+                              double vx_mps, double vy_mps, double vz_mps) {
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world || ball_index < 0) {
+    return -1;
+  }
+
+  auto& balls = world->balls();
+  const std::size_t idx = static_cast<std::size_t>(ball_index);
+  if (idx >= balls.size()) {
+    return -1;
+  }
+
+  auto state = balls[idx].state();
+  state.velocity_mps = frcsim::Vector3{vx_mps, vy_mps, vz_mps};
+  balls[idx].setState(state);
+  return 0;
+}
+
 int c_rsSetWorldAerodynamics(uint64_t world_handle, int enabled,
                              double air_density_kgpm3,
                              double linear_drag_coefficient_n_per_mps,
@@ -267,6 +318,56 @@ int c_rsSetWorldGravity(uint64_t world_handle, double gx_mps2,
 
   world->config().gravity_mps2 = frcsim::Vector3{gx_mps2, gy_mps2, gz_mps2};
   world->config().enable_gravity = true;
+  return 0;
+}
+
+int c_rsGetBallPosition(uint64_t world_handle, int ball_index,
+                        double* x_m, double* y_m, double* z_m) {
+  if (!x_m || !y_m || !z_m) {
+    return -1;
+  }
+
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world || ball_index < 0) {
+    return -1;
+  }
+
+  const auto& balls = world->balls();
+  const std::size_t idx = static_cast<std::size_t>(ball_index);
+  if (idx >= balls.size()) {
+    return -1;
+  }
+
+  const frcsim::Vector3 p = balls[idx].state().position_m;
+  *x_m = p.x;
+  *y_m = p.y;
+  *z_m = p.z;
+  return 0;
+}
+
+int c_rsGetBallLinearVelocity(uint64_t world_handle, int ball_index,
+                              double* vx_mps, double* vy_mps, double* vz_mps) {
+  if (!vx_mps || !vy_mps || !vz_mps) {
+    return -1;
+  }
+
+  std::lock_guard<std::mutex> lock(g_world_mutex);
+  frcsim::PhysicsWorld* world = getWorld(world_handle);
+  if (!world || ball_index < 0) {
+    return -1;
+  }
+
+  const auto& balls = world->balls();
+  const std::size_t idx = static_cast<std::size_t>(ball_index);
+  if (idx >= balls.size()) {
+    return -1;
+  }
+
+  const frcsim::Vector3 v = balls[idx].state().velocity_mps;
+  *vx_mps = v.x;
+  *vy_mps = v.y;
+  *vz_mps = v.z;
   return 0;
 }
 
