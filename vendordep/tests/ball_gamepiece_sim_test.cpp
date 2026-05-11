@@ -15,8 +15,6 @@ int main() {
     robot_a.position_m = frcsim::Vector3(1.0, 2.0, 0.0);
     robot_a.velocity_mps = frcsim::Vector3(3.0, 0.0, 0.0);
     robot_a.yaw_rad = 0.0;
-    robot_a.intake_enabled = true;
-    robot_a.intake_radius_m = 0.35;
 
     frcsim::BallGamepieceSim::RobotState robot_b;
     robot_b.position_m = frcsim::Vector3(1.7, 2.0, 0.0);
@@ -60,7 +58,6 @@ int main() {
         sim.step(0.02);
     }
 
-    assert(sim.robots()[robot_a_id].carried_ball_index != frcsim::BallGamepieceSim::kNoBall);
 
     const double relative_speed_before = (robot_a.velocity_mps - robot_b.velocity_mps).norm();
     const double relative_speed_after =
@@ -75,8 +72,8 @@ int main() {
     fire.estimated_exit_velocity_mps = 16.5;
     fire.spin_radps = frcsim::Vector3(0.0, 40.0, 0.0);
 
-    const bool fired = sim.fireBall(robot_a_id, fire);
-    assert(fired);
+    const std::size_t projectile_idx = sim.fireProjectile(robot_a_id, fire, true);
+    assert(projectile_idx != frcsim::BallGamepieceSim::kNoBall);
 
     for (int i = 0; i < 240; ++i) {
         sim.step(0.02);
@@ -412,8 +409,6 @@ int main() {
         full_robot_a.position_m = frcsim::Vector3(2.0, 2.0, 0.0);
         full_robot_a.velocity_mps = frcsim::Vector3(1.4, 0.2, 0.0);
         full_robot_a.yaw_rad = 0.2;
-        full_robot_a.intake_enabled = true;
-        full_robot_a.intake_radius_m = 0.32;
         full_sim.addRobot(full_robot_a);
 
         frcsim::BallGamepieceSim::RobotState full_robot_b;
