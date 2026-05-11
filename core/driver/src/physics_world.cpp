@@ -239,6 +239,109 @@ void PhysicsWorld::step() {
     }
   }
 
+  // Resolve ball <-> rigid-body collisions (simple approximations).
+  // Handle sphere-sphere (body sphere) and sphere-box (body box) collisions.
+  for (auto& ball : balls_) {
+    // Copy mutable state, update and write back with setState().
+    BallPhysicsSim3D::BallState s = ball.state();
+    if (s.held) {
+      continue;
+    }
+
+    const BallPhysicsSim3D::BallProperties& bp = ball.ballProperties();
+    const double ball_r = std::max(0.0, bp.radius_m);
+    const double ball_m = std::max(1e-9, bp.mass_kg);
+    const double inv_ball_m = 1.0 / ball_m;
+
+    for (auto& body : bodies_) {
+      // Skip bodies that shouldn't interact via world mask if collision detection disabled.
+      if (!config_.enable_collision_detection) {
+        break;
+      }
+
+      const auto* geom = body.aerodynamicGeometry();
+      if (!geom) {
+        continue;
+      }
+
+      // Material restitution fallback.
+      const Material* body_mat = body.material();
+      const double body_restitution = body_mat ? body_mat->coefficient_of_restitution : 0.4;
+
+      // Helper to apply impulse along contact normal.
+      auto apply_impulse = [&](const Vector3& contact_normal, const Vector3& contact_point_world) {
+        Vector3 normal = contact_normal;
+        if (normal.isZero()) {
+          normal = Vector3::unitZ();
+        } else {
+          normal = normal.normalized();
+        }
+
+        // Push ball out of penetration (simple positional correction).
+        // We compute penetration separately before calling this helper.
+
+        const Vector3 rel_vel = s.velocity_mps - body.linearVelocity();
+        const double vn = rel_vel.dot(normal);
+        if (vn >= 0.0) {
+          return;
+        }
+
+        const double e = std::clamp(0.5 * (bp.restitution + body_restitution), 0.0, 1.0);
+
+        // Treat kinematic bodies as infinite mass (they do not change velocity).
+        const double inv_body_m = body.flags().is_kinematic ? 0.0 : body.inverseMass();
+
+        const double j = -(1.0 + e) * vn / (inv_ball_m + inv_body_m);
+        const Vector3 impulse = normal * j;
+
+        // Apply to ball state
+        s.velocity_mps += impulse * inv_ball_m;
+
+        // Apply to body if not kinematic
+        if (!body.flags().is_kinematic) {
+          const Vector3 new_body_vel = body.linearVelocity() - impulse * inv_body_m;
+          body.setLinearVelocity(new_body_vel);
+        }
+      };
+
+      if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kSphere) {
+        const double body_r = std::max(0.0, geom->radius_m);
+        const Vector3 rel = s.position_m - body.position();
+        const double dist = rel.norm();
+        const double contact_dist = ball_r + body_r;
+        if (dist <= contact_dist && dist > 1e-9) {
+          const Vector3 normal = rel / dist;
+          const double penetration = contact_dist - dist;
+          s.position_m += normal * penetration;
+          apply_impulse(normal, body.position());
+        }
+      } else if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kBox) {
+        // Find closest point on oriented box to ball center.
+        const Vector3 rel_world = s.position_m - body.position();
+        const Vector3 rel_local = body.orientation().inverse().rotate(rel_world);
+        const Vector3 half = geom->box_dimensions_m * 0.5;
+
+        Vector3 clamped_local{
+            std::clamp(rel_local.x, -half.x, half.x),
+            std::clamp(rel_local.y, -half.y, half.y),
+            std::clamp(rel_local.z, -half.z, half.z)};
+
+        const Vector3 closest_world = body.orientation().rotate(clamped_local) + body.position();
+        const Vector3 diff = s.position_m - closest_world;
+        const double dist = diff.norm();
+        if (dist <= ball_r) {
+          const Vector3 normal = dist > 1e-9 ? diff / dist : Vector3::unitZ();
+          const double penetration = ball_r - dist;
+          s.position_m += normal * penetration;
+          apply_impulse(normal, closest_world);
+        }
+      }
+      // Cylinder and other shapes can be added later.
+    }
+
+    ball.setState(s);
+  }
+
   for (auto& ball : balls_) {
     ball.step(dt_s);
   }
