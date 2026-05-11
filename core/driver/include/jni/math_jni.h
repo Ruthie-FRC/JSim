@@ -38,6 +38,19 @@ JNIEXPORT jlong JNICALL Java_api_Matrix3_nativeTransform(JNIEnv*, jobject, jlong
 JNIEXPORT jlong JNICALL Java_api_Matrix3_nativeTranspose(JNIEnv*, jobject, jlong);
 JNIEXPORT void JNICALL Java_api_Matrix3_nativeDelete(JNIEnv*, jobject, jlong);
 
+// Physics JNI (world/body/ball)
+JNIEXPORT jlong JNICALL Java_api_NativePhysics_nativeCreateWorld(JNIEnv*, jclass);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeDestroyWorld(JNIEnv*, jclass, jlong);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeStepWorld(JNIEnv*, jclass, jlong, jdouble);
+
+JNIEXPORT jlong JNICALL Java_api_NativePhysics_nativeCreateBody(JNIEnv*, jclass, jlong, jdouble);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeSetBodyBoxGeometry(JNIEnv*, jclass, jlong, jdouble, jdouble, jdouble);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeSetBodySphereGeometry(JNIEnv*, jclass, jlong, jdouble);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeSetBodyPosition(JNIEnv*, jclass, jlong, jdouble, jdouble, jdouble);
+
+JNIEXPORT jlong JNICALL Java_api_NativePhysics_nativeCreateBall(JNIEnv*, jclass, jlong);
+JNIEXPORT void JNICALL Java_api_NativePhysics_nativeBallShoot(JNIEnv*, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble);
+JNIEXPORT jdoubleArray JNICALL Java_api_NativePhysics_nativeGetBallState(JNIEnv*, jclass, jlong);
 #ifdef __cplusplus
 }
 #endif

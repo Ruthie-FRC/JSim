@@ -335,8 +335,37 @@ void PhysicsWorld::step() {
           s.position_m += normal * penetration;
           apply_impulse(normal, closest_world);
         }
+      } else if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kCylinder) {
+        // Approximate cylinder as oriented along geometry.cylinder_axis_local
+        const double body_r = std::max(0.0, geom->radius_m);
+        const double half_len = std::max(0.0, geom->cylinder_length_m) * 0.5;
+
+        // Transform ball center into body local frame
+        const Vector3 rel_world = s.position_m - body.position();
+        const Vector3 rel_local = body.orientation().inverse().rotate(rel_world);
+
+        // Cylinder axis in local body coords
+        Vector3 axis_local = geom->cylinder_axis_local.normalized();
+        if (axis_local.isZero()) axis_local = Vector3::unitZ();
+
+        // Project onto axis to get longitudinal coordinate
+        const double longitudinal = rel_local.dot(axis_local);
+        const double clamped_long = std::clamp(longitudinal, -half_len, half_len);
+
+        // Closest point on axis (local), then convert to world
+        const Vector3 closest_local = axis_local * clamped_long;
+        const Vector3 closest_world = body.orientation().rotate(closest_local) + body.position();
+
+        const Vector3 diff = s.position_m - closest_world;
+        const double radial_dist = std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+        if (radial_dist <= (ball_r + body_r)) {
+          const Vector3 normal = radial_dist > 1e-9 ? diff / radial_dist : Vector3::unitZ();
+          const double penetration = (ball_r + body_r) - radial_dist;
+          s.position_m += normal * penetration;
+          apply_impulse(normal, closest_world);
+        }
       }
-      // Cylinder and other shapes can be added later.
+      // Other shapes may be added later.
     }
 
     ball.setState(s);
