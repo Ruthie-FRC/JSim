@@ -164,29 +164,11 @@ public final class Ball {
   }
 
   /**
-   * Gets the current world-space position in meters.
-   *
-   * @return a length-3 array containing {x, y, z}
-   */
-  double[] positionArray() {
-    return world.getBallPositionArray(ballIndex);
-  }
-
-  /**
    * Gets the current world-space linear velocity in meters per second.
    *
    * @return the ball linear velocity
    */
   public LinearVelocity3d linearVelocity() {
     return world.getBallLinearVelocity(ballIndex);
-  }
-
-  /**
-   * Gets the current world-space linear velocity in meters per second.
-   *
-   * @return a length-3 array containing {vx, vy, vz}
-   */
-  double[] linearVelocityArray() {
-    return world.getBallLinearVelocityArray(ballIndex);
   }
 }

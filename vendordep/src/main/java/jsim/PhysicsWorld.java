@@ -212,22 +212,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Gets the world position for the given body.
-	 *
-	 * @param bodyIndex native body index
-	 * @return a length-3 array containing {x, y, z}
-	 */
-	double[] getBodyPositionArray(int bodyIndex) {
-		ensureOpen();
-		double[] values = new double[3];
-		int rc = JSimJNI.getBodyPosition(worldHandle, bodyIndex, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get body position: rc=" + rc);
-		}
-		return values;
-	}
-
-	/**
 	 * Gets the world linear velocity for the given body.
 	 *
 	 * @param bodyIndex native body index
@@ -243,20 +227,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
-	/**
-	 * Gets the world linear velocity for the given body.
-	 *
-	 * @param bodyIndex native body index
-	 * @return a length-3 array containing {vx, vy, vz}
-	 */
-	double[] getBodyLinearVelocityArray(int bodyIndex) {
-		ensureOpen();
-		double[] values = new double[3];
-		int rc = JSimJNI.getBodyLinearVelocity(worldHandle, bodyIndex, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get body linear velocity: rc=" + rc);
-		}
-		return values;
 	}
 
 	/**
@@ -292,20 +262,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
 
-	/**
-	 * Gets the world position for the given ball.
-	 *
-	 * @param ballIndex native ball index
-	 * @return a length-3 array containing {x, y, z} position in meters
-	 */
-	double[] getBallPositionArray(int ballIndex) {
-		ensureOpen();
-		double[] values = new double[3];
-		int rc = JSimJNI.getBallPosition(worldHandle, ballIndex, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get ball position: rc=" + rc);
-		}
-		return values;
 	}
 
 	/**
@@ -324,20 +280,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
-	/**
-	 * Gets the world linear velocity for the given ball.
-	 *
-	 * @param ballIndex native ball index
-	 * @return a length-3 array containing {vx, vy, vz} velocity in meters per second
-	 */
-	double[] getBallLinearVelocityArray(int ballIndex) {
-		ensureOpen();
-		double[] values = new double[3];
-		int rc = JSimJNI.getBallLinearVelocity(worldHandle, ballIndex, values);
-		if (rc != 0) {
-			throw new IllegalStateException("Failed to get ball linear velocity: rc=" + rc);
-		}
-		return values;
 	}
 
 	/**

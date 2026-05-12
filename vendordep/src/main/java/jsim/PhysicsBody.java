@@ -127,30 +127,12 @@ public final class PhysicsBody {
   }
 
   /**
-   * Gets the current world-space position in meters.
-   *
-   * @return a length-3 array containing {x, y, z}
-   */
-  public double[] positionArray() {
-    return world.getBodyPositionArray(bodyIndex);
-  }
-
-  /**
    * Gets the current world-space linear velocity in meters per second.
    *
    * @return the body linear velocity
    */
   public LinearVelocity3d linearVelocity() {
     return world.getBodyLinearVelocity(bodyIndex);
-  }
-
-  /**
-   * Gets the current world-space linear velocity in meters per second.
-   *
-   * @return a length-3 array containing {vx, vy, vz}
-   */
-  public double[] linearVelocityArray() {
-    return world.getBodyLinearVelocityArray(bodyIndex);
   }
 
 }
