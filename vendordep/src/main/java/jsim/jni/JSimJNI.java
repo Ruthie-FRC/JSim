@@ -202,30 +202,26 @@ public class JSimJNI {
       double dragCoefficient);
 
     /**
-     * Sets a ball's world-space position in meters.
-      *
-      * <p>User-facing wrappers accept a Pose3d and pass its translation components here.
+     * Sets a ball's world-space position from a Pose3d.
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
-     * @param xMeters x component of Pose3d translation in meters
-     * @param yMeters y component of Pose3d translation in meters
-     * @param zMeters z component of Pose3d translation in meters
+     * @param xMeters Pose3d position data
+     * @param yMeters Pose3d position data
+     * @param zMeters Pose3d position data
      * @return zero on success
      */
     public static native int setBallPosition(
       long worldHandle, int ballIndex, double xMeters, double yMeters, double zMeters);
 
     /**
-     * Sets a ball's world-space linear velocity in meters per second.
-      *
-      * <p>User-facing wrappers accept a LinearVelocity3d and pass its components here.
+     * Sets a ball's world-space linear velocity from a LinearVelocity3d.
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
-     * @param vxMps x component of LinearVelocity3d in meters per second
-     * @param vyMps y component of LinearVelocity3d in meters per second
-     * @param vzMps z component of LinearVelocity3d in meters per second
+     * @param vxMps LinearVelocity3d data
+     * @param vyMps LinearVelocity3d data
+     * @param vzMps LinearVelocity3d data
      * @return zero on success
      */
     public static native int setBallLinearVelocity(
@@ -342,28 +338,21 @@ public class JSimJNI {
   public static native int getBodyState13Array(long worldHandle, double[] outState13);
 
   /**
-   * Reads a ball's world-space position.
-   *
-   * <p>User-facing wrappers return a Pose3d with zero rotation; this method returns only the
-   * translation components.
+   * Reads a ball's world-space position as a Pose3d.
    *
    * @param worldHandle the native world handle
    * @param ballIndex the native ball index
-   * @param outXyzMeters output array of length at least 3 containing {x, y, z} in meters
+   * @param outXyzMeters output array for Pose3d data
    * @return zero on success
    */
   public static native int getBallPosition(long worldHandle, int ballIndex, double[] outXyzMeters);
 
   /**
-   * Reads a ball's world-space linear velocity.
-   *
-   * <p>User-facing wrappers return a LinearVelocity3d; this method returns only the velocity
-   * components.
+   * Reads a ball's world-space linear velocity as a LinearVelocity3d.
    *
    * @param worldHandle the native world handle
    * @param ballIndex the native ball index
-   * @param outVxyzMps output array of length at least 3 containing {vx, vy, vz} in meters per
-   *     second
+   * @param outVxyzMps output array for LinearVelocity3d data
    * @return zero on success
    */
   public static native int getBallLinearVelocity(
