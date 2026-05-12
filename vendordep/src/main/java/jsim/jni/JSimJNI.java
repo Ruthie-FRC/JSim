@@ -344,9 +344,12 @@ public class JSimJNI {
   /**
    * Reads a ball's world-space position.
    *
+   * <p>User-facing wrappers return a Pose3d with zero rotation; this method returns only the
+   * translation components.
+   *
    * @param worldHandle the native world handle
    * @param ballIndex the native ball index
-   * @param outXyzMeters output array of length at least 3
+   * @param outXyzMeters output array of length at least 3 containing {x, y, z} in meters
    * @return zero on success
    */
   public static native int getBallPosition(long worldHandle, int ballIndex, double[] outXyzMeters);
@@ -354,9 +357,13 @@ public class JSimJNI {
   /**
    * Reads a ball's world-space linear velocity.
    *
+   * <p>User-facing wrappers return a LinearVelocity3d; this method returns only the velocity
+   * components.
+   *
    * @param worldHandle the native world handle
    * @param ballIndex the native ball index
-   * @param outVxyzMps output array of length at least 3
+   * @param outVxyzMps output array of length at least 3 containing {vx, vy, vz} in meters per
+   *     second
    * @return zero on success
    */
   public static native int getBallLinearVelocity(

@@ -266,7 +266,7 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * Gets the world position for the given ball.
 	 *
 	 * @param ballIndex native ball index
-	 * @return ball position
+	 * @return ball position as a Pose3d with zero rotation
 	 */
 	public Pose3d getBallPosition(int ballIndex) {
 		double[] values = getBallPositionArray(ballIndex);
@@ -277,7 +277,7 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * Gets the world position for the given ball.
 	 *
 	 * @param ballIndex native ball index
-	 * @return a length-3 array containing {x, y, z}
+	 * @return a length-3 array containing {x, y, z} position in meters
 	 */
 	public double[] getBallPositionArray(int ballIndex) {
 		ensureOpen();
@@ -293,7 +293,7 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * Gets the world linear velocity for the given ball.
 	 *
 	 * @param ballIndex native ball index
-	 * @return ball linear velocity
+	 * @return ball linear velocity as a LinearVelocity3d
 	 */
 	public LinearVelocity3d getBallLinearVelocity(int ballIndex) {
 		double[] values = getBallLinearVelocityArray(ballIndex);
@@ -304,7 +304,7 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * Gets the world linear velocity for the given ball.
 	 *
 	 * @param ballIndex native ball index
-	 * @return a length-3 array containing {vx, vy, vz}
+	 * @return a length-3 array containing {vx, vy, vz} velocity in meters per second
 	 */
 	public double[] getBallLinearVelocityArray(int ballIndex) {
 		ensureOpen();
