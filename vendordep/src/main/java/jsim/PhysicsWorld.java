@@ -4,6 +4,9 @@
 
 package jsim;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import jsim.jni.JSimJNI;
 
 /**
@@ -56,16 +59,16 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Sets the body's world-space position in meters.
+	 * Sets the body's world pose.
 	 *
 	 * @param bodyIndex native body index
-	 * @param xMeters x position in meters
-	 * @param yMeters y position in meters
-	 * @param zMeters z position in meters
+	 * @param positionMeters body pose (translation in meters)
 	 */
-	void setBodyPosition(int bodyIndex, double xMeters, double yMeters, double zMeters) {
+	void setBodyPosition(int bodyIndex, Pose3d positionMeters) {
 		ensureOpen();
-		int rc = JSimJNI.setBodyPosition(worldHandle, bodyIndex, xMeters, yMeters, zMeters);
+		Translation3d translation = positionMeters.getTranslation();
+		int rc = JSimJNI.setBodyPosition(
+			worldHandle, bodyIndex, translation.getX(), translation.getY(), translation.getZ());
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set body position: rc=" + rc);
 		}
@@ -155,16 +158,16 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Sets the ball's world-space position in meters.
+	 * Sets the ball's world pose.
 	 *
 	 * @param ballIndex native ball index
-	 * @param xMeters x position in meters
-	 * @param yMeters y position in meters
-	 * @param zMeters z position in meters
+	 * @param positionMeters ball pose (translation in meters)
 	 */
-	void setBallPosition(int ballIndex, double xMeters, double yMeters, double zMeters) {
+	void setBallPosition(int ballIndex, Pose3d positionMeters) {
 		ensureOpen();
-		int rc = JSimJNI.setBallPosition(worldHandle, ballIndex, xMeters, yMeters, zMeters);
+		Translation3d translation = positionMeters.getTranslation();
+		int rc = JSimJNI.setBallPosition(
+			worldHandle, ballIndex, translation.getX(), translation.getY(), translation.getZ());
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set ball position: rc=" + rc);
 		}
@@ -189,14 +192,14 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Gets the world position for the given body.
+	 * Gets the world pose for the given body.
 	 *
 	 * @param bodyIndex native body index
-	 * @return body position
+	 * @return body pose with zero rotation
 	 */
-	public Vec3 getBodyPosition(int bodyIndex) {
+	public Pose3d getBodyPosition(int bodyIndex) {
 		double[] values = getBodyPositionArray(bodyIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new Pose3d(new Translation3d(values[0], values[1], values[2]), new Rotation3d());
 	}
 
 	/**
@@ -221,9 +224,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param bodyIndex native body index
 	 * @return body linear velocity
 	 */
-	public Vec3 getBodyLinearVelocity(int bodyIndex) {
+	public LinearVelocity3d getBodyLinearVelocity(int bodyIndex) {
 		double[] values = getBodyLinearVelocityArray(bodyIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return LinearVelocity3d.fromArray(values);
 	}
 
 	/**
@@ -260,14 +263,14 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Gets the world position for the given ball.
+	 * Gets the world pose for the given ball.
 	 *
 	 * @param ballIndex native ball index
-	 * @return ball position
+	 * @return ball pose with zero rotation
 	 */
-	public Vec3 getBallPosition(int ballIndex) {
+	public Pose3d getBallPosition(int ballIndex) {
 		double[] values = getBallPositionArray(ballIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new Pose3d(new Translation3d(values[0], values[1], values[2]), new Rotation3d());
 	}
 
 	/**
@@ -292,9 +295,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param ballIndex native ball index
 	 * @return ball linear velocity
 	 */
-	public Vec3 getBallLinearVelocity(int ballIndex) {
+	public LinearVelocity3d getBallLinearVelocity(int ballIndex) {
 		double[] values = getBallLinearVelocityArray(ballIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return LinearVelocity3d.fromArray(values);
 	}
 
 	/**
