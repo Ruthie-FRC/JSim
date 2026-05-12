@@ -4,8 +4,6 @@
 
 package jsim;
 
-import edu.wpi.first.math.geometry.Pose3d;
-
 /**
  * Handle for a ball managed by {@link PhysicsWorld}.
  */
@@ -28,25 +26,23 @@ public final class Ball {
   }
 
   /**
-   * Sets the ball's world pose.
+   * Sets the ball's world-space position in meters.
    *
-   * @param positionMeters the new pose
+   * @param positionMeters the new position in meters
    */
-  public void setPosition(Pose3d positionMeters) {
-    world.setBallPosition(ballIndex, positionMeters);
+  public void setPosition(Vec3 positionMeters) {
+    world.setBallPosition(ballIndex, positionMeters.x(), positionMeters.y(), positionMeters.z());
   }
 
   /**
-   * Sets the ball's world-space linear velocity in meters per second.
+   * Sets the ball's world-space position in meters.
    *
-   * @param velocityMps the new linear velocity in meters per second
+   * @param xMeters x position in meters
+   * @param yMeters y position in meters
+   * @param zMeters z position in meters
    */
-  public void setLinearVelocity(LinearVelocity3d velocityMps) {
-    world.setBallLinearVelocity(
-      ballIndex,
-      velocityMps.xMetersPerSecond(),
-      velocityMps.yMetersPerSecond(),
-      velocityMps.zMetersPerSecond());
+  public void setPosition(double xMeters, double yMeters, double zMeters) {
+    world.setBallPosition(ballIndex, xMeters, yMeters, zMeters);
   }
 
   /**
@@ -55,7 +51,7 @@ public final class Ball {
    * @param velocityMps the new linear velocity in meters per second
    */
   public void setLinearVelocity(Vec3 velocityMps) {
-    setLinearVelocity(new LinearVelocity3d(velocityMps.x(), velocityMps.y(), velocityMps.z()));
+    world.setBallLinearVelocity(ballIndex, velocityMps.x(), velocityMps.y(), velocityMps.z());
   }
 
   /**
@@ -73,10 +69,10 @@ public final class Ball {
   /**
    * Convenience method to set both position and launch velocity.
    *
-   * @param positionMeters launch pose
+   * @param positionMeters launch position in meters
    * @param velocityMps launch velocity in meters per second
    */
-  public void shoot(Pose3d positionMeters, LinearVelocity3d velocityMps) {
+  public void shoot(Vec3 positionMeters, Vec3 velocityMps) {
     setPosition(positionMeters);
     setLinearVelocity(velocityMps);
   }
@@ -86,7 +82,7 @@ public final class Ball {
    *
    * @return the ball position
    */
-  public Pose3d position() {
+  public Vec3 position() {
     return world.getBallPosition(ballIndex);
   }
 
@@ -104,7 +100,7 @@ public final class Ball {
    *
    * @return the ball linear velocity
    */
-  public LinearVelocity3d linearVelocity() {
+  public Vec3 linearVelocity() {
     return world.getBallLinearVelocity(ballIndex);
   }
 

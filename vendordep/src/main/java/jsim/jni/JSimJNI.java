@@ -5,10 +5,6 @@
 package jsim.jni;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import jsim.LinearVelocity3d;
-import jsim.Vec3;
 
 /** JNI entry points for the vendor physics driver. */
 public class JSimJNI {
@@ -205,117 +201,31 @@ public class JSimJNI {
       double zMeters,
       double dragCoefficient);
 
-  /**
-   * Sets a body's world-space position using a WPILib {@code Pose3d}.
-   *
-   * @param worldHandle the native world handle
-   * @param bodyIndex the native body index
-   * @param pose the world-space pose (translation in meters)
-   * @return zero on success
-   */
-  public static int setBodyPosition(long worldHandle, int bodyIndex, Pose3d pose) {
-    Translation3d t = pose.getTranslation();
-    return setBodyPosition(worldHandle, bodyIndex, t.getX(), t.getY(), t.getZ());
-  }
-
-  /**
-   * Sets a body's world-space linear velocity using a {@link jsim.Vec3}.
-   *
-   * @param worldHandle the native world handle
-   * @param bodyIndex the native body index
-   * @param v velocity components (m/s)
-   * @return zero on success
-   */
-  public static int setBodyLinearVelocity(long worldHandle, int bodyIndex, Vec3 v) {
-    return setBodyLinearVelocity(worldHandle, bodyIndex, v.x(), v.y(), v.z());
-  }
-
-  /**
-   * Sets a body's world-space linear velocity using a dedicated velocity record.
-   *
-   * @param worldHandle the native world handle
-   * @param bodyIndex the native body index
-   * @param velocity the velocity components in meters per second
-   * @return zero on success
-   */
-  public static int setBodyLinearVelocity(
-      long worldHandle, int bodyIndex, LinearVelocity3d velocity) {
-    return setBodyLinearVelocity(
-        worldHandle,
-        bodyIndex,
-        velocity.xMetersPerSecond(),
-        velocity.yMetersPerSecond(),
-        velocity.zMetersPerSecond());
-  }
-
-  /**
-   * Sets a ball's world-space position in meters.
-   *
-   * @param worldHandle the native world handle
-   * @param ballIndex the native ball index
-   * @param xMeters x position in meters
-   * @param yMeters y position in meters
-   * @param zMeters z position in meters
-   * @return zero on success
-   */
-  public static native int setBallPosition(
+    /**
+     * Sets a ball's world-space position in meters.
+     *
+     * @param worldHandle the native world handle
+     * @param ballIndex the native ball index
+     * @param xMeters x position in meters
+     * @param yMeters y position in meters
+     * @param zMeters z position in meters
+     * @return zero on success
+     */
+    public static native int setBallPosition(
       long worldHandle, int ballIndex, double xMeters, double yMeters, double zMeters);
 
-  /**
-   * Sets a ball's world-space position using a WPILib {@code Pose3d}.
-   *
-   * @param worldHandle the native world handle
-   * @param ballIndex the native ball index
-   * @param pose the world-space pose (translation in meters)
-   * @return zero on success
-   */
-  public static int setBallPosition(long worldHandle, int ballIndex, Pose3d pose) {
-    Translation3d t = pose.getTranslation();
-    return setBallPosition(worldHandle, ballIndex, t.getX(), t.getY(), t.getZ());
-  }
-
-  /**
-   * Sets a ball's world-space linear velocity in meters per second.
-   *
-   * @param worldHandle the native world handle
-   * @param ballIndex the native ball index
-   * @param vxMps x velocity in meters per second
-   * @param vyMps y velocity in meters per second
-   * @param vzMps z velocity in meters per second
-   * @return zero on success
-   */
-  public static native int setBallLinearVelocity(
+    /**
+     * Sets a ball's world-space linear velocity in meters per second.
+     *
+     * @param worldHandle the native world handle
+     * @param ballIndex the native ball index
+     * @param vxMps x velocity in meters per second
+     * @param vyMps y velocity in meters per second
+     * @param vzMps z velocity in meters per second
+     * @return zero on success
+     */
+    public static native int setBallLinearVelocity(
       long worldHandle, int ballIndex, double vxMps, double vyMps, double vzMps);
-
-  /**
-   * Sets a ball's world-space linear velocity using a dedicated velocity record.
-   *
-   * @param worldHandle the native world handle
-   * @param ballIndex the native ball index
-   * @param velocity the velocity components in meters per second
-   * @return zero on success
-   */
-  public static int setBallLinearVelocity(
-      long worldHandle, int ballIndex, LinearVelocity3d velocity) {
-    return setBallLinearVelocity(
-        worldHandle,
-        ballIndex,
-        velocity.xMetersPerSecond(),
-        velocity.yMetersPerSecond(),
-        velocity.zMetersPerSecond());
-  }
-
-  /**
-   * Sets a ball's world-space linear velocity using a {@link jsim.Vec3}.
-   *
-   * @param worldHandle the native world handle
-   * @param ballIndex the native ball index
-   * @param v velocity components (m/s)
-   * @return zero on success
-   */
-  public static int setBallLinearVelocity(long worldHandle, int ballIndex, Vec3 v) {
-    return setBallLinearVelocity(worldHandle, ballIndex, v.x(), v.y(), v.z());
-  }
 
   /**
    * Sets the world's gravity vector in meters per second squared.
