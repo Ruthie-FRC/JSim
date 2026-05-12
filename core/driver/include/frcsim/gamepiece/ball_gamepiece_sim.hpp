@@ -25,12 +25,10 @@ namespace frcsim {
  * projectiles.
    * @note Not thread-safe. This mutates ball state while reading shared
    *       simulator state (for example: robot list plus field parameters)
-   *       without synchronization;
- *
-  * @note Not thread-safe. This mutates ball state while reading shared
-  *       simulator state (for example: robot list plus field parameters)
-  *       without synchronization;
-  *       without synchronization;
+   *       without synchronization. To make this thread-safe, consider using
+   *       std::atomic for the ball position or add a std::mutex to synchronize
+   *       access to the ball state.
+   *
  * - Velocity vectors are world-frame meters/second.
  * - Robot yaw is radians about +Z.
  *

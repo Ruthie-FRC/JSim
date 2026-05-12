@@ -107,11 +107,13 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Sets the body's collision filter.
+	 * Sets the body's collision filter for broad-phase collision detection.
+	 * Bodies on the same collision layer will be filtered based on their respective
+	 * collision masks, allowing fine-grained control over which bodies can collide.
 	 *
 	 * @param bodyIndex native body index
-	 * @param collisionLayerBits collision layer bits
-	 * @param collisionMaskBits collision mask bits
+	 * @param collisionLayerBits collision layer bits (which group this body belongs to)
+	 * @param collisionMaskBits collision mask bits (which groups this body will collide with)
 	 */
 	void setBodyCollisionFilter(int bodyIndex, int collisionLayerBits, int collisionMaskBits) {
 		ensureOpen();
@@ -123,11 +125,12 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Sets the body's aerodynamic sphere.
+	 * Defines an approximate spherical collision/body shape for aerodynamic drag modeling.
+	 * This sets both the collision geometry and aerodynamic drag calculations for the body.
 	 *
 	 * @param bodyIndex native body index
-	 * @param radiusMeters radius in meters
-	 * @param dragCoefficient drag coefficient
+	 * @param radiusMeters sphere radius in meters
+	 * @param dragCoefficient drag coefficient for aerodynamic calculations
 	 */
 	void setBodyAerodynamicSphere(int bodyIndex, double radiusMeters, double dragCoefficient) {
 		ensureOpen();
@@ -139,13 +142,14 @@ public final class PhysicsWorld implements AutoCloseable {
 	}
 
 	/**
-	 * Sets the body's aerodynamic box.
+	 * Defines an approximate box collision/body shape for aerodynamic drag modeling.
+	 * This sets both the collision geometry and aerodynamic drag calculations for the body.
 	 *
 	 * @param bodyIndex native body index
-	 * @param xMeters x dimension in meters
-	 * @param yMeters y dimension in meters
-	 * @param zMeters z dimension in meters
-	 * @param dragCoefficient drag coefficient
+	 * @param xMeters box x dimension in meters
+	 * @param yMeters box y dimension in meters
+	 * @param zMeters box z dimension in meters
+	 * @param dragCoefficient drag coefficient for aerodynamic calculations
 	 */
 	void setBodyAerodynamicBox(int bodyIndex, double xMeters, double yMeters, double zMeters,
 			double dragCoefficient) {
@@ -207,7 +211,10 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param bodyIndex native body index
 	 * @return a length-3 array containing {x, y, z}
+	 * @deprecated Use {@link #getBodyPosition(int)} to get a structured Pose3d instead.
+	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
+	@Deprecated(forRemoval = false)
 	public double[] getBodyPositionArray(int bodyIndex) {
 		ensureOpen();
 		double[] values = new double[3];
@@ -234,7 +241,10 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param bodyIndex native body index
 	 * @return a length-3 array containing {vx, vy, vz}
+	 * @deprecated Use {@link #getBodyLinearVelocity(int)} to get a structured LinearVelocity3d instead.
+	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
+	@Deprecated(forRemoval = false)
 	public double[] getBodyLinearVelocityArray(int bodyIndex) {
 		ensureOpen();
 		double[] values = new double[3];
@@ -278,7 +288,10 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param ballIndex native ball index
 	 * @return a length-3 array containing {x, y, z} position in meters
+	 * @deprecated Use {@link #getBallPosition(int)} to get a structured Pose3d instead.
+	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
+	@Deprecated(forRemoval = false)
 	public double[] getBallPositionArray(int ballIndex) {
 		ensureOpen();
 		double[] values = new double[3];
@@ -305,7 +318,10 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param ballIndex native ball index
 	 * @return a length-3 array containing {vx, vy, vz} velocity in meters per second
+	 * @deprecated Use {@link #getBallLinearVelocity(int)} to get a structured LinearVelocity3d instead.
+	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
+	@Deprecated(forRemoval = false)
 	public double[] getBallLinearVelocityArray(int ballIndex) {
 		ensureOpen();
 		double[] values = new double[3];
