@@ -4,6 +4,12 @@
 
 package jsim;
 
+import static edu.wpi.first.units.Units.Meters;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.measure.Distance;
+
 /**
  * Handle for a body managed by {@link PhysicsWorld}.
  */
@@ -28,10 +34,31 @@ public final class PhysicsBody {
   /**
    * Sets the body's world-space position in meters.
    *
+   * @param pose the new position (only translation component is used)
+   */
+  public void setPosition(Pose3d pose) {
+    Translation3d translation = pose.getTranslation();
+    world.setBodyPosition(bodyIndex, translation.getX(), translation.getY(), translation.getZ());
+  }
+
+  /**
+   * Sets the body's world-space position in meters.
+   *
    * @param positionMeters the new position in meters
    */
-  public void setPosition(Vec3 positionMeters) {
-    world.setBodyPosition(bodyIndex, positionMeters.x(), positionMeters.y(), positionMeters.z());
+  public void setPosition(Translation3d positionMeters) {
+    world.setBodyPosition(bodyIndex, positionMeters.getX(), positionMeters.getY(), positionMeters.getZ());
+  }
+
+  /**
+   * Sets the body's world-space position.
+   *
+   * @param x x position
+   * @param y y position
+   * @param z z position
+   */
+  public void setPosition(Distance x, Distance y, Distance z) {
+    world.setBodyPosition(bodyIndex, x.in(Meters), y.in(Meters), z.in(Meters));
   }
 
   /**
@@ -50,8 +77,12 @@ public final class PhysicsBody {
    *
    * @param velocityMps the new linear velocity in meters per second
    */
-  public void setLinearVelocity(Vec3 velocityMps) {
-    world.setBodyLinearVelocity(bodyIndex, velocityMps.x(), velocityMps.y(), velocityMps.z());
+  public void setLinearVelocity(LinearVelocity3d velocityMps) {
+    world.setBodyLinearVelocity(
+        bodyIndex,
+        velocityMps.getVxMetersPerSecond(),
+        velocityMps.getVyMetersPerSecond(),
+        velocityMps.getVzMetersPerSecond());
   }
 
   /**
@@ -111,7 +142,7 @@ public final class PhysicsBody {
    *
    * @return the body position
    */
-  public Vec3 position() {
+  public Pose3d position() {
     return world.getBodyPosition(bodyIndex);
   }
 
@@ -129,7 +160,7 @@ public final class PhysicsBody {
    *
    * @return the body linear velocity
    */
-  public Vec3 linearVelocity() {
+  public LinearVelocity3d linearVelocity() {
     return world.getBodyLinearVelocity(bodyIndex);
   }
 

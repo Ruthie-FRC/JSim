@@ -4,6 +4,9 @@
 
 package jsim;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import jsim.jni.JSimJNI;
 
 /**
@@ -194,9 +197,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param bodyIndex native body index
 	 * @return body position
 	 */
-	public Vec3 getBodyPosition(int bodyIndex) {
+	public Pose3d getBodyPosition(int bodyIndex) {
 		double[] values = getBodyPositionArray(bodyIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
 
 	/**
@@ -221,9 +224,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param bodyIndex native body index
 	 * @return body linear velocity
 	 */
-	public Vec3 getBodyLinearVelocity(int bodyIndex) {
+	public LinearVelocity3d getBodyLinearVelocity(int bodyIndex) {
 		double[] values = getBodyLinearVelocityArray(bodyIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
 	/**
@@ -265,9 +268,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param ballIndex native ball index
 	 * @return ball position
 	 */
-	public Vec3 getBallPosition(int ballIndex) {
+	public Pose3d getBallPosition(int ballIndex) {
 		double[] values = getBallPositionArray(ballIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
 
 	/**
@@ -292,9 +295,9 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param ballIndex native ball index
 	 * @return ball linear velocity
 	 */
-	public Vec3 getBallLinearVelocity(int ballIndex) {
+	public LinearVelocity3d getBallLinearVelocity(int ballIndex) {
 		double[] values = getBallLinearVelocityArray(ballIndex);
-		return new Vec3(values[0], values[1], values[2]);
+		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
 	/**
@@ -338,8 +341,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param gravity gravity vector in meters per second squared
 	 */
-	public void setGravity(Vec3 gravity) {
-		setGravity(gravity.x(), gravity.y(), gravity.z());
+	public void setGravity(Translation3d gravity) {
+		setGravity(gravity.getX(), gravity.getY(), gravity.getZ());
 	}
 
 	/**

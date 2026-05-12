@@ -203,6 +203,8 @@ public class JSimJNI {
 
     /**
      * Sets a ball's world-space position in meters.
+      *
+      * <p>User-facing wrappers accept a Pose3d and pass its translation components here.
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
@@ -216,6 +218,8 @@ public class JSimJNI {
 
     /**
      * Sets a ball's world-space linear velocity in meters per second.
+      *
+      * <p>User-facing wrappers accept a LinearVelocity3d and pass its components here.
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
