@@ -227,8 +227,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
-	}
-
 	/**
 	 * Exports full body state blocks.
 	 *
@@ -261,9 +259,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		}
 		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
-
-	}
-
 	/**
 	 * Gets the world linear velocity for the given ball.
 	 *
@@ -279,9 +274,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		}
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
-
-	}
-
 	/**
 	 * Advances the simulation by one step.
 	 */
