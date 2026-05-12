@@ -208,9 +208,9 @@ public class JSimJNI {
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
-     * @param xMeters x position in meters
-     * @param yMeters y position in meters
-     * @param zMeters z position in meters
+     * @param xMeters x component of Pose3d translation in meters
+     * @param yMeters y component of Pose3d translation in meters
+     * @param zMeters z component of Pose3d translation in meters
      * @return zero on success
      */
     public static native int setBallPosition(
@@ -223,9 +223,9 @@ public class JSimJNI {
      *
      * @param worldHandle the native world handle
      * @param ballIndex the native ball index
-     * @param vxMps x velocity in meters per second
-     * @param vyMps y velocity in meters per second
-     * @param vzMps z velocity in meters per second
+     * @param vxMps x component of LinearVelocity3d in meters per second
+     * @param vyMps y component of LinearVelocity3d in meters per second
+     * @param vzMps z component of LinearVelocity3d in meters per second
      * @return zero on success
      */
     public static native int setBallLinearVelocity(
