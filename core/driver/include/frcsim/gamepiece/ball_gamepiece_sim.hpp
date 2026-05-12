@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <functional>
 #include <limits>
+#include <mutex>
 #include <string>
 #include <utility>
 #include <vector>
@@ -23,11 +24,9 @@ namespace frcsim {
   /**
    * @brief Resolves robot-ball contact response.
  * projectiles.
-   * @note Not thread-safe. This mutates ball state while reading shared
-   *       simulator state (for example: robot list plus field parameters)
-   *       without synchronization. To make this thread-safe, consider using
-   *       std::atomic for the ball position or add a std::mutex to synchronize
-   *       access to the ball state.
+   * @note Thread-safe via internal std::mutex. All public methods that access or
+   *       mutate ball state (position, velocity, etc.) are protected by locks.
+   *       The step() method performs all simulation updates safely.
    *
  * - Velocity vectors are world-frame meters/second.
  * - Robot yaw is radians about +Z.
@@ -272,7 +271,10 @@ class BallGamepieceSim {
    * entities.
    * @param field New field configuration.
    */
-  void setFieldConfig(const FieldConfig& field) { field_ = field; }
+  void setFieldConfig(const FieldConfig& field) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    field_ = field;
+  }
 
   /** @brief Callback type invoked when a robot is added to this simulator. */
   using RobotAddedCallback =
@@ -284,6 +286,7 @@ class BallGamepieceSim {
    * @return Inserted robot index.
    */
   std::size_t addRobot(const RobotState& robot) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     robots_.push_back(robot);
     const std::size_t robot_index = robots_.size() - 1;
     if (robot_added_callback_) {
@@ -310,6 +313,7 @@ class BallGamepieceSim {
   std::size_t addBall(const BallPhysicsSim3D::BallState& state,
                       const BallPhysicsSim3D::Config& config,
                       const BallPhysicsSim3D::BallProperties& properties) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     BallEntity entity{};
     entity.sim = BallPhysicsSim3D(config, properties);
     entity.sim.setState(state);
@@ -324,6 +328,7 @@ class BallGamepieceSim {
    * @return Inserted projectile index.
    */
   std::size_t addProjectile(const ProjectileEntity& projectile) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     projectiles_.push_back(projectile);
     return projectiles_.size() - 1;
   }
@@ -334,6 +339,7 @@ class BallGamepieceSim {
    * @return Mutable reference to stored goal zone.
    */
   GoalZone& addGoalZone(const GoalZone& goal_zone) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     goals_.push_back(goal_zone);
     return goals_.back();
   }
@@ -344,6 +350,7 @@ class BallGamepieceSim {
    * @return Mutable reference to stored registration.
    */
   GamePieceInfo& registerGamePieceType(const GamePieceInfo& info) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     for (auto& existing : gamepiece_types_) {
       if (existing.type == info.type) {
         existing = info;
@@ -355,7 +362,10 @@ class BallGamepieceSim {
   }
 
   /** @brief Clears all registered game piece type definitions. */
-  void clearGamePieceTypes() { gamepiece_types_.clear(); }
+  void clearGamePieceTypes() {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    gamepiece_types_.clear();
+  }
 
   /**
    * @brief Adds a field element and returns a mutable reference to the stored
@@ -365,6 +375,7 @@ class BallGamepieceSim {
    */
   EnvironmentalBoundary& addFieldElement(
       const EnvironmentalBoundary& boundary) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     field_elements_.push_back(boundary);
     return field_elements_.back();
   }
@@ -411,6 +422,7 @@ class BallGamepieceSim {
    * @return true if the ball index was valid and updated.
    */
   bool setBallType(std::size_t ball_index, GamePieceType type) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (ball_index >= balls_.size() || ball_index >= ball_types_.size()) {
       return false;
     }
@@ -438,6 +450,7 @@ class BallGamepieceSim {
    * @return true when removal succeeded.
    */
   bool removeBall(std::size_t ball_index) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (ball_index >= balls_.size() || ball_index >= ball_types_.size()) {
       return false;
     }
@@ -475,11 +488,15 @@ class BallGamepieceSim {
 
   /** @brief Returns total grounded ball count (including scored-in-net balls).
    * @return Grounded ball count. */
-  std::size_t countBalls() const { return balls_.size(); }
+  std::size_t countBalls() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    return balls_.size();
+  }
 
   /** @brief Returns count of currently active projectiles. @return Active
    * projectile count. */
   std::size_t countProjectiles() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     std::size_t count = 0;
     for (const auto& projectile : projectiles_) {
       if (projectile.active) {
@@ -492,6 +509,7 @@ class BallGamepieceSim {
   /** @brief Returns count of grounded balls marked as scored in configured net
    * volume(s). @return Scored ball count. */
   std::size_t countScoredBalls() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     std::size_t count = 0;
     for (const auto& ball : balls_) {
       if (ball.scored_in_net) {
@@ -514,6 +532,7 @@ class BallGamepieceSim {
       std::size_t robot_index, const ExitTrajectoryParameters& command,
       bool spawn_on_ground_after_touch = true,
       const std::function<void()>& hit_target_callback = {}) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (robot_index >= robots_.size()) {
       return kNoBall;
     }
@@ -555,6 +574,8 @@ class BallGamepieceSim {
       return;
     }
 
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
     const int substeps = std::max(1, simulation_substeps_);
     const double dt_substep_s = dt_s / static_cast<double>(substeps);
 
@@ -1656,6 +1677,7 @@ class BallGamepieceSim {
   std::vector<EnvironmentalBoundary> field_elements_{};
   RobotAddedCallback robot_added_callback_{};
   int simulation_substeps_{4};
+  mutable std::mutex state_mutex_{};
 };
 
 }  // namespace frcsim

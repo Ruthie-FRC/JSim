@@ -78,11 +78,8 @@ public final class Ball {
    * @param xMeters x position in meters
    * @param yMeters y position in meters
    * @param zMeters z position in meters
-   * @deprecated Use {@link #setPosition(Pose3d)}, {@link #setPosition(Translation3d)}, 
-   *             or {@link #setPosition(Distance, Distance, Distance)} for type safety.
    */
-  @Deprecated(forRemoval = false)
-  public void setPosition(double xMeters, double yMeters, double zMeters) {
+  void setPosition(double xMeters, double yMeters, double zMeters) {
     world.setBallPosition(ballIndex, xMeters, yMeters, zMeters);
   }
 
@@ -170,11 +167,8 @@ public final class Ball {
    * Gets the current world-space position in meters.
    *
    * @return a length-3 array containing {x, y, z}
-   * @deprecated Use {@link #position()} to get a structured Pose3d instead.
-   *             This method is reserved for internal use only.
    */
-  @Deprecated(forRemoval = false)
-  public double[] positionArray() {
+  double[] positionArray() {
     return world.getBallPositionArray(ballIndex);
   }
 
@@ -191,11 +185,8 @@ public final class Ball {
    * Gets the current world-space linear velocity in meters per second.
    *
    * @return a length-3 array containing {vx, vy, vz}
-   * @deprecated Use {@link #linearVelocity()} to get a structured LinearVelocity3d instead.
-   *             This method is reserved for internal use only.
    */
-  @Deprecated(forRemoval = false)
-  public double[] linearVelocityArray() {
+  double[] linearVelocityArray() {
     return world.getBallLinearVelocityArray(ballIndex);
   }
 }

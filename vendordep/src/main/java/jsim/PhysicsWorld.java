@@ -211,11 +211,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param bodyIndex native body index
 	 * @return a length-3 array containing {x, y, z}
-	 * @deprecated Use {@link #getBodyPosition(int)} to get a structured Pose3d instead.
-	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
-	@Deprecated(forRemoval = false)
-	public double[] getBodyPositionArray(int bodyIndex) {
+	double[] getBodyPositionArray(int bodyIndex) {
 		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBodyPosition(worldHandle, bodyIndex, values);
@@ -241,11 +238,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param bodyIndex native body index
 	 * @return a length-3 array containing {vx, vy, vz}
-	 * @deprecated Use {@link #getBodyLinearVelocity(int)} to get a structured LinearVelocity3d instead.
-	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
-	@Deprecated(forRemoval = false)
-	public double[] getBodyLinearVelocityArray(int bodyIndex) {
+	double[] getBodyLinearVelocityArray(int bodyIndex) {
 		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBodyLinearVelocity(worldHandle, bodyIndex, values);
@@ -288,11 +282,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param ballIndex native ball index
 	 * @return a length-3 array containing {x, y, z} position in meters
-	 * @deprecated Use {@link #getBallPosition(int)} to get a structured Pose3d instead.
-	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
-	@Deprecated(forRemoval = false)
-	public double[] getBallPositionArray(int ballIndex) {
+	double[] getBallPositionArray(int ballIndex) {
 		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBallPosition(worldHandle, ballIndex, values);
@@ -318,11 +309,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	 *
 	 * @param ballIndex native ball index
 	 * @return a length-3 array containing {vx, vy, vz} velocity in meters per second
-	 * @deprecated Use {@link #getBallLinearVelocity(int)} to get a structured LinearVelocity3d instead.
-	 *             This method returns a mutable array which should not be retained beyond the current scope.
 	 */
-	@Deprecated(forRemoval = false)
-	public double[] getBallLinearVelocityArray(int ballIndex) {
+	double[] getBallLinearVelocityArray(int ballIndex) {
 		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBallLinearVelocity(worldHandle, ballIndex, values);

@@ -42,19 +42,6 @@ public final class PhysicsBody {
   }
 
   /**
-   * Sets the body's world-space position in meters.
-   *
-   * @param positionMeters the new position in meters
-   * @deprecated Use {@link #setPosition(Pose3d)} or {@link #setPosition(Distance, Distance, Distance)}
-   *             for better semantics. A Translation3d is semantically relative to a Pose3d frame,
-   *             not an absolute world position.
-   */
-  @Deprecated(forRemoval = false)
-  public void setPosition(Translation3d positionMeters) {
-    world.setBodyPosition(bodyIndex, positionMeters.getX(), positionMeters.getY(), positionMeters.getZ());
-  }
-
-  /**
    * Sets the body's world-space position.
    *
    * @param x x position
@@ -63,20 +50,6 @@ public final class PhysicsBody {
    */
   public void setPosition(Distance x, Distance y, Distance z) {
     world.setBodyPosition(bodyIndex, x.in(Meters), y.in(Meters), z.in(Meters));
-  }
-
-  /**
-   * Sets the body's world-space position in meters.
-   *
-   * @param xMeters x position in meters
-   * @param yMeters y position in meters
-   * @param zMeters z position in meters
-   * @deprecated Use {@link #setPosition(Pose3d)} or {@link #setPosition(Distance, Distance, Distance)}
-   *             for type safety and clarity.
-   */
-  @Deprecated(forRemoval = false)
-  public void setPosition(double xMeters, double yMeters, double zMeters) {
-    world.setBodyPosition(bodyIndex, xMeters, yMeters, zMeters);
   }
 
   /**
