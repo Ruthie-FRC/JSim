@@ -202,7 +202,12 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return body position
 	 */
 	public Pose3d getBodyPosition(int bodyIndex) {
-		double[] values = getBodyPositionArray(bodyIndex);
+		ensureOpen();
+		double[] values = new double[3];
+		int rc = JSimJNI.getBodyPosition(worldHandle, bodyIndex, values);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to get body position: rc=" + rc);
+		}
 		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
 
@@ -229,7 +234,12 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return body linear velocity
 	 */
 	public LinearVelocity3d getBodyLinearVelocity(int bodyIndex) {
-		double[] values = getBodyLinearVelocityArray(bodyIndex);
+		ensureOpen();
+		double[] values = new double[3];
+		int rc = JSimJNI.getBodyLinearVelocity(worldHandle, bodyIndex, values);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to get body linear velocity: rc=" + rc);
+		}
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
@@ -273,7 +283,12 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return ball position as a Pose3d with zero rotation
 	 */
 	public Pose3d getBallPosition(int ballIndex) {
-		double[] values = getBallPositionArray(ballIndex);
+		ensureOpen();
+		double[] values = new double[3];
+		int rc = JSimJNI.getBallPosition(worldHandle, ballIndex, values);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to get ball position: rc=" + rc);
+		}
 		return new Pose3d(values[0], values[1], values[2], new Rotation3d());
 	}
 
@@ -300,7 +315,12 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return ball linear velocity as a LinearVelocity3d
 	 */
 	public LinearVelocity3d getBallLinearVelocity(int ballIndex) {
-		double[] values = getBallLinearVelocityArray(ballIndex);
+		ensureOpen();
+		double[] values = new double[3];
+		int rc = JSimJNI.getBallLinearVelocity(worldHandle, ballIndex, values);
+		if (rc != 0) {
+			throw new IllegalStateException("Failed to get ball linear velocity: rc=" + rc);
+		}
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
 
