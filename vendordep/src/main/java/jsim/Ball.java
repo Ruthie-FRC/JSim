@@ -51,6 +51,17 @@ public final class Ball {
   }
 
   /**
+   * Sets the ball's world-space position in meters.
+   *
+   * @param positionMeters the new position in meters
+   * @deprecated use setPosition(Pose3d), setPosition(Translation3d), or setPosition(Distance, Distance, Distance)
+   */
+  @Deprecated(forRemoval = false)
+  public void setPosition(Vec3 positionMeters) {
+    world.setBallPosition(ballIndex, positionMeters.x(), positionMeters.y(), positionMeters.z());
+  }
+
+  /**
    * Sets the ball's world-space position.
    *
    * @param x x position
@@ -88,6 +99,17 @@ public final class Ball {
   /**
    * Sets the ball's world-space linear velocity in meters per second.
    *
+   * @param velocityMps the new linear velocity in meters per second
+   * @deprecated use setLinearVelocity(LinearVelocity3d)
+   */
+  @Deprecated(forRemoval = false)
+  public void setLinearVelocity(Vec3 velocityMps) {
+    world.setBallLinearVelocity(ballIndex, velocityMps.x(), velocityMps.y(), velocityMps.z());
+  }
+
+  /**
+   * Sets the ball's world-space linear velocity in meters per second.
+   *
    * @param vxMetersPerSecond x velocity in meters per second
    * @param vyMetersPerSecond y velocity in meters per second
    * @param vzMetersPerSecond z velocity in meters per second
@@ -115,6 +137,19 @@ public final class Ball {
    * @param velocityMps launch velocity in meters per second
    */
   public void shoot(Translation3d positionMeters, LinearVelocity3d velocityMps) {
+    setPosition(positionMeters);
+    setLinearVelocity(velocityMps);
+  }
+
+  /**
+   * Convenience method to set both position and launch velocity.
+   *
+   * @param positionMeters launch position in meters
+   * @param velocityMps launch velocity in meters per second
+   * @deprecated use shoot(Pose3d, LinearVelocity3d) or shoot(Translation3d, LinearVelocity3d)
+   */
+  @Deprecated(forRemoval = false)
+  public void shoot(Vec3 positionMeters, Vec3 velocityMps) {
     setPosition(positionMeters);
     setLinearVelocity(velocityMps);
   }
