@@ -316,7 +316,7 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setWorldGravity(worldHandle, gxMetersPerSecondSquared,
 				gyMetersPerSecondSquared, gzMetersPerSecondSquared);
 		if (rc != 0) {
-			throw new JSimException("Failed to set world gravity to (" + gxMetersPerSecondSquared + ", " + gyMetersPerSecondSquared + ", " + gzMetersPerSecondSquared + ") m/s²", rc,
+			throw new JSimException("Failed to set world gravity to (" + gxMetersPerSecondSquared + ", " + gyMetersPerSecondSquared + ", " + gzMetersPerSecondSquared + ") m/s^2", rc,
 				"Gravity values must be finite numbers. Check that all gravity components are valid floating point values.");
 		}
 	}
