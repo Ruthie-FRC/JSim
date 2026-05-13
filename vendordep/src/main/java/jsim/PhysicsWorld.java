@@ -36,7 +36,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return the created body handle
 	 */
 	public PhysicsBody createBody(double massKg) {
-		ensureOpen();
 		int index = JSimJNI.createBody(worldHandle, massKg);
 		if (index < 0) {
 			throw new IllegalStateException("Failed to create body");
@@ -50,7 +49,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return the created ball handle
 	 */
 	public Ball createBall() {
-		ensureOpen();
 		int index = JSimJNI.createBall(worldHandle);
 		if (index < 0) {
 			throw new IllegalStateException("Failed to create ball");
@@ -67,7 +65,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param zMeters z position in meters
 	 */
 	void setBodyPosition(int bodyIndex, double xMeters, double yMeters, double zMeters) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyPosition(worldHandle, bodyIndex, xMeters, yMeters, zMeters);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set body position: rc=" + rc);
@@ -84,7 +81,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 */
 	void setBodyLinearVelocity(int bodyIndex, double vxMetersPerSecond, double vyMetersPerSecond,
 			double vzMetersPerSecond) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyLinearVelocity(worldHandle, bodyIndex, vxMetersPerSecond,
 				vyMetersPerSecond, vzMetersPerSecond);
 		if (rc != 0) {
@@ -99,7 +95,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param enabled true to enable gravity
 	 */
 	void setBodyGravityEnabled(int bodyIndex, boolean enabled) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyGravityEnabled(worldHandle, bodyIndex, enabled);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set body gravity enabled: rc=" + rc);
@@ -116,7 +111,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param collisionMaskBits collision mask bits (which groups this body will collide with)
 	 */
 	void setBodyCollisionFilter(int bodyIndex, int collisionLayerBits, int collisionMaskBits) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyCollisionFilter(worldHandle, bodyIndex, collisionLayerBits,
 				collisionMaskBits);
 		if (rc != 0) {
@@ -133,7 +127,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param dragCoefficient drag coefficient for aerodynamic calculations
 	 */
 	void setBodyAerodynamicSphere(int bodyIndex, double radiusMeters, double dragCoefficient) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyAerodynamicSphere(worldHandle, bodyIndex, radiusMeters,
 				dragCoefficient);
 		if (rc != 0) {
@@ -153,7 +146,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 */
 	void setBodyAerodynamicBox(int bodyIndex, double xMeters, double yMeters, double zMeters,
 			double dragCoefficient) {
-		ensureOpen();
 		int rc = JSimJNI.setBodyAerodynamicBox(worldHandle, bodyIndex, xMeters, yMeters,
 				zMeters, dragCoefficient);
 		if (rc != 0) {
@@ -170,7 +162,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param zMeters z position in meters
 	 */
 	void setBallPosition(int ballIndex, double xMeters, double yMeters, double zMeters) {
-		ensureOpen();
 		int rc = JSimJNI.setBallPosition(worldHandle, ballIndex, xMeters, yMeters, zMeters);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to set ball position: rc=" + rc);
@@ -187,7 +178,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 */
 	void setBallLinearVelocity(int ballIndex, double vxMetersPerSecond, double vyMetersPerSecond,
 			double vzMetersPerSecond) {
-		ensureOpen();
 		int rc = JSimJNI.setBallLinearVelocity(worldHandle, ballIndex, vxMetersPerSecond,
 				vyMetersPerSecond, vzMetersPerSecond);
 		if (rc != 0) {
@@ -202,7 +192,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return body position
 	 */
 	public Pose3d getBodyPosition(int bodyIndex) {
-		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBodyPosition(worldHandle, bodyIndex, values);
 		if (rc != 0) {
@@ -218,7 +207,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return body linear velocity
 	 */
 	public LinearVelocity3d getBodyLinearVelocity(int bodyIndex) {
-		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBodyLinearVelocity(worldHandle, bodyIndex, values);
 		if (rc != 0) {
@@ -236,7 +224,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return number of body blocks written
 	 */
 	public int getBodyState13Array(double[] outState13) {
-		ensureOpen();
 		int rc = JSimJNI.getBodyState13Array(worldHandle, outState13);
 		if (rc < 0) {
 			throw new IllegalStateException("Failed to get body state array: rc=" + rc);
@@ -251,7 +238,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return ball position as a Pose3d with zero rotation
 	 */
 	public Pose3d getBallPosition(int ballIndex) {
-		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBallPosition(worldHandle, ballIndex, values);
 		if (rc != 0) {
@@ -266,7 +252,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @return ball linear velocity as a LinearVelocity3d
 	 */
 	public LinearVelocity3d getBallLinearVelocity(int ballIndex) {
-		ensureOpen();
 		double[] values = new double[3];
 		int rc = JSimJNI.getBallLinearVelocity(worldHandle, ballIndex, values);
 		if (rc != 0) {
@@ -287,7 +272,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 * @param steps number of steps to advance
 	 */
 	public void step(int steps) {
-		ensureOpen();
 		int rc = JSimJNI.stepWorld(worldHandle, steps);
 		if (rc != 0) {
 			throw new IllegalStateException("Failed to step world: rc=" + rc);
@@ -312,7 +296,6 @@ public final class PhysicsWorld implements AutoCloseable {
 	 */
 	public void setGravity(double gxMetersPerSecondSquared, double gyMetersPerSecondSquared,
 			double gzMetersPerSecondSquared) {
-		ensureOpen();
 		int rc = JSimJNI.setWorldGravity(worldHandle, gxMetersPerSecondSquared,
 				gyMetersPerSecondSquared, gzMetersPerSecondSquared);
 		if (rc != 0) {
@@ -325,12 +308,6 @@ public final class PhysicsWorld implements AutoCloseable {
 		if (worldHandle != 0) {
 			JSimJNI.destroyWorld(worldHandle);
 			worldHandle = 0;
-		}
-	}
-
-	private void ensureOpen() {
-		if (worldHandle == 0) {
-			throw new IllegalStateException("PhysicsWorld is closed");
 		}
 	}
 }
