@@ -20,12 +20,20 @@ std::unordered_map<std::uint64_t, std::unique_ptr<frcsim::PhysicsWorld>>
     g_worlds;
 std::uint64_t g_next_handle = 1;
 
-frcsim::PhysicsWorld* getWorld(std::uint64_t handle) {
-  const auto it = g_worlds.find(handle);
-  if (it == g_worlds.end()) {
+bool worldExists(std::uint64_t handle) {
+  return g_worlds.find(handle) != g_worlds.end();
+}
+
+frcsim::PhysicsWorld* lookupWorld(std::uint64_t handle) {
+  if (!worldExists(handle)) {
     return nullptr;
   }
-  return it->second.get();
+
+  return g_worlds.at(handle).get();
+}
+
+frcsim::PhysicsWorld* getWorld(std::uint64_t handle) {
+  return lookupWorld(handle);
 }
 
 frcsim::RigidBody* getBody(frcsim::PhysicsWorld* world, int body_index) {
