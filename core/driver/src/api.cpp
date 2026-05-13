@@ -5,7 +5,7 @@
 extern "C" {
 
 PhysicsWorld_t* frcsim_create_world() {
-  return new PhysicsWorld_t();
+  return new PhysicsWorld_t;
 }
 
 void frcsim_destroy_world(PhysicsWorld_t* w) {
