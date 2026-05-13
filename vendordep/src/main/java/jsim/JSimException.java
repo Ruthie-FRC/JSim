@@ -14,6 +14,13 @@ public final class JSimException extends RuntimeException {
     /** Native return code from the failing JNI call. Non-zero indicates an error. */
     private final int rc;
 
+    /**
+     * Constructs a new JSimException describing a native operation failure.
+     *
+     * @param operation operation that failed
+     * @param rc native return code (non-zero indicates an error)
+     * @param suggestion how to fix or mitigate the failure
+     */
     public JSimException(String operation, int rc, String suggestion) {
         super(buildMessage(operation, rc, suggestion));
         this.rc = rc;
