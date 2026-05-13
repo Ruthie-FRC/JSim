@@ -11,6 +11,7 @@ package jsim;
  * happened (native return code), and how to fix it (suggestion).
  */
 public final class JSimException extends RuntimeException {
+    /** Native return code from the failing JNI call. Non-zero indicates an error. */
     private final int rc;
 
     public JSimException(String operation, int rc, String suggestion) {
@@ -28,6 +29,11 @@ public final class JSimException extends RuntimeException {
         return sb.toString();
     }
 
+    /**
+     * Returns the native return code associated with this failure.
+     *
+     * @return native return code (non-zero indicates an error)
+     */
     public int getRc() {
         return rc;
     }
