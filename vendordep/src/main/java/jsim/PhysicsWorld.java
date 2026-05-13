@@ -39,8 +39,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	public PhysicsBody createBody(double massKg) {
 		int index = JSimJNI.createBody(worldHandle, massKg);
 		if (index < 0) {
-			throw new JSimException("Failed to create body", index,
-				"Verify the mass parameter is valid and check native logs for why body creation failed.");
+			throw new JSimException("Failed to create body with mass=" + massKg + " kg", index,
+				"Body mass must be a positive, finite value. Received: " + massKg);
 		}
 		return new PhysicsBody(this, index);
 	}
@@ -53,8 +53,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	public Ball createBall() {
 		int index = JSimJNI.createBall(worldHandle);
 		if (index < 0) {
-			throw new JSimException("Failed to create ball", index,
-				"Ensure there are available resources in the native world and check native logs.");
+			throw new JSimException("Failed to create ball in physics world", index,
+				"The physics world may have reached its maximum capacity or internal resources are exhausted. Ensure the world is properly initialized.");
 		}
 		return new Ball(this, index);
 	}
@@ -70,8 +70,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	void setBodyPosition(int bodyIndex, double xMeters, double yMeters, double zMeters) {
 		int rc = JSimJNI.setBodyPosition(worldHandle, bodyIndex, xMeters, yMeters, zMeters);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body position", rc,
-				"Verify the body index and that the world is initialized; check native logs for details.");
+			throw new JSimException("Failed to set body position for bodyIndex=" + bodyIndex + " to (" + xMeters + ", " + yMeters + ", " + zMeters + ") m", rc,
+				"Body index may be invalid or the world handle is corrupted. Check that bodyIndex >= 0 and the body exists in this world.");
 		}
 	}
 
@@ -88,8 +88,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setBodyLinearVelocity(worldHandle, bodyIndex, vxMetersPerSecond,
 				vyMetersPerSecond, vzMetersPerSecond);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body linear velocity", rc,
-				"Verify the body index and velocity parameters; check native logs for details.");
+			throw new JSimException("Failed to set body linear velocity for bodyIndex=" + bodyIndex + " to (" + vxMetersPerSecond + ", " + vyMetersPerSecond + ", " + vzMetersPerSecond + ") m/s", rc,
+				"Body index may be invalid or velocity values are non-finite. Check that bodyIndex >= 0 and all velocities are finite numbers.");
 		}
 	}
 
@@ -102,8 +102,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	void setBodyGravityEnabled(int bodyIndex, boolean enabled) {
 		int rc = JSimJNI.setBodyGravityEnabled(worldHandle, bodyIndex, enabled);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body gravity enabled", rc,
-				"Verify the body index and that the world is initialized; check native logs for details.");
+			throw new JSimException("Failed to set body gravity enabled=" + enabled + " for bodyIndex=" + bodyIndex, rc,
+				"Body index may be invalid or does not exist. Check that bodyIndex >= 0 and refers to an existing body in this world.");
 		}
 	}
 
@@ -120,8 +120,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setBodyCollisionFilter(worldHandle, bodyIndex, collisionLayerBits,
 				collisionMaskBits);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body collision filter", rc,
-				"Verify the body index and collision parameters; check native logs for details.");
+			throw new JSimException("Failed to set body collision filter for bodyIndex=" + bodyIndex + " with layerBits=" + collisionLayerBits + ", maskBits=" + collisionMaskBits, rc,
+				"Body index may be invalid or does not exist. Check that bodyIndex >= 0 and refers to an existing body in this world.");
 		}
 	}
 
@@ -137,8 +137,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setBodyAerodynamicSphere(worldHandle, bodyIndex, radiusMeters,
 				dragCoefficient);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body collision sphere", rc,
-				"Verify the body index and sphere parameters; check native logs for details.");
+			throw new JSimException("Failed to set body aerodynamic sphere for bodyIndex=" + bodyIndex + " with radius=" + radiusMeters + " m, dragCoefficient=" + dragCoefficient, rc,
+				"Body index may be invalid, or radius/drag coefficient are invalid. Radius must be positive and finite; drag coefficient must be non-negative and finite.");
 		}
 	}
 
@@ -157,8 +157,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setBodyAerodynamicBox(worldHandle, bodyIndex, xMeters, yMeters,
 				zMeters, dragCoefficient);
 		if (rc != 0) {
-			throw new JSimException("Failed to set body collision box", rc,
-				"Verify the body index and box dimensions; check native logs for details.");
+			throw new JSimException("Failed to set body aerodynamic box for bodyIndex=" + bodyIndex + " with dimensions (" + xMeters + ", " + yMeters + ", " + zMeters + ") m, dragCoefficient=" + dragCoefficient, rc,
+				"Body index may be invalid, or dimensions/drag coefficient are invalid. All dimensions must be positive and finite; drag coefficient must be non-negative and finite.");
 		}
 	}
 
@@ -270,8 +270,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		double[] values = new double[3];
 		int rc = JSimJNI.getBallLinearVelocity(worldHandle, ballIndex, values);
 		if (rc != 0) {
-			throw new JSimException("Failed to get ball linear velocity", rc,
-				"Verify the ball index and that the world is initialized; check native logs for details.");
+			throw new JSimException("Failed to get ball linear velocity for ballIndex=" + ballIndex, rc,
+				"Ball index may be invalid or does not exist. Check that ballIndex >= 0 and refers to an existing ball in this world.");
 		}
 		return new LinearVelocity3d(values[0], values[1], values[2]);
 	}
@@ -290,8 +290,8 @@ public final class PhysicsWorld implements AutoCloseable {
 	public void step(int steps) {
 		int rc = JSimJNI.stepWorld(worldHandle, steps);
 		if (rc != 0) {
-			throw new JSimException("Failed to step world", rc,
-				"Check native logs and ensure the world handle is valid and not already destroyed.");
+			throw new JSimException("Failed to step world by " + steps + " step(s)", rc,
+				"World handle may be corrupted or previously destroyed. Ensure the PhysicsWorld has not been closed and the world handle is valid.");
 		}
 	}
 
@@ -316,8 +316,8 @@ public final class PhysicsWorld implements AutoCloseable {
 		int rc = JSimJNI.setWorldGravity(worldHandle, gxMetersPerSecondSquared,
 				gyMetersPerSecondSquared, gzMetersPerSecondSquared);
 		if (rc != 0) {
-			throw new JSimException("Failed to set gravity", rc,
-				"Verify gravity parameters and that the world handle is valid; check native logs for details.");
+			throw new JSimException("Failed to set world gravity to (" + gxMetersPerSecondSquared + ", " + gyMetersPerSecondSquared + ", " + gzMetersPerSecondSquared + ") m/s²", rc,
+				"Gravity values must be finite numbers. Check that all gravity components are valid floating point values.");
 		}
 	}
 

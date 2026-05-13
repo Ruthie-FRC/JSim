@@ -24,7 +24,7 @@ namespace frcsim {
   /**
    * @brief Resolves robot-ball contact response.
  * projectiles.
-   * @note Thread-safe via internal std::mutex. All public methods that access or
+  * @note Thread-safe via internal std::recursive_mutex. All public methods that access or
    *       mutate ball state (position, velocity, etc.) are protected by locks.
    *       The step() method performs all simulation updates safely.
    *
@@ -1232,12 +1232,12 @@ class BallGamepieceSim {
   /**
    * @brief Resolves robot-ball contact response.
    * @param ball Ball entity updated in place when contact occurs.
-   * @note Not thread-safe. This mutates ball state while reading shared
-   *       simulator state (for example: robot list plus field parameters)
-   *       without synchronization;
-   *       call from the single-threaded simulation update path only.
+  * @note Thread-safe. This method acquires an internal lock before accessing
+  *       shared simulator state (robot list and field parameters) to ensure
+  *       safe concurrent access from any thread.
    */
   void resolveRobotBallContacts(BallEntity& ball) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex_);
     auto state = ball.sim.state();
 
     for (const auto& robot : robots_) {
@@ -1677,7 +1677,7 @@ class BallGamepieceSim {
   std::vector<EnvironmentalBoundary> field_elements_{};
   RobotAddedCallback robot_added_callback_{};
   int simulation_substeps_{4};
-  mutable std::mutex state_mutex_{};
+  mutable std::recursive_mutex state_mutex_{};
 };
 
 }  // namespace frcsim
