@@ -35,9 +35,8 @@ The architecture is designed to support extension through additional force model
 
 ## Documentation Strategy
 
-Documentation is authored in Markdown under `mkdocs/docs/` and published with MkDocs Material.
+The main API reference is generated from source comments with MkDoxy, while Markdown pages provide the landing page and supporting guides.
 
 ## Related Pages
 
-- [API Usage](api_usage.md)
-- [Physics Reference](physics_reference.md)
+- [Overview](api/links.md)

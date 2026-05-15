@@ -1,7 +1,7 @@
 # JSim Physics Library
 
 [![CI](https://github.com/Ruthie-FRC/JSim/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/ci.yml)
-[![jsim.dev](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy-mkdocs.yml)
+[![jsim.dev](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ruthie-FRC/JSim/actions/workflows/deploy.yml)
 [![License](https://img.shields.io/github/license/Ruthie-FRC/JSim)](LICENSE.txt)
 [![Open Issues](https://img.shields.io/github/issues/Ruthie-FRC/JSim)](https://github.com/Ruthie-FRC/JSim/issues)
 
@@ -38,8 +38,9 @@ Vendordep build tooling requires Java 17.
 ### Preview Docs Locally
 
 ```bash
-pip install mkdocs mkdocs-material
-mkdocs serve --config-file mkdocs/mkdocs.yml
+pip install mkdocs mkdocs-material mkdoxy
+sudo apt-get install doxygen
+PYTHONPATH=mkdocs mkdocs serve --config-file mkdocs/mkdocs.yml
 ```
 
 ## Repository Structure
@@ -66,11 +67,10 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 
 ## Documentation
 
-- Docs source: `mkdocs/docs/`
-- MkDocs config: `mkdocs/mkdocs.yml`
+- Docs source and MkDoxy config: `mkdocs/docs/` and `mkdocs/mkdocs.yml`
 - Deployed docs: https://jsim.dev
 - Java API (Javadocs): https://jsim.dev/api/javadoc/
-- Native API (Doxygen): https://jsim.dev/api/doxygen/html/
+- Native and mixed-language API: https://jsim.dev/api/
 
 ## Contributing
 

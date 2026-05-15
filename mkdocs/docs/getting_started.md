@@ -28,8 +28,9 @@ cd vendordep
 ## Local Documentation Preview
 
 ```bash
-pip install mkdocs mkdocs-material
-mkdocs serve --config-file mkdocs/mkdocs.yml
+pip install mkdocs mkdocs-material mkdoxy
+sudo apt-get install doxygen
+PYTHONPATH=mkdocs mkdocs serve --config-file mkdocs/mkdocs.yml
 ```
 
 ## Example Entry Points
@@ -44,9 +45,10 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 - `apps/`: runtime and visualization tools
 - `cad-import/`: CAD and geometry import utilities
 - `vendordep/`: Gradle build/test and vendordep packaging
-- `mkdocs/`: documentation source and configuration
+- `mkdocs/`: MkDocs site content and MkDoxy configuration
 
 ## Pages
 
-- [API Usage](api_usage.md): how to use the library from your application
-- [Architecture](architecture.md): subsystem layout and extension model
+- [Overview](api/links.md): generated API landing page
+- [Class List](api/annotated.md): generated type index
+- [Files](api/files.md): generated file index
