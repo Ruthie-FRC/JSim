@@ -4,6 +4,10 @@
 
 package jsim;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -14,6 +18,8 @@ import jsim.jni.JSimJNI;
  */
 public final class PhysicsWorld implements AutoCloseable {
 	private long worldHandle;
+	private final List<Ball> balls = new ArrayList<>();
+	private final List<Runnable> stepListeners = new ArrayList<>();
 
 	/**
 	 * Creates a native physics world.
@@ -56,7 +62,29 @@ public final class PhysicsWorld implements AutoCloseable {
 			throw new JSimException("Failed to create ball in physics world", index,
 				"The physics world may have reached its maximum capacity or internal resources are exhausted. Ensure the world is properly initialized.");
 		}
-		return new Ball(this, index);
+		Ball ball = new Ball(this, index);
+		balls.add(ball);
+		return ball;
+	}
+
+	/**
+	 * Returns the balls created through this world wrapper in insertion order.
+	 *
+	 * @return immutable view of the created balls
+	 */
+	public List<Ball> balls() {
+		return Collections.unmodifiableList(balls);
+	}
+
+	/**
+	 * Registers a callback that runs after each successful physics step.
+	 *
+	 * @param listener callback invoked after {@link #step()} completes
+	 */
+	public void addStepListener(Runnable listener) {
+		if (listener != null) {
+			stepListeners.add(listener);
+		}
 	}
 
 	/**
@@ -292,6 +320,9 @@ public final class PhysicsWorld implements AutoCloseable {
 		if (rc != 0) {
 			throw new JSimException("Failed to step world by " + steps + " step(s)", rc,
 				"World handle may be corrupted or previously destroyed. Ensure the PhysicsWorld has not been closed and the world handle is valid.");
+		}
+		for (Runnable listener : stepListeners) {
+			listener.run();
 		}
 	}
 
