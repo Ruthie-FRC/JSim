@@ -22,6 +22,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -71,6 +74,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y doxygen
+      - name: Verify Java runtime
+        run: |
+          echo "Java version:" && java -XshowSettings:properties -version 2>&1 | sed -n 's/.*version \"\([0-9.]*\).*\"/\1/p' || true
+          java -version
+          if ! java -version 2>&1 | grep -q '"17' ; then
+            echo "Java 17 is required for building Javadocs/Doxygen. Current java:" && java -version
+            exit 1
+          fi
       - name: Build Javadoc and Doxygen
         working-directory: vendordep
         run: ./gradlew javadoc doxygenDox
@@ -79,11 +90,23 @@ jobs:
         with:
           name: javadocs
           path: vendordep/build/docs/javadoc
+      - name: Verify Javadocs artifact
+        run: |
+          echo "Javadocs files:" && find vendordep/build/docs/javadoc -type f | wc -l
+          if [ ! -d vendordep/build/docs/javadoc ] || [ $(find vendordep/build/docs/javadoc -type f | wc -l) -lt 1 ]; then
+            echo "No Javadocs were generated; aborting." && exit 1
+          fi
       - name: Upload Doxygen artifact
         uses: actions/upload-artifact@v4
         with:
           name: doxygen
           path: vendordep/build/docs/doxygen
+      - name: Verify Doxygen artifact
+        run: |
+          echo "Doxygen files:" && find vendordep/build/docs/doxygen -type f | wc -l
+          if [ ! -d vendordep/build/docs/doxygen ] || [ $(find vendordep/build/docs/doxygen -type f | wc -l) -lt 1 ]; then
+            echo "No Doxygen output was generated; aborting." && exit 1
+          fi
 
   build-docker:
     env:
