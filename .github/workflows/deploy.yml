@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build-site:
-    name: "Build - MkDocs"
+    name: "Build - MkDocs + MkDoxy"
     runs-on: ubuntu-latest
     env:
       releaseVersion: ${{ inputs.releaseVersion }}
@@ -37,10 +37,12 @@ jobs:
           python-version: '3.x'
       - name: Install docs toolchain
         run: |
-          pip install mkdocs mkdocs-material ghp-import
+          pip install mkdocs mkdocs-material mkdoxy ghp-import
+          sudo apt-get update
+          sudo apt-get install -y doxygen
       - name: Build docs site and stage API references
         run: |
-          mkdocs build --config-file mkdocs/mkdocs.yml
+          PYTHONPATH=mkdocs mkdocs build --config-file mkdocs/mkdocs.yml
       - name: Upload mkdocs site
         uses: actions/upload-artifact@v4
         with:
@@ -285,7 +287,9 @@ jobs:
           python-version: '3.x'
       - name: Install docs toolchain
         run: |
-          pip install mkdocs mkdocs-material ghp-import
+          pip install mkdocs mkdocs-material mkdoxy ghp-import
+          sudo apt-get update
+          sudo apt-get install -y doxygen
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:

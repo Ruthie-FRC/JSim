@@ -15,7 +15,7 @@ Triggers on all pushes to the `main` branch and all Pull Requests.
 ### 2. Deployment & Releases (`deploy.yml`)
 Triggers upon creating a new GitHub Release.
 - **Vendordep Publishing:** Compiles and publishes the `.json` vendordep and zipped native binaries for FRC WPILib integration.
-- **Documentation:** Builds the MkDocs and Doxygen documentation and pushes it to GitHub Pages.
+- **Documentation:** Builds the MkDocs site through MkDoxy so the API reference is generated directly from Doxygen comments before publishing to GitHub Pages.
 
 ## Running Tests Locally
 

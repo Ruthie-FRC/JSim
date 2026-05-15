@@ -38,8 +38,9 @@ Vendordep build tooling requires Java 17.
 ### Preview Docs Locally
 
 ```bash
-pip install mkdocs mkdocs-material
-mkdocs serve --config-file mkdocs/mkdocs.yml
+pip install mkdocs mkdocs-material mkdoxy
+sudo apt-get install doxygen
+PYTHONPATH=mkdocs mkdocs serve --config-file mkdocs/mkdocs.yml
 ```
 
 ## Repository Structure
@@ -66,11 +67,10 @@ mkdocs serve --config-file mkdocs/mkdocs.yml
 
 ## Documentation
 
-- Docs source: `mkdocs/docs/`
-- MkDocs config: `mkdocs/mkdocs.yml`
+- Docs source and MkDoxy config: `mkdocs/docs/` and `mkdocs/mkdocs.yml`
 - Deployed docs: https://jsim.dev
 - Java API (Javadocs): https://jsim.dev/api/javadoc/
-- Native API (Doxygen): https://jsim.dev/api/doxygen/html/
+- Native and mixed-language API: https://jsim.dev/api/
 
 ## Contributing
 

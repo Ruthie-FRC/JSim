@@ -43,27 +43,47 @@ theme:
 
 nav:
   - Home: index.md
-  - Getting Started:
-      - getting_started.md
-      - API Usage: api_usage.md
-      - Architecture: architecture.md
-  - Physics Models:
-      - physics_models.md
-      - Physics Reference: physics_reference.md
-      - Collision Impulses: collision_impulses.md
-      - Drivetrain and Mechanism Dynamics: drivetrain_mechanism_dynamics.md
-  - Math Reference:
-      - math_index.md
-      - Units and Conventions: units_and_conventions.md
-      - Integrators: integrators.md
-      - Vector3: vector.md
-      - Matrix3: matrix.md
-      - Quaternion: quaternion.md
-      - Aerodynamics Math: aerodynamics.md
-      - Magnus Effect Math: magnus.md
+  - API Reference:
+      - Overview: api/links.md
+      - Class List: api/annotated.md
+      - Class Index: api/classes.md
+      - Class Hierarchy: api/hierarchy.md
+      - Class Members: api/class_members.md
+      - Class Member Functions: api/class_member_functions.md
+      - Class Member Variables: api/class_member_variables.md
+      - Class Member Typedefs: api/class_member_typedefs.md
+      - Class Member Enums: api/class_member_enums.md
+      - Namespace List: api/namespaces.md
+      - Namespace Members: api/namespace_members.md
+      - Namespace Member Functions: api/namespace_member_functions.md
+      - Namespace Member Variables: api/namespace_member_variables.md
+      - Namespace Member Typedefs: api/namespace_member_typedefs.md
+      - Namespace Member Enums: api/namespace_member_enums.md
+      - Functions: api/functions.md
+      - Variables: api/variables.md
+      - Macros: api/macros.md
+      - Files: api/files.md
 
 plugins:
   - search
+  - mkdoxy:
+      projects:
+        api:
+          src-dirs: >-
+            ../core/driver/include ../core/driver/src ../core/python
+            ../vendordep/src/main/java ../jsim/java/api ../jsim/java/frc
+            ../frc/robot/sim/core
+          full-doc: true
+          api-path: api
+          doxy-cfg:
+            FILE_PATTERNS: "*.h *.hpp *.cpp *.c *.java"
+            RECURSIVE: true
+            EXTRACT_ALL: true
+            EXCLUDE_SYMBOLS: "operator[]"
+            WARN_IF_UNDOCUMENTED: true
+            WARN_NO_PARAMDOC: true
+            JAVADOC_AUTOBRIEF: true
+            GENERATE_TREEVIEW: true
 
 extra:
   generator: false
