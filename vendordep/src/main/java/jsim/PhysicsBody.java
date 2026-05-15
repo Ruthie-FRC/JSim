@@ -4,6 +4,12 @@
 
 package jsim;
 
+import static edu.wpi.first.units.Units.Meters;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.measure.Distance;
+
 /**
  * Handle for a body managed by {@link PhysicsWorld}.
  */
@@ -28,21 +34,22 @@ public final class PhysicsBody {
   /**
    * Sets the body's world-space position in meters.
    *
-   * @param positionMeters the new position in meters
+   * @param pose the new position (only translation component is used)
    */
-  public void setPosition(Vec3 positionMeters) {
-    world.setBodyPosition(bodyIndex, positionMeters.x(), positionMeters.y(), positionMeters.z());
+  public void setPosition(Pose3d pose) {
+    Translation3d translation = pose.getTranslation();
+    world.setBodyPosition(bodyIndex, translation.getX(), translation.getY(), translation.getZ());
   }
 
   /**
-   * Sets the body's world-space position in meters.
+   * Sets the body's world-space position.
    *
-   * @param xMeters x position in meters
-   * @param yMeters y position in meters
-   * @param zMeters z position in meters
+   * @param x x position
+   * @param y y position
+   * @param z z position
    */
-  public void setPosition(double xMeters, double yMeters, double zMeters) {
-    world.setBodyPosition(bodyIndex, xMeters, yMeters, zMeters);
+  public void setPosition(Distance x, Distance y, Distance z) {
+    world.setBodyPosition(bodyIndex, x.in(Meters), y.in(Meters), z.in(Meters));
   }
 
   /**
@@ -50,8 +57,12 @@ public final class PhysicsBody {
    *
    * @param velocityMps the new linear velocity in meters per second
    */
-  public void setLinearVelocity(Vec3 velocityMps) {
-    world.setBodyLinearVelocity(bodyIndex, velocityMps.x(), velocityMps.y(), velocityMps.z());
+  public void setLinearVelocity(LinearVelocity3d velocityMps) {
+    world.setBodyLinearVelocity(
+        bodyIndex,
+        velocityMps.getVxMetersPerSecond(),
+        velocityMps.getVyMetersPerSecond(),
+        velocityMps.getVzMetersPerSecond());
   }
 
   /**
@@ -77,21 +88,42 @@ public final class PhysicsBody {
   }
 
   /**
-   * Gets the current world-space position in meters.
+   * Sets an approximate spherical collision/body shape for this body.
    *
-   * @return the body position
+   * @param radiusMeters sphere radius in meters
    */
-  public Vec3 position() {
-    return world.getBodyPosition(bodyIndex);
+  public void setCollisionSphere(double radiusMeters) {
+    world.setBodyAerodynamicSphere(bodyIndex, radiusMeters, 0.0);
+  }
+
+  /**
+   * Sets an approximate box collision/body shape for this body.
+   *
+   * @param xMeters box x dimension in meters
+   * @param yMeters box y dimension in meters
+   * @param zMeters box z dimension in meters
+   */
+  public void setCollisionBox(double xMeters, double yMeters, double zMeters) {
+    world.setBodyAerodynamicBox(bodyIndex, xMeters, yMeters, zMeters, 0.0);
+  }
+
+  /**
+   * Sets broad-phase collision filtering for this body.
+   *
+   * @param collisionLayerBits body layer bitmask
+   * @param collisionMaskBits body mask bitmask
+   */
+  public void setCollisionFilter(int collisionLayerBits, int collisionMaskBits) {
+    world.setBodyCollisionFilter(bodyIndex, collisionLayerBits, collisionMaskBits);
   }
 
   /**
    * Gets the current world-space position in meters.
    *
-   * @return a length-3 array containing {x, y, z}
+   * @return the body position
    */
-  public double[] positionArray() {
-    return world.getBodyPositionArray(bodyIndex);
+  public Pose3d position() {
+    return world.getBodyPosition(bodyIndex);
   }
 
   /**
@@ -99,17 +131,8 @@ public final class PhysicsBody {
    *
    * @return the body linear velocity
    */
-  public Vec3 linearVelocity() {
+  public LinearVelocity3d linearVelocity() {
     return world.getBodyLinearVelocity(bodyIndex);
-  }
-
-  /**
-   * Gets the current world-space linear velocity in meters per second.
-   *
-   * @return a length-3 array containing {vx, vy, vz}
-   */
-  public double[] linearVelocityArray() {
-    return world.getBodyLinearVelocityArray(bodyIndex);
   }
 
 }

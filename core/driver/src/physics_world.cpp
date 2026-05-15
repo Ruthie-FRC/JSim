@@ -243,6 +243,114 @@ void PhysicsWorld::step() {
     ball.step(dt_s);
   }
 
+  // Resolve ball <-> rigid-body collisions after the ball has advanced its own physics.
+  for (auto& ball : balls_) {
+    BallPhysicsSim3D::BallState s = ball.state();
+    if (s.held) {
+      continue;
+    }
+
+    const BallPhysicsSim3D::BallProperties& bp = ball.ballProperties();
+    const double ball_r = std::max(0.0, bp.radius_m);
+    const double ball_m = std::max(1e-9, bp.mass_kg);
+    const double inv_ball_m = 1.0 / ball_m;
+
+    auto apply_impulse = [&](RigidBody& body, const Vector3& contact_normal) {
+      Vector3 normal = contact_normal;
+      if (normal.isZero()) {
+        normal = Vector3::unitZ();
+      } else {
+        normal = normal.normalized();
+      }
+
+      const Vector3 rel_vel = s.velocity_mps - body.linearVelocity();
+      const double vn = rel_vel.dot(normal);
+      if (vn >= 0.0) {
+        return;
+      }
+
+      const Material* body_mat = body.material();
+      const double body_restitution =
+          body_mat ? body_mat->coefficient_of_restitution : 0.4;
+      const double e = std::clamp(0.5 * (bp.restitution + body_restitution), 0.0, 1.0);
+      const double inv_body_m = body.flags().is_kinematic ? 0.0 : body.inverseMass();
+      const double j = -(1.0 + e) * vn / (inv_ball_m + inv_body_m);
+      const Vector3 impulse = normal * j;
+
+      s.velocity_mps += impulse * inv_ball_m;
+      if (!body.flags().is_kinematic) {
+        body.setLinearVelocity(body.linearVelocity() - impulse * inv_body_m);
+      }
+    };
+
+    for (auto& body : bodies_) {
+      if (!config_.enable_collision_detection) {
+        break;
+      }
+
+      const auto* geom = body.aerodynamicGeometry();
+      if (!geom) {
+        continue;
+      }
+
+      if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kSphere) {
+        const double body_r = std::max(0.0, geom->radius_m);
+        const Vector3 rel = s.position_m - body.position();
+        const double dist = rel.norm();
+        const double contact_dist = ball_r + body_r;
+        if (dist <= contact_dist && dist > 1e-9) {
+          const Vector3 normal = rel / dist;
+          s.position_m += normal * (contact_dist - dist);
+          apply_impulse(body, normal);
+        }
+      } else if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kBox) {
+        const Vector3 rel_world = s.position_m - body.position();
+        const Vector3 rel_local = body.orientation().inverse().rotate(rel_world);
+        const Vector3 half = geom->box_dimensions_m * 0.5;
+
+        Vector3 clamped_local{
+            std::clamp(rel_local.x, -half.x, half.x),
+            std::clamp(rel_local.y, -half.y, half.y),
+            std::clamp(rel_local.z, -half.z, half.z)};
+
+        const Vector3 closest_world =
+            body.orientation().rotate(clamped_local) + body.position();
+        const Vector3 diff = s.position_m - closest_world;
+        const double dist = diff.norm();
+        if (dist <= ball_r) {
+          const Vector3 normal = dist > 1e-9 ? diff / dist : Vector3::unitZ();
+          s.position_m += normal * (ball_r - dist);
+          apply_impulse(body, normal);
+        }
+      } else if (geom->shape == RigidBody::AerodynamicGeometry::Shape::kCylinder) {
+        const double body_r = std::max(0.0, geom->radius_m);
+        const double half_len = std::max(0.0, geom->cylinder_length_m) * 0.5;
+        const Vector3 rel_world = s.position_m - body.position();
+        const Vector3 rel_local = body.orientation().inverse().rotate(rel_world);
+
+        Vector3 axis_local = geom->cylinder_axis_local.normalized();
+        if (axis_local.isZero()) {
+          axis_local = Vector3::unitZ();
+        }
+
+        const double longitudinal = rel_local.dot(axis_local);
+        const double clamped_long = std::clamp(longitudinal, -half_len, half_len);
+        const Vector3 closest_local = axis_local * clamped_long;
+        const Vector3 closest_world =
+            body.orientation().rotate(closest_local) + body.position();
+        const Vector3 diff = s.position_m - closest_world;
+        const double dist = diff.norm();
+        if (dist <= (ball_r + body_r)) {
+          const Vector3 normal = dist > 1e-9 ? diff / dist : Vector3::unitZ();
+          s.position_m += normal * ((ball_r + body_r) - dist);
+          apply_impulse(body, normal);
+        }
+      }
+    }
+
+    ball.setState(s);
+  }
+
   ++step_count_;
   accumulated_sim_time_s_ += dt_s;
 }

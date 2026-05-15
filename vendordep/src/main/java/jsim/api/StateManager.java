@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import jsim.field.FieldConfig;
 
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,5 +53,18 @@ public class StateManager {
         robotStates.put(id, stateRef);
 
         return new SimRobot(id, stateRef);
+    }
+
+    /**
+     * Returns a snapshot of all registered robot poses keyed by robot id.
+     *
+     * @return immutable map of robot ids to poses
+     */
+    public Map<RobotID, Pose2d> getRobotPoses() {
+        Map<RobotID, Pose2d> poses = new EnumMap<>(RobotID.class);
+        for (Map.Entry<RobotID, FieldState<SimRobot.RobotState>> entry : robotStates.entrySet()) {
+            poses.put(entry.getKey(), entry.getValue().get().pose);
+        }
+        return Collections.unmodifiableMap(poses);
     }
 }

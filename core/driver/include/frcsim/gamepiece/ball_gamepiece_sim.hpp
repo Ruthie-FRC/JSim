@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <functional>
 #include <limits>
+#include <mutex>
 #include <string>
 #include <utility>
 #include <vector>
@@ -20,14 +21,13 @@
 
 namespace frcsim {
 
-/**
- * @brief Simulates robot interaction with spherical game pieces and free-flight
+  /**
+   * @brief Resolves robot-ball contact response.
  * projectiles.
- *
- * Owns robot, grounded-ball, projectile, goal-zone, and field-boundary state.
- *
- * Coordinate conventions:
- * - Position vectors are world-frame meters.
+  * @note Thread-safe via internal std::recursive_mutex. All public methods that access or
+   *       mutate ball state (position, velocity, etc.) are protected by locks.
+   *       The step() method performs all simulation updates safely.
+   *
  * - Velocity vectors are world-frame meters/second.
  * - Robot yaw is radians about +Z.
  *
@@ -92,10 +92,14 @@ class BallGamepieceSim {
     double robot_ball_restitution_min_scale{0.55};
     /** Friction used for robot-ball collision impulse. */
     double robot_ball_contact_friction{0.2};
-    /** Ball planar velocity retention during robot plowing interaction. */
-    double plow_ball_velocity_retention{0.7};
-    /** Gain from robot planar velocity into plowed ball velocity. */
-    double plow_robot_velocity_gain{0.6};
+    /** Enable automatic snapping of game elements to scoring zones when within
+     * snap_distance_m. Used for pick-and-place games or ball scoring where the
+     * element disappears and is added to a hub-like device, then teleported out
+     * X seconds later. */
+    bool scoring_element_snapping_enabled{false};
+    /** Distance threshold for automatic snapping to scoring zones, in meters.
+     */
+    double snap_distance_m{0.1};
     /** Restitution used for grounded ball-ball collision impulse. */
     double ball_ball_contact_restitution{0.45};
     /** Friction used for grounded ball-ball collision impulse. */
@@ -143,26 +147,7 @@ class BallGamepieceSim {
 
     /** Approximate planar collision radius. */
     double radius_m{0.45};
-    /** Enables intake capture logic when true. */
-    bool intake_enabled{false};
-    /** Maximum number of simultaneously carried balls (currently 0 or 1
-     * behavior). */
-    std::size_t intake_capacity{1};
-    /** Intake capture radius from intake origin. */
-    double intake_radius_m{0.28};
-    /** Intake origin offset in robot frame. */
-    Vector3 intake_offset_m{0.45, 0.0, 0.10};
-    /** Held-ball anchor offset in robot frame. */
-    Vector3 carry_offset_m{0.25, 0.0, 0.25};
 
-  /** Index of carried ball or kNoBall when not carrying. */
-  std::size_t carried_ball_index{kNoBall};
-
-  /** Ball level (0.0 = empty, 1.0 = full tank). */
-  double ball_level{1.0};
-
-  /** Ball consumption rate (units per second). */
-  double ball_consumption_rate{0.0};
   };
 
   /**
@@ -286,7 +271,10 @@ class BallGamepieceSim {
    * entities.
    * @param field New field configuration.
    */
-  void setFieldConfig(const FieldConfig& field) { field_ = field; }
+  void setFieldConfig(const FieldConfig& field) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    field_ = field;
+  }
 
   /** @brief Callback type invoked when a robot is added to this simulator. */
   using RobotAddedCallback =
@@ -298,6 +286,7 @@ class BallGamepieceSim {
    * @return Inserted robot index.
    */
   std::size_t addRobot(const RobotState& robot) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     robots_.push_back(robot);
     const std::size_t robot_index = robots_.size() - 1;
     if (robot_added_callback_) {
@@ -324,6 +313,7 @@ class BallGamepieceSim {
   std::size_t addBall(const BallPhysicsSim3D::BallState& state,
                       const BallPhysicsSim3D::Config& config,
                       const BallPhysicsSim3D::BallProperties& properties) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     BallEntity entity{};
     entity.sim = BallPhysicsSim3D(config, properties);
     entity.sim.setState(state);
@@ -338,6 +328,7 @@ class BallGamepieceSim {
    * @return Inserted projectile index.
    */
   std::size_t addProjectile(const ProjectileEntity& projectile) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     projectiles_.push_back(projectile);
     return projectiles_.size() - 1;
   }
@@ -348,6 +339,7 @@ class BallGamepieceSim {
    * @return Mutable reference to stored goal zone.
    */
   GoalZone& addGoalZone(const GoalZone& goal_zone) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     goals_.push_back(goal_zone);
     return goals_.back();
   }
@@ -358,6 +350,7 @@ class BallGamepieceSim {
    * @return Mutable reference to stored registration.
    */
   GamePieceInfo& registerGamePieceType(const GamePieceInfo& info) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     for (auto& existing : gamepiece_types_) {
       if (existing.type == info.type) {
         existing = info;
@@ -369,7 +362,10 @@ class BallGamepieceSim {
   }
 
   /** @brief Clears all registered game piece type definitions. */
-  void clearGamePieceTypes() { gamepiece_types_.clear(); }
+  void clearGamePieceTypes() {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    gamepiece_types_.clear();
+  }
 
   /**
    * @brief Adds a field element and returns a mutable reference to the stored
@@ -379,6 +375,7 @@ class BallGamepieceSim {
    */
   EnvironmentalBoundary& addFieldElement(
       const EnvironmentalBoundary& boundary) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     field_elements_.push_back(boundary);
     return field_elements_.back();
   }
@@ -425,6 +422,7 @@ class BallGamepieceSim {
    * @return true if the ball index was valid and updated.
    */
   bool setBallType(std::size_t ball_index, GamePieceType type) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (ball_index >= balls_.size() || ball_index >= ball_types_.size()) {
       return false;
     }
@@ -452,6 +450,7 @@ class BallGamepieceSim {
    * @return true when removal succeeded.
    */
   bool removeBall(std::size_t ball_index) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (ball_index >= balls_.size() || ball_index >= ball_types_.size()) {
       return false;
     }
@@ -459,15 +458,6 @@ class BallGamepieceSim {
     balls_.erase(balls_.begin() + static_cast<std::ptrdiff_t>(ball_index));
     ball_types_.erase(ball_types_.begin() +
                       static_cast<std::ptrdiff_t>(ball_index));
-
-    for (auto& robot : robots_) {
-      if (robot.carried_ball_index == ball_index) {
-        robot.carried_ball_index = kNoBall;
-      } else if (robot.carried_ball_index != kNoBall &&
-                 robot.carried_ball_index > ball_index) {
-        --robot.carried_ball_index;
-      }
-    }
     return true;
   }
 
@@ -498,11 +488,15 @@ class BallGamepieceSim {
 
   /** @brief Returns total grounded ball count (including scored-in-net balls).
    * @return Grounded ball count. */
-  std::size_t countBalls() const { return balls_.size(); }
+  std::size_t countBalls() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    return balls_.size();
+  }
 
   /** @brief Returns count of currently active projectiles. @return Active
    * projectile count. */
   std::size_t countProjectiles() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     std::size_t count = 0;
     for (const auto& projectile : projectiles_) {
       if (projectile.active) {
@@ -515,6 +509,7 @@ class BallGamepieceSim {
   /** @brief Returns count of grounded balls marked as scored in configured net
    * volume(s). @return Scored ball count. */
   std::size_t countScoredBalls() const {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     std::size_t count = 0;
     for (const auto& ball : balls_) {
       if (ball.scored_in_net) {
@@ -522,55 +517,6 @@ class BallGamepieceSim {
       }
     }
     return count;
-  }
-
-  /**
-   * @brief Launches the robot's carried ball using exit trajectory parameters.
-   * @param robot_index Robot index that owns the carried ball.
-   * @param command Launch parameters.
-   * @return true if a carried ball existed and was launched.
-   */
-  bool fireBall(std::size_t robot_index,
-                const ExitTrajectoryParameters& command) {
-    if (robot_index >= robots_.size()) {
-      return false;
-    }
-
-    RobotState& robot = robots_[robot_index];
-    if (robot.carried_ball_index == kNoBall ||
-        robot.carried_ball_index >= balls_.size()) {
-      return false;
-    }
-
-    BallEntity& ball = balls_[robot.carried_ball_index];
-    const double launch_speed =
-        command.estimated_exit_velocity_mps > 0.0
-            ? command.estimated_exit_velocity_mps
-            : std::max(0.0, command.mechanism_speed_mps);
-
-    const double yaw_world = robot.yaw_rad + command.yaw_offset_rad;
-    const double cos_pitch = std::cos(command.pitch_rad);
-    const Vector3 direction_world(std::cos(yaw_world) * cos_pitch,
-                                  std::sin(yaw_world) * cos_pitch,
-                                  std::sin(command.pitch_rad));
-
-    const Vector3 launch_position =
-        robot.position_m + rotateYaw(command.launch_offset_m, robot.yaw_rad);
-    const Vector3 launch_velocity =
-        robot.velocity_mps + direction_world * launch_speed;
-
-    ball.sim.shoot(launch_position, launch_velocity, command.spin_radps);
-    ball.scored_in_net = false;
-    robot.carried_ball_index = kNoBall;
-
-    if (!ball_types_.empty()) {
-      const std::size_t ball_index =
-          static_cast<std::size_t>(&ball - &balls_[0]);
-      if (ball_index < ball_types_.size()) {
-        ball_types_[ball_index] = command.gamepiece_type;
-      }
-    }
-    return true;
   }
 
   /**
@@ -586,6 +532,7 @@ class BallGamepieceSim {
       std::size_t robot_index, const ExitTrajectoryParameters& command,
       bool spawn_on_ground_after_touch = true,
       const std::function<void()>& hit_target_callback = {}) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
     if (robot_index >= robots_.size()) {
       return kNoBall;
     }
@@ -627,6 +574,8 @@ class BallGamepieceSim {
       return;
     }
 
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    
     const int substeps = std::max(1, simulation_substeps_);
     const double dt_substep_s = dt_s / static_cast<double>(substeps);
 
@@ -667,36 +616,26 @@ class BallGamepieceSim {
     resolveRobotRobotImpedance();
     updateProjectiles(dt_s);
 
-    updateIntakeStates();
-
     for (std::size_t i = 0; i < balls_.size(); ++i) {
       BallEntity& ball = balls_[i];
-      applyRobotCarrierPose(i, ball);
 
       const Vector3 pre_step_position = ball.sim.state().position_m;
       const bool skip_integration =
-          field_.sleeping_enabled && ball.sleeping && !ball.sim.state().held;
+          field_.sleeping_enabled && ball.sleeping;
       if (!skip_integration) {
         ball.sim.step(dt_s);
       }
 
-      if (!ball.sim.state().held) {
-        auto state = ball.sim.state();
-        const double spin_decay =
-            std::max(0.0, 1.0 - field_.free_ball_spin_decay_per_s * dt_s);
-        state.spin_radps *= spin_decay;
-        ball.sim.setState(state);
-      }
+      auto state = ball.sim.state();
+      const double spin_decay =
+          std::max(0.0, 1.0 - field_.free_ball_spin_decay_per_s * dt_s);
+      state.spin_radps *= spin_decay;
+      ball.sim.setState(state);
 
       resolveContinuousCollision(ball, pre_step_position, dt_s);
-
-      if (!ball.sim.state().held) {
-        resolveRobotBallContacts(ball);
-        resolveFieldElements(ball, dt_s);
-        resolveFieldBounds(ball);
-      } else {
-        resolveFieldBounds(ball);
-      }
+      resolveRobotBallContacts(ball);
+      resolveFieldElements(ball, dt_s);
+      resolveFieldBounds(ball);
     }
 
     resolveBallBallContacts(dt_s);
@@ -1290,73 +1229,15 @@ class BallGamepieceSim {
     }
   }
 
-  void updateIntakeStates() {
-    for (auto& robot : robots_) {
-      if (!robot.intake_enabled || robot.intake_capacity == 0 ||
-          robot.carried_ball_index != kNoBall) {
-        continue;
-      }
-
-      const Vector3 intake_world =
-          robot.position_m + rotateYaw(robot.intake_offset_m, robot.yaw_rad);
-
-      std::size_t best_ball = kNoBall;
-      double best_distance = std::numeric_limits<double>::infinity();
-
-      for (std::size_t ball_index = 0; ball_index < balls_.size();
-           ++ball_index) {
-        BallEntity& ball = balls_[ball_index];
-        if (ball.sim.state().held || ball.scored_in_net) {
-          continue;
-        }
-
-        const double distance =
-            (ball.sim.state().position_m - intake_world).norm();
-        if (distance < robot.intake_radius_m && distance < best_distance) {
-          best_distance = distance;
-          best_ball = ball_index;
-        }
-      }
-
-      if (best_ball == kNoBall) {
-        continue;
-      }
-
-      BallEntity& selected = balls_[best_ball];
-      selected.sim.setCarrierPose(
-          robot.position_m + rotateYaw(robot.carry_offset_m, robot.yaw_rad),
-          robot.velocity_mps);
-
-      BallPhysicsSim3D::PickupRequest request{};
-      request.intake_position_m = intake_world;
-      request.capture_radius_m = robot.intake_radius_m;
-      request.carry_offset_m = rotateYaw(robot.carry_offset_m, robot.yaw_rad);
-      if (selected.sim.requestPickup(request)) {
-        robot.carried_ball_index = best_ball;
-      }
-    }
-  }
-
-  void applyRobotCarrierPose(std::size_t ball_index, BallEntity& ball) {
-    for (const auto& robot : robots_) {
-      if (robot.carried_ball_index != ball_index) {
-        continue;
-      }
-      const Vector3 carry_world =
-          robot.position_m + rotateYaw(robot.carry_offset_m, robot.yaw_rad);
-      ball.sim.setCarrierPose(carry_world, robot.velocity_mps);
-      return;
-    }
-  }
-
   /**
-   * @brief Resolves robot-ball contact response including plow coupling.
+   * @brief Resolves robot-ball contact response.
    * @param ball Ball entity updated in place when contact occurs.
-   * @note Not thread-safe. This mutates ball state and reads shared simulator
-   *       state (e.g., robot list and field parameters) without synchronization;
-   *       call from the single-threaded simulation update path only.
+  * @note Thread-safe. This method acquires an internal lock before accessing
+  *       shared simulator state (robot list and field parameters) to ensure
+  *       safe concurrent access from any thread.
    */
   void resolveRobotBallContacts(BallEntity& ball) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex_);
     auto state = ball.sim.state();
 
     for (const auto& robot : robots_) {
@@ -1376,16 +1257,6 @@ class BallGamepieceSim {
         const double penetration = contact_distance - distance;
         state.position_m +=
           normal * std::max(0.0, penetration - field_.baumgarte_slop_m);
-
-      // Plowing behavior: transfer robot planar velocity into the ball.
-      const Vector3 robot_planar_velocity(robot.velocity_mps.x,
-                                          robot.velocity_mps.y, 0.0);
-      state.velocity_mps.x =
-          field_.plow_ball_velocity_retention * state.velocity_mps.x +
-          field_.plow_robot_velocity_gain * robot_planar_velocity.x;
-      state.velocity_mps.y =
-          field_.plow_ball_velocity_retention * state.velocity_mps.y +
-          field_.plow_robot_velocity_gain * robot_planar_velocity.y;
 
       Vector3 relative_velocity = state.velocity_mps - robot.velocity_mps;
       const double normal_impact_speed = -relative_velocity.dot(normal);
@@ -1614,6 +1485,22 @@ class BallGamepieceSim {
       auto state = ball.sim.state();
       const double radius = ball.sim.ballProperties().radius_m;
 
+     // Check for pick-and-place snapping to goal zones
+     if (field_.scoring_element_snapping_enabled) {
+       for (const auto& goal : goals_) {
+         Vector3 displacement = goal.center_m - state.position_m;
+         double distance = displacement.norm();
+         if (distance < field_.snap_distance_m) {
+           // Snap element to scoring zone
+           state.position_m = goal.center_m;
+           state.velocity_mps = Vector3(0.0, 0.0, 0.0);
+           state.spin_radps = Vector3(0.0, 0.0, 0.0);
+           ball.sim.setState(state);
+           return;  // Ball is scored, stop processing
+         }
+       }
+     }
+
       for (const auto& boundary : field_elements_) {
         if (!boundary.is_active) {
           continue;
@@ -1790,6 +1677,7 @@ class BallGamepieceSim {
   std::vector<EnvironmentalBoundary> field_elements_{};
   RobotAddedCallback robot_added_callback_{};
   int simulation_substeps_{4};
+  mutable std::recursive_mutex state_mutex_{};
 };
 
 }  // namespace frcsim

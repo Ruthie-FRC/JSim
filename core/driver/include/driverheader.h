@@ -76,6 +76,13 @@ void c_rsDestroyWorld(uint64_t world_handle);
 int c_rsCreateBody(uint64_t world_handle, double mass_kg);
 
 /**
+ * @brief Creates a new ball simulator in a world.
+ * @param world_handle Target world handle.
+ * @return Non-negative ball index on success; negative value on failure.
+ */
+int c_rsCreateBall(uint64_t world_handle);
+
+/**
  * @brief Sets a body's world-space position.
  * @param world_handle Target world handle.
  * @param body_index Zero-based body index returned by c_rsCreateBody().
@@ -176,6 +183,54 @@ int c_rsSetBodyAerodynamicSphere(uint64_t world_handle, int body_index,
 int c_rsSetBodyAerodynamicBox(uint64_t world_handle, int body_index,
                               double x_m, double y_m, double z_m,
                               double drag_coefficient);
+
+/**
+ * @brief Sets a ball's world-space position.
+ * @param world_handle Target world handle.
+ * @param ball_index Zero-based ball index.
+ * @param x_m Position x in meters.
+ * @param y_m Position y in meters.
+ * @param z_m Position z in meters.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsSetBallPosition(uint64_t world_handle, int ball_index,
+                        double x_m, double y_m, double z_m);
+
+/**
+ * @brief Sets a ball's world-space linear velocity.
+ * @param world_handle Target world handle.
+ * @param ball_index Zero-based ball index.
+ * @param vx_mps Velocity x component in meters/second.
+ * @param vy_mps Velocity y component in meters/second.
+ * @param vz_mps Velocity z component in meters/second.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsSetBallLinearVelocity(uint64_t world_handle, int ball_index,
+                              double vx_mps, double vy_mps, double vz_mps);
+
+/**
+ * @brief Reads a ball's world-space position.
+ * @param world_handle Target world handle.
+ * @param ball_index Zero-based ball index.
+ * @param x_m Output pointer for x position in meters.
+ * @param y_m Output pointer for y position in meters.
+ * @param z_m Output pointer for z position in meters.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsGetBallPosition(uint64_t world_handle, int ball_index,
+                        double* x_m, double* y_m, double* z_m);
+
+/**
+ * @brief Reads a ball's world-space linear velocity.
+ * @param world_handle Target world handle.
+ * @param ball_index Zero-based ball index.
+ * @param vx_mps Output pointer for x velocity in meters/second.
+ * @param vy_mps Output pointer for y velocity in meters/second.
+ * @param vz_mps Output pointer for z velocity in meters/second.
+ * @return 0 on success, non-zero on failure.
+ */
+int c_rsGetBallLinearVelocity(uint64_t world_handle, int ball_index,
+                              double* vx_mps, double* vy_mps, double* vz_mps);
 
 /**
  * @brief Configures world-level aerodynamic constants and feature toggle.
@@ -315,6 +370,13 @@ int c_rsGetBodyVelocity6Array(uint64_t world_handle, double* out_velocity6,
  */
 int c_rsGetBodyState13Array(uint64_t world_handle, double* out_state13,
                             int max_bodies);
+
+/**
+ * @brief Creates and registers a rigid assembly container.
+ * @param world_handle Target world handle.
+ * @return Non-negative assembly index on success; negative on failure.
+ */
+int c_rsCreateAssembly(uint64_t world_handle);
 
 #ifdef __cplusplus
 }  // extern "C"

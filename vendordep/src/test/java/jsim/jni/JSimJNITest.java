@@ -4,9 +4,13 @@
 
 package jsim.jni;
 
+import static edu.wpi.first.units.Units.Meters;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import jsim.Ball;
 import jsim.PhysicsBody;
 import jsim.PhysicsWorld;
 
@@ -36,18 +40,35 @@ public class JSimJNITest {
   void javaWrapperScalarAndArrayTest() {
     try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
       PhysicsBody body = world.createBody(1.0);
-      body.setPosition(0.0, 0.0, 1.0);
+      body.setPosition(Meters.of(0.0), Meters.of(0.0), Meters.of(1.0));
       body.setLinearVelocity(0.0, 0.0, 0.0);
       world.setGravity(0.0, 0.0, -9.81);
 
       world.step(10);
 
-      double[] pos = body.positionArray();
-      double[] vel = body.linearVelocityArray();
-      assertTrue(pos.length == 3);
-      assertTrue(vel.length == 3);
-      assertTrue(pos[2] < 1.0);
-      assertTrue(vel[2] < 0.0);
+      Pose3d pos = body.position();
+      var vel = body.linearVelocity();
+      assertTrue(pos.getZ() < 1.0);
+      assertTrue(vel.getVzMetersPerSecond() < 0.0);
+    }
+  }
+
+  @Test
+  void ballCollisionWrapperTest() {
+    try (PhysicsWorld world = new PhysicsWorld(0.01, true)) {
+      PhysicsBody bumper = world.createBody(10.0);
+      bumper.setCollisionBox(0.6, 0.6, 0.2);
+      bumper.setPosition(Meters.of(0.0), Meters.of(0.0), Meters.of(0.1));
+
+      Ball ball = world.createBall();
+      ball.shoot(new jsim.Vec3(0.5, 0.0, 0.12), new jsim.Vec3(-3.0, 0.0, 0.0));
+
+      world.step(20);
+
+      Pose3d pos = ball.position();
+      var vel = ball.linearVelocity();
+      assertTrue(pos.getZ() >= 0.0);
+      assertTrue(vel.getVxMetersPerSecond() > -3.0);
     }
   }
 }
