@@ -1,9 +1,10 @@
 # Physics Models
 
-This section collects the physics model reference pages for the simulator.
+Overview of high-level physical models provided by JSim.
 
-## Pages
+- Rigid-body dynamics: Mass, inertia, external forces, constraint solving
+- Drivetrain models: differential, swerve, and mecanum abstractions (where implemented)
+- Mechanism elements: gears, belts, attached subsystems
+- Ball and field interactions: bounce, friction, and contact geometry
 
-- [Physics Reference](physics_reference.md): core modeling assumptions and equations
-- [Collision Impulses](collision_impulses.md): contact and impulse handling
-- [Drivetrain and Mechanism Dynamics](drivetrain_mechanism_dynamics.md): reduced-order mechanism dynamics
+See `physics_reference.md` for assumptions and derivations.

@@ -1,43 +1,13 @@
 # Architecture
 
-JSim is organized as a modular monorepo with clear separation between core physics, bindings, runtime applications, and documentation.
+JSim is organized into layered subsystems:
 
-## High-Level Structure
+- Core physics engine: numerical integrators, collision handling, contacts
+- Models: drivetrain, mechanisms, aerodynamics, ball and field elements
+- IO and CAD: URDF/STL import, material definitions
+- Language bindings: Python, Java, and native C++ APIs
+- Examples and runtime: robotics runtime, sensor pipeline, and sample robots
 
-- `core/driver/`: Primary C++ engine headers and implementation.
-- `core/python/`: Python-side bindings and integration code.
-- `core/java/`: Java-side bindings and API surface.
-- `core/bindings-java/`: Java/JNI binding support.
-- `core/gamepiece-models/`: Gamepiece and simulation object models.
-- `apps/sim-runtime/`: Runtime integration for robot simulation workflows.
-- `apps/viewer-plugin/`: Visualization and timeline tooling.
-- `cad-import/`: CAD/geometry import utilities (URDF/STL processing).
-- `examples/`: Language-specific examples.
-- `scripts/`: Project scripts including test orchestration.
-- `vendordep/tests/`: Native unit and integration test sources.
-
-## Physics Core Design
-
-Key components include:
-
-- Math primitives: vectors, quaternions, matrices, and integrators.
-- Rigid-body modeling and assemblies.
-- Force generators and aerodynamic models.
-- Physics world orchestration.
-
-The architecture is designed to support extension through additional force models, body types, and runtime integrations.
-
-## Build and Test
-
-- Gradle drives native, JNI, and Java builds.
-- `vendordep/gradlew test` executes Java tests and native verification binaries.
-- `scripts/run-tests.sh` enforces Java 17 and runs the vendordep test workflow from repo root.
-
-## Documentation Strategy
-
-Documentation is authored in Markdown under `mkdocs/docs/` and published with MkDocs Material.
-
-## Related Pages
-
-- [API Usage](api_usage.md)
-- [Physics Reference](physics_reference.md)
+Extension points
+- Add new models by implementing the model interface in `cad-import/mechanisms.py` or C++ equivalents.
+- Bindings are generated from the native API; update `python/bindings.cpp` and build scripts to expose new functions.

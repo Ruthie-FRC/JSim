@@ -1,4 +1,25 @@
 # JSim
+
+JSim is a modular, open-source physics simulation library focused on FRC robotics.
+
+This documentation provides onboarding, API usage, architecture details, and reference material for simulation, math, and CAD workflows.
+
+## Quick Links
+
+- Getting Started: getting_started.md
+- API Usage: api_usage.md
+- Architecture: architecture.md
+- Physics Reference: physics_reference.md
+- Math Reference: math_index.md
+
+## Contributing
+
+See the repository `CONTRIBUTING.md` in the project root for contribution guidelines, and open issues or pull requests on GitHub.
+
+## Feedback
+
+If something is missing or unclear, please file an issue at https://github.com/Ruthie-FRC/JSim/issues
+# JSim
 JSim is a modular FRC physics library for simulation, analysis, and robotics workflow integration.
 
 !!! info "Project Status"

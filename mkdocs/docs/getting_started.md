@@ -1,52 +1,32 @@
 # Getting Started
 
-Use this section as the entry point for integrating JSim into your project.
+This page helps you build and run examples for JSim.
 
-## Vendordep URL
+Prerequisites
+- Java 17+ (or the version the project targets)
+- C++ toolchain (clang/gcc) for native builds
+- Python 3.8+ for Python examples
 
-```
-https://jsim.dev/JSim.json
-```
-
-## Build and Test
-
-From the repository root:
+Quick build (recommended)
 
 ```bash
 scripts/run-tests.sh
 ```
 
-This script selects a Java 17 runtime and runs the vendordep Gradle test workflow.
-
-You can also run the tests directly:
+Run a single example (Python)
 
 ```bash
-cd vendordep
-./gradlew test
+python3 examples/python/simple_world_demo.py
 ```
 
-## Local Documentation Preview
+Running Java examples
+
+Use Gradle in `vendordep` or the top-level Gradle wrapper:
 
 ```bash
-pip install mkdocs mkdocs-material
-mkdocs serve --config-file mkdocs/mkdocs.yml
+./gradlew :examples:java:run
 ```
 
-## Example Entry Points
-
-- C++: `examples/cpp/minimal_world.cpp`
-- Java: `examples/java/FlywheelPredictionExample.java`
-- Python: `examples/python/simple_world_demo.py`
-
-## Repository Areas
-
-- `core/`: engine and language binding sources
-- `apps/`: runtime and visualization tools
-- `cad-import/`: CAD and geometry import utilities
-- `vendordep/`: Gradle build/test and vendordep packaging
-- `mkdocs/`: documentation source and configuration
-
-## Pages
-
-- [API Usage](api_usage.md): how to use the library from your application
-- [Architecture](architecture.md): subsystem layout and extension model
+Where to go next
+- API Usage: api_usage.md
+- Examples: check `examples/` and `jsim/examples/` for language-specific samples
